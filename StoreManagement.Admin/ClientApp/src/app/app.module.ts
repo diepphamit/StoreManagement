@@ -14,6 +14,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { CoreModule } from './core/core.module';
 import { ToastrModule } from 'ngx-toastr';
 import { UserService } from './services/user.service';
+import { CategoryService } from './services/category.service';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { UserService } from './services/user.service';
   ],
   providers: [
     AuthService,
-    UserService
+    UserService,
+    CategoryService
   ],
   bootstrap: [AppComponent]
 })
