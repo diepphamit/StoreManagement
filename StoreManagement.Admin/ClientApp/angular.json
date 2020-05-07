@@ -20,12 +20,29 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "assets": ["src/assets"],
+            "assets": [
+              "src/assets",
+              "src/favicon.ico"
+            ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/font-awesome/css/font-awesome.css",
+              "node_modules/ionicons/dist/css/ionicons.min.css",
+              "src/assets/css/AdminLTE.min.css",
+              "node_modules/jvectormap/jquery-jvectormap.css",
+              "node_modules/ngx-toastr/toastr.css",
+              "src/assets/css/skins/_all-skins.min.css",
+              "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "src/assets/js/adminlte.min.js",
+              "node_modules/jquery-sparkline/jquery.sparkline.min.js",
+              "node_modules/jvectormap/jquery-jvectormap.min.js",
+              "node_modules/jquery-slimscroll/jquery.slimscroll.min.js"
+            ]
           },
           "configurations": {
             "production": {

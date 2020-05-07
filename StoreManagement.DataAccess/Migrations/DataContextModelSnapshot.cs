@@ -133,6 +133,23 @@ namespace StoreManagement.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("GroupUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Staff"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Customer"
+                        });
                 });
 
             modelBuilder.Entity("StoreManagement.DataAccess.Entites.Order", b =>
@@ -242,7 +259,7 @@ namespace StoreManagement.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ImageAddress")
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProductId")
@@ -326,13 +343,13 @@ namespace StoreManagement.DataAccess.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Gender")
+                    b.Property<bool?>("Gender")
                         .HasColumnType("bit");
 
                     b.Property<int>("GroupUserId")
@@ -344,13 +361,19 @@ namespace StoreManagement.DataAccess.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -358,6 +381,17 @@ namespace StoreManagement.DataAccess.Migrations
                     b.HasIndex("GroupUserId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "admin@admin.com",
+                            GroupUserId = 1,
+                            PasswordHash = new byte[] { 113, 184, 43, 74, 56, 241, 25, 141, 179, 179, 180, 63, 25, 102, 46, 19, 33, 174, 245, 83, 63, 25, 139, 121, 160, 13, 156, 186, 142, 210, 218, 234, 72, 152, 54, 172, 106, 184, 36, 15, 225, 174, 243, 96, 30, 76, 231, 6, 138, 35, 48, 221, 1, 58, 218, 117, 28, 209, 169, 4, 138, 71, 251, 242 },
+                            PasswordSalt = new byte[] { 158, 66, 91, 189, 70, 223, 204, 212, 146, 94, 212, 76, 254, 71, 182, 121, 231, 231, 120, 75, 96, 237, 136, 70, 138, 5, 9, 76, 137, 193, 115, 69, 15, 69, 94, 103, 4, 213, 202, 217, 100, 108, 54, 31, 182, 227, 252, 46, 151, 166, 26, 132, 45, 238, 227, 63, 180, 203, 207, 28, 3, 27, 59, 93, 151, 202, 226, 95, 83, 224, 100, 34, 252, 17, 136, 225, 2, 16, 234, 11, 99, 230, 104, 203, 221, 102, 246, 168, 6, 15, 141, 117, 176, 89, 125, 212, 249, 29, 56, 121, 157, 244, 20, 177, 124, 140, 40, 249, 16, 45, 80, 39, 216, 229, 92, 163, 174, 188, 224, 57, 221, 22, 114, 189, 33, 107, 202, 47 },
+                            Username = "admin"
+                        });
                 });
 
             modelBuilder.Entity("StoreManagement.DataAccess.Entites.UserPermission", b =>
