@@ -1,4 +1,9 @@
 ﻿using AutoMapper;
+using StoreManagement.BusinessLogic.Dtos.Auth;
+using StoreManagement.BusinessLogic.Dtos.Categories;
+using StoreManagement.BusinessLogic.Dtos.Pictures;
+using StoreManagement.BusinessLogic.Dtos.Users;
+using StoreManagement.DataAccess.Entites;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,5 +12,19 @@ namespace StoreManagement.BusinessLogic.AutoMapper
 {
     public class AutoMapperProfiles : Profile
     {
+        public AutoMapperProfiles()
+        {
+            CreateMap<User, UserAuthReturn>().ForMember(x => x.GroupRole, y => { y.MapFrom(z => z.GroupUser.Name); });
+
+            CreateMap<Category, CategoryUI>();
+            CreateMap<CategoryUI, Category>();
+
+            CreateMap<User, UserDto>().ForMember(x => x.GroupRole, y => { y.MapFrom(z => z.GroupUser.Name); });
+            CreateMap<UserForCreate, User>();
+            CreateMap<UserUpdateDto, User>();
+
+            CreateMap<Picture, PictureUI>().ForMember(x => x.ProductName, y => { y.MapFrom(z => z.Product.Name); });
+        }
+        
     }
 }

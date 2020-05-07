@@ -5,6 +5,7 @@ using StoreManagement.DataAccess.Entites;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace StoreManagement.DataAccess.Data
@@ -34,6 +35,21 @@ namespace StoreManagement.DataAccess.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            var hmac = new HMACSHA512();
+
+            builder.Entity<GroupUser>().HasData(new GroupUser { Id = 1, Name = "Admin" });
+            builder.Entity<GroupUser>().HasData(new GroupUser { Id = 2, Name = "Staff" });
+            builder.Entity<GroupUser>().HasData(new GroupUser { Id = 3, Name = "Customer" });
+            builder.Entity<User>().HasData(new User
+            {
+                Id = 1,
+                Username = "admin",
+                Email = "admin@admin.com",
+                PasswordSalt = hmac.Key,
+                PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes("12345678")),
+                GroupUserId = 1
+            }) ;
 
             builder.Entity<Order>(x =>
             {

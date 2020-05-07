@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using StoreManagement.BusinessLogic.AutoMapper;
+using StoreManagement.BusinessLogic.Implementaions;
+using StoreManagement.BusinessLogic.Interfaces;
 using StoreManagement.DataAccess.Data;
 
 namespace StoreManagement.API
@@ -31,6 +35,25 @@ namespace StoreManagement.API
                options.UseSqlServer(
                    Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("StoreManagement.DataAccess")));
             services.AddControllers();
+
+            services.AddAuthentication();
+            services.AddAuthorization();
+
+            services.AddAutoMapper(typeof(AutoMapperProfiles), typeof(AutoMapperProfiles));
+            //Repository
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPictureRepository, PictureRepository>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Store Management API", Version = "v1.0" });
@@ -45,6 +68,8 @@ namespace StoreManagement.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("CorsPolicy");
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -53,6 +78,7 @@ namespace StoreManagement.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
