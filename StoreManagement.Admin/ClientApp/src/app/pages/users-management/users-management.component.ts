@@ -60,13 +60,7 @@ export class UsersManagementComponent implements OnInit {
                         this.toastr.success(`Xóa tài khoản thành công`);
                     },
                     (error: HttpErrorResponse) => {
-                        let errors : any;
-
-                        if (!errors.length) {
-                            errors.push(`Xóa tài khoản không thành công!`);
-                        }
-
-                        this.toastr.error(errors.join(','));
+                        this.toastr.error('Xóa tài khoản không thành công!');
                     }
                 );
         }

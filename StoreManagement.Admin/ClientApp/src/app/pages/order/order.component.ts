@@ -7,22 +7,23 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import {  BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { CategoryService } from 'src/app/services/category.service';
-import { Category } from 'src/app/models/category/category.model';
+import { Order } from 'src/app/models/order/order.model';
+import { OrderService } from 'src/app/services/order.service';
+
 
 @Component({
-    selector: 'app-category',
-    templateUrl: './category.component.html'
+    selector: 'app-order',
+    templateUrl: './order.component.html'
 })
-export class CategoryComponent implements OnInit {
-    category: Category;
+export class OrderComponent implements OnInit {
+    order: Order;
     keyword: string;
     itemsAsync: Observable<any[]>;
     modalRef: BsModalRef;
 
     constructor(
         // tslint:disable-next-line:no-shadowed-variable
-        public CategoryService: CategoryService,
+        public orderService: OrderService,
         private router: Router,
         private modalService: BsModalService,
         private toastr: ToastrService
@@ -30,19 +31,19 @@ export class CategoryComponent implements OnInit {
 
     ngOnInit() {
         this.keyword = '';
-        this.getAllCategories();
+        this.getAllOrders();
     }
 
-    getAllCategories() {
-        this.itemsAsync = this.CategoryService.getAllCategories(this.keyword);
+    getAllOrders() {
+        this.itemsAsync = this.orderService.getAllOrders(this.keyword);
     }
 
     add() {
-        this.router.navigate(['/categories/add']);
+        this.router.navigate(['/orders/add']);
     }
 
     edit(id: any) {
-        this.router.navigate(['/categories/edit/' + id]);
+        this.router.navigate(['/orders/edit/' + id]);
     }
 
     // editFull(id: any) {
@@ -50,38 +51,38 @@ export class CategoryComponent implements OnInit {
     // }
 
     deleteConfirm(template: TemplateRef<any>, data: any) {
-        this.category = Object.assign({}, data);
+        this.order = Object.assign({}, data);
         this.modalRef = this.modalService.show(template);
     }
 
     confirm(): void {
-        if (this.category) {
-            this.CategoryService.deleteCategory(this.category.id)
+        if (this.order) {
+            this.orderService.deleteOrder(this.order.id)
                 .subscribe(
                     () => {
-                        this.getAllCategories();
-                        this.toastr.success(`Xóa loại hàng thành công`);
+                        this.getAllOrders();
+                        this.toastr.success(`Xóa đơn hàng thành công`);
                     },
                     (error: HttpErrorResponse) => {
-                        this.toastr.error(('Xóa loại hàng không thành công'));
+                        this.toastr.error(('Xóa đơn hàng không thành công'));
                     }
                 );
         }
-        this.category = undefined;
+        this.order = undefined;
         this.modalRef.hide();
     }
 
     close(): void {
-        this.category = undefined;
+        this.order = undefined;
         this.modalRef.hide();
     }
 
     search() {
-        this.getAllCategories();
+        this.getAllOrders();
     }
 
     refresh() {
         this.keyword = '';
-        this.getAllCategories();
+        this.getAllOrders();
     }
 }
