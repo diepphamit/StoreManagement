@@ -2,6 +2,7 @@
 using StoreManagement.BusinessLogic.Dtos.Auth;
 using StoreManagement.BusinessLogic.Dtos.Categories;
 using StoreManagement.BusinessLogic.Dtos.Pictures;
+using StoreManagement.BusinessLogic.Dtos.Suppliers;
 using StoreManagement.BusinessLogic.Dtos.Users;
 using StoreManagement.DataAccess.Entites;
 using System;
@@ -24,6 +25,8 @@ namespace StoreManagement.BusinessLogic.AutoMapper
             CreateMap<UserUpdateDto, User>();
 
             CreateMap<Picture, PictureUI>().ForMember(x => x.ProductName, y => { y.MapFrom(z => z.Product.Name); });
+            CreateMap<Supplier, SupplierUI>();
+            CreateMap<SupplierUI, Supplier>();
         }
         
     }
