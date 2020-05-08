@@ -59,5 +59,13 @@ namespace StoreManagement.API.Controllers
             if (result) return Ok();
             return BadRequest();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSupplier(int id)
+        {
+            var result = await _supplierRepository.DeleteSupplierAsync(id);
+            if (result) return Ok();
+            return BadRequest();
+        }
     }
 }
