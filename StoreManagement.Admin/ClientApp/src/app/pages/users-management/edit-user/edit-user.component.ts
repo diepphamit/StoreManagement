@@ -22,6 +22,12 @@ export class EditUserComponent implements OnInit {
     { key: 2, value: ['Staff'] },
     { key: 3, value: ['Customer'] }
   ];
+  genders: any[] = [
+    { key: false, value: ['Nữ'] },
+    { key: true, value: ['Nam'] }
+  ];
+
+
 
   constructor(
     private fb: FormBuilder,
@@ -35,10 +41,10 @@ export class EditUserComponent implements OnInit {
       name: [''],
       address: [''],
       phoneNumber: [''],
-      gender: [true],
+      gender: [],
       dateOfBirth: [''],
       image: [''],
-      groupUserId: [3, Validators.required]
+      groupUserId: []
     });
   }
 
@@ -54,8 +60,8 @@ export class EditUserComponent implements OnInit {
             this.editUserForm.controls.address.setValue(result.address);
             this.editUserForm.controls.phoneNumber.setValue(result.phoneNumber);
             this.editUserForm.controls.gender.setValue(result.gender);
-            this.editUserForm.controls.dateOfBirth.setValue(result.dateOfBirth);
-            this.editUserForm.controls.groupUserId.setValue(result.groupUserId);
+            this.editUserForm.controls.dateOfBirth.setValue(new Date(result.dateOfBirth));
+            this.editUserForm.controls.groupUserId.setValue(this.getGroupUserIdByName(result.groupRole));
           },
           () => {
             this.toastr.error(`Không tìm thấy sản phẩm này`);
@@ -64,9 +70,10 @@ export class EditUserComponent implements OnInit {
     });
   }
 
-  editProduct() {
+  editUser() {
     this.user = Object.assign({}, this.editUserForm.value);
-
+    this.user.gender = this.editUserForm.value.gender === 'true';
+    this.user.groupUserId = Number(this.user.groupUserId);
     this.userService.editUser(this.id, this.user).subscribe(
       () => {
         this.router.navigate(['/users']).then(() => {
@@ -80,5 +87,11 @@ export class EditUserComponent implements OnInit {
   }
 
   get f() { return this.editUserForm.controls; }
+
+  getGroupUserIdByName(name: string) {
+    if (name === 'Admin') { return 1; }
+    if (name === 'Staff') { return 2; }
+    if (name === 'Customer') { return 3; }
+  }
 
 }
