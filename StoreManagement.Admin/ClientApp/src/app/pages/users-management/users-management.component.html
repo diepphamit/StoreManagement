@@ -45,8 +45,7 @@
                           <td>{{ item.phoneNumber }}</td>
                           <td>{{ item.groupRole }}</td>
                           <td style=" text-align: center;">
-                              <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;"
-                                  >
+                              <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;" (click) = "edit(item.id)">
                                   <i class="fa fa-pencil"></i>
                               </button>
                               <button class="btn btn-sm btn-danger" style="margin-right: 10px; margin-bottom: 5px;"  (click)="deleteConfirm(template,item)">
