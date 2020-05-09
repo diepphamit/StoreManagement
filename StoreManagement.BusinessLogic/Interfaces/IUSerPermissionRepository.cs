@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StoreManagement.BusinessLogic.Interfaces
 {
-    interface IUSerPermissionReposirory
+    interface IUSerPermissionRepository
     {
     }
 }

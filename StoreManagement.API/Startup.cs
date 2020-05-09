@@ -43,6 +43,7 @@ namespace StoreManagement.API
             //Repository
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPictureRepository, PictureRepository>();
             services.AddScoped<ISupplierRepository, SupplierRepository>();

@@ -1,0 +1,71 @@
+<div class="box box-primary">
+
+  <div class="box-header with-border">
+    <h3 class="box-title">Cập nhật</h3>
+  </div>
+
+  <form [formGroup]="editProductForm" (submit)="editProduct()" novalidate>
+    <div class="box-body">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label>Tên sản phẩm</label>
+            <input type="text" class="form-control" formControlName="name" placeholder="Tên sản phẩm"
+              [ngClass]="{ 'is-invalid': f.name.errors }">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label>Mô tả</label>
+            <input type="text" class="form-control" formControlName="description" placeholder="Mô tả"
+              [ngClass]="{ 'is-invalid': f.description.errors }">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label>Giá</label>
+            <input type="text" class="form-control" formControlName="price" placeholder="Giá"
+              [ngClass]="{ 'is-invalid': f.price.errors }">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label>Giảm giá</label>
+            <input type="text" class="form-control" formControlName="discount" placeholder="Giảm giá"
+              [ngClass]="{ 'is-invalid': f.discount.errors }">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label>Mã barcode</label>
+            <input type="text" class="form-control" formControlName="barcode" placeholder="Mã barcode"
+              [ngClass]="{ 'is-invalid': f.barcode.errors }">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label>Danh mục</label>
+            <select class="form-control" formControlName="categoryId" [ngClass]="{ 'is-invalid': f.categoryId.errors }">
+              <option value="">Choose your Category</option>
+              <option *ngFor="let category of categories | async" value={{category.id}}>{{category.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label>Nhà cung cấp</label>
+            <select class="form-control" formControlName="supplierId" [ngClass]="{ 'is-invalid': f.supplierId.errors }">
+              <option value="">Choose your Supplier</option>
+              <option *ngFor="let category of categories | async" value={{category.id}}>{{category.name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="box-footer">
+      <button [routerLink]="['/products']" class="btn btn-default">Hủy</button>
+      <button type="submit" [disabled]="editProductForm.invalid" class="btn btn-success pull-right">Lưu</button>
+    </div>
+  </form>
+
+</div>
