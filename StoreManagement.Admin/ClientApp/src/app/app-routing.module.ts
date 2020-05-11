@@ -22,7 +22,7 @@ const routes: Routes = [
   {
     path: '',
     component: FullComponent,
-    //canActivateChild: [AuthGuard],
+    // canActivateChild: [AuthGuard]
     children: [
       {
         path: 'home',
@@ -39,6 +39,14 @@ const routes: Routes = [
       {
         path: 'products',
         loadChildren: () => import('./pages/product/product.module').then(m => m.ProductModule)
+      },
+      {
+        path: 'suppliers',
+        loadChildren: () => import('./pages/supplier/supplier.module').then(m => m.SupplierModule)
+      },
+      {
+        path: 'orders',
+        loadChildren: () => import('./pages/order/order.module').then(m => m.OrderModule)
       }
     ]
   },
