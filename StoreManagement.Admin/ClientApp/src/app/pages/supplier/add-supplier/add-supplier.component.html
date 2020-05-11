@@ -4,19 +4,33 @@
       <h3 class="box-title">Thêm mới</h3>
     </div>
   
-    <form [formGroup]="addCategoryForm" (submit)="addCategory()" novalidate>
+    <form [formGroup]="addSupplierForm" (submit)="addSupplier()" novalidate>
       <div class="box-body">
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Tên loại hàng</label>
-              <input type="text" class="form-control" formControlName="name" placeholder="Tên loại hàng"
+              <label>Tên nhà cung cấp</label>
+              <input type="text" class="form-control" formControlName="name" placeholder="Tên nhà cung cấp"
                 [ngClass]="{ 'is-invalid': f.name.errors }">
             </div>
             <div class="form-group">
               <label>Mô tả</label>
               <input type="text" class="form-control" formControlName="description" placeholder="Mô tả"
                 [ngClass]="{ 'is-invalid': f.description.errors }">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Số điện thoại</label>
+              <input type="text" class="form-control" formControlName="phonenumber" placeholder="Số điện thoại"
+                [ngClass]="{ 'is-invalid': f.phonenumber.errors }">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Địa chỉ</label>
+              <input type="text" class="form-control" formControlName="address" placeholder="Địa chỉ"
+                [ngClass]="{ 'is-invalid': f.address.errors }">
             </div>
           </div>
         </div>
@@ -41,8 +55,8 @@
   
       </div>
       <div class="box-footer text-center">
-        <button [routerLink]="['/categories']" class="btn btn-default">Hủy</button>
-        <button type="submit" [disabled]="addCategoryForm.invalid" class="btn btn-success">Lưu</button>
+        <button [routerLink]="['/suppliers']" class="btn btn-default">Hủy</button>
+        <button type="submit" [disabled]="addSupplierForm.invalid" class="btn btn-success">Lưu</button>
       </div>
     </form>
   

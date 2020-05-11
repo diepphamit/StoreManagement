@@ -1,7 +1,7 @@
 
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">Quản lý loại hàng</h3>
+        <h3 class="box-title">Quản lý nhà cung cấp</h3>
     </div>
     <div class="box-body">
         <div class="row">
@@ -29,15 +29,17 @@
                     <tbody>
                         <tr>
                             <th style="width: 5%">Id</th>
-                            <th>Tên loại</th>
-                            <th>Mô tả</th>
+                            <th>Tên nhà cung cấp</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
                             <th style="text-align: center;">Hành động</th>
                         </tr>
                         <tr
                             *ngFor="let item of itemsAsync | async">
                             <td>{{ item.id }}</td>
                             <td>{{ item.name }}</td>
-                            <td>{{ item.description }}</td>
+                            <td>{{ item.phoneNumber }}</td>
+                            <td>{{ item.address }}</td>
                             <td style=" text-align: center;">
                                 <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;" (click) = "edit(item.id)"
                                     >
@@ -64,7 +66,7 @@
         <h4 class="modal-title">Xác nhận</h4>
     </div>
     <div class="modal-body">
-        <p>Bạn có chắc chắn muốn xóa loại hàng này không?</p>
+        <p>Bạn có chắc chắn muốn xóa nhà cung cấp này không?</p>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" (click)="close()">Đóng</button>

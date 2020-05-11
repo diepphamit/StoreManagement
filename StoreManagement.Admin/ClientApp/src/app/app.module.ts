@@ -17,6 +17,7 @@ import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
 import { ProductService } from './services/product.sevice';
 import { PictureService } from './services/picture.service';
+import { SupplierService } from './services/supplier.service';
 
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
@@ -57,7 +58,8 @@ export function tokenGetter() {
     AuthService,
     UserService,
     CategoryService,
-    ProductService
+    ProductService,
+    SupplierService
   ],
   bootstrap: [AppComponent]
 })

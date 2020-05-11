@@ -1,1 +1,32 @@
-<p>edit-category works!</p>
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+      <h3 class="box-title">Cập nhật</h3>
+    </div>
+  
+    <form [formGroup]="editCategoryForm" (submit)="editCategory()" novalidate>
+      <div class="box-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Tên loại hàng</label>
+              <input type="text" class="form-control" formControlName="name" placeholder="Tên loại hàng"
+                [ngClass]="{ 'is-invalid': f.name.errors }">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Mô tả</label>
+              <input type="text" class="form-control" formControlName="description" placeholder="Mô tả"
+                [ngClass]="{ 'is-invalid': f.description.errors }">
+            </div>
+          </div>
+          </div>
+        </div>
+      <div class="box-footer text-center">
+        <button [routerLink]="['/categories']" class="btn btn-default">Hủy</button>
+        <button type="submit" [disabled]="editCategoryForm.invalid" class="btn btn-success pull-right">Lưu</button>
+      </div>
+    </form>
+  
+  </div>

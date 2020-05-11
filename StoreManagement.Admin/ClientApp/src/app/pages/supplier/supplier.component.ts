@@ -7,22 +7,21 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import {  BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { CategoryService } from 'src/app/services/category.service';
-import { Category } from 'src/app/models/category/category.model';
+import { Supplier } from 'src/app/models/supplier/supplier.model';
+import { SupplierService } from 'src/app/services/supplier.service';
 
 @Component({
-    selector: 'app-category',
-    templateUrl: './category.component.html'
+    selector: 'app-supplier',
+    templateUrl: './supplier.component.html'
 })
-export class CategoryComponent implements OnInit {
-    category: Category;
+export class SupplierComponent implements OnInit {
+    supplier: Supplier;
     keyword: string;
     itemsAsync: Observable<any[]>;
     modalRef: BsModalRef;
 
     constructor(
-        // tslint:disable-next-line:no-shadowed-variable
-        public CategoryService: CategoryService,
+        public supplierService: SupplierService,
         private router: Router,
         private modalService: BsModalService,
         private toastr: ToastrService
@@ -30,19 +29,19 @@ export class CategoryComponent implements OnInit {
 
     ngOnInit() {
         this.keyword = '';
-        this.getAllCategories();
+        this.getAllSuppliers();
     }
 
-    getAllCategories() {
-        this.itemsAsync = this.CategoryService.getAllCategories(this.keyword);
+    getAllSuppliers() {
+        this.itemsAsync = this.supplierService.getAllSuppliers(this.keyword);
     }
 
     add() {
-        this.router.navigate(['/categories/add']);
+        this.router.navigate(['/suppliers/add']);
     }
 
     edit(id: any) {
-        this.router.navigate(['/categories/edit/' + id]);
+        this.router.navigate(['/suppliers/edit/' + id]);
     }
 
     // editFull(id: any) {
@@ -50,38 +49,38 @@ export class CategoryComponent implements OnInit {
     // }
 
     deleteConfirm(template: TemplateRef<any>, data: any) {
-        this.category = Object.assign({}, data);
+        this.supplier = Object.assign({}, data);
         this.modalRef = this.modalService.show(template);
     }
 
     confirm(): void {
-        if (this.category) {
-            this.CategoryService.deleteCategory(this.category.id)
+        if (this.supplier) {
+            this.supplierService.deleteSupplier(this.supplier.id)
                 .subscribe(
                     () => {
-                        this.getAllCategories();
-                        this.toastr.success(`Xóa loại hàng thành công`);
+                        this.getAllSuppliers();
+                        this.toastr.success(`Xóa nhà cung cấp thành công`);
                     },
                     (error: HttpErrorResponse) => {
-                        this.toastr.error(('Xóa loại hàng không thành công'));
+                        this.toastr.error(('Xóa nhà cung cấp  không thành công'));
                     }
                 );
         }
-        this.category = undefined;
+        this.supplier = undefined;
         this.modalRef.hide();
     }
 
     close(): void {
-        this.category = undefined;
+        this.supplier = undefined;
         this.modalRef.hide();
     }
 
     search() {
-        this.getAllCategories();
+        this.getAllSuppliers();
     }
 
     refresh() {
         this.keyword = '';
-        this.getAllCategories();
+        this.getAllSuppliers();
     }
 }
