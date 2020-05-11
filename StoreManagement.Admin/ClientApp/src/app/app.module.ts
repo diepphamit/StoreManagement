@@ -16,6 +16,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
 import { ProductService } from './services/product.sevice';
+import { SupplierService } from './services/supplier.service';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { ProductService } from './services/product.sevice';
     AuthService,
     UserService,
     CategoryService,
-    ProductService
+    ProductService,
+    SupplierService
   ],
   bootstrap: [AppComponent]
 })
