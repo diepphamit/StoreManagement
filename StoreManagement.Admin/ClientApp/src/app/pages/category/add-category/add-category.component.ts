@@ -6,7 +6,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Category } from 'src/app/models/category/category.model';
 import { CategoryComponent } from '../category.component';
 import { CategoryService } from 'src/app/services/category.service';
-import { CategoryForAdd } from 'src/app/models/category/categoryForAdd.model';
 
 @Component({
   selector: 'app-add-category',
@@ -15,7 +14,7 @@ import { CategoryForAdd } from 'src/app/models/category/categoryForAdd.model';
 export class AddCategoryComponent implements OnInit {
 
   addCategoryForm: FormGroup;
-  category: CategoryForAdd;
+  category: Category;
 
   constructor(
     private fb: FormBuilder,
