@@ -7,9 +7,10 @@ export class UserUpdate {
     public address: string;
     public gender: boolean;
     public dateOfBirth: Date;
+    public groupUserId: Number;
 
     constructor(id?: string, username?: string, fullname?: string, email?: string,
-        phoneNumber?: string, address?: string, gender?: boolean, dateOfBirth?: Date) {
+        phoneNumber?: string, address?: string, gender?: boolean, dateOfBirth?: Date, groupUserId?: Number) {
         this.id = id;
         this.userName = username;
         this.fullName = fullname;
@@ -18,5 +19,6 @@ export class UserUpdate {
         this.address = address;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
+        this.groupUserId = groupUserId;
     }
 }

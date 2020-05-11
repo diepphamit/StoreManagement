@@ -40,7 +40,7 @@ export class AddUserComponent implements OnInit {
       gender: [true],
       dateOfBirth: [''],
       image: [''],
-      groupUserId: [3, Validators.required]
+      groupUserId: [3]
     });
   }
 
