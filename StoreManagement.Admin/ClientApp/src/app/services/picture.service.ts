@@ -4,17 +4,17 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class CategoryService {
-  baseUrl = environment.apiUrl + 'category';
+export class PictureService {
+  baseUrl = environment.apiUrl + 'picture';
 
   constructor(private http: HttpClient) {
   }
 
-  getAllCategories(keyword: string): Observable<any> {
+  getAllPictures(keyword: string): Observable<any> {
     return this.http.get(`${this.baseUrl}?keyword=${keyword}`);
   }
 
-  getCategoryById(id: any): Observable<any> {
+  getPictureById(id: any): Observable<any> {
     return this.http.get(`${this.baseUrl}/${id}`);
   }
 
@@ -22,19 +22,19 @@ export class CategoryService {
   //     return this.http.get(`${this.baseUrl}/GetUserFullById/${id}`);
   // }
 
-  createCategory(category: any) {
-    return this.http.post(this.baseUrl, category);
+  createPicture(picture: any) {
+    return this.http.post(this.baseUrl, picture);
   }
 
-  editCategory(id: any, category: any) {
-    return this.http.put(`${this.baseUrl}/${id}`, category);
+  editPicture(id: any, picture: any) {
+    return this.http.put(`${this.baseUrl}/${id}`, picture);
   }
 
   // editUserFull(id: any, user: any) {
   //     return this.http.put(`${this.baseUrl}/UpdateUserFull/${id}`, user);
   // }
 
-  deleteCategory(id: any) {
+  deletePicture(id: any) {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
 }

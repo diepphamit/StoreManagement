@@ -1,0 +1,71 @@
+<div class="box box-primary">
+  <div class="box-header with-border">
+    <h3 class="box-title">Quản lý hình ảnh</h3>
+  </div>
+  <div class="box-body">
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="input-group">
+          <input class="form-control" type="text" [(ngModel)]="keyword" placeholder="Nhập từ khóa" />
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" (click)="search()">
+              <i class="fa fa-search"></i>
+            </button>
+            <button class="btn btn-default" type="button" (click)="refresh()">
+              <i class="fa fa-refresh"></i>
+            </button>
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-success" (click)="add()">Thêm mới</button>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-xs-12 col-md-12">
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th style="width: 5%">Id</th>
+              <th>Tên sản phẩm</th>
+              <th>URL</th>
+              <th style="text-align: center;">Hành động</th>
+            </tr>
+            <tr *ngFor="let item of itemsAsync | async">
+              <td>{{ item.id }}</td>
+              <td>{{ item.productName }}</td>
+              <td>{{ item.imageUrl }}</td>
+              <td style=" text-align: center;">
+                <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;" (click)="edit(item.id)">
+                  <i class="fa fa-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" style="margin-right: 10px; margin-bottom: 5px;"
+                  (click)="deleteConfirm(template,item)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <pagination-controls class="custom-pagination" (pageChange)="getAllUsers($event)" autoHide="true"
+                  responsive="true" previousLabel="Trước" nextLabel="Sau" directionLinks="true">
+              </pagination-controls> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <button type="button" class="close" (click)="close()">&times;</button>
+    <h4 class="modal-title">Xác nhận</h4>
+  </div>
+  <div class="modal-body">
+    <p>Bạn có chắc chắn muốn xóa ảnh này không?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="close()">Đóng</button>
+    <button type="button" class="btn btn-primary" (click)="confirm()">OK</button>
+  </div>
+</ng-template>

@@ -12,7 +12,7 @@ import { UserLogin } from '../models/user/user-login.model';
   providedIn: 'root'
 })
 export class AuthService {
-  baseUrl = 'http://localhost:5000/api/' + 'Auth/';
+  baseUrl = environment.apiUrl + 'Auth/';
   decodedToken: Token;
   currentUser: User;
   loginRedirectUrl: string;

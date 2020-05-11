@@ -41,12 +41,13 @@ const routes: Routes = [
         loadChildren: () => import('./pages/product/product.module').then(m => m.ProductModule)
       },
       {
-        path: 'suppliers',
-        loadChildren: () => import('./pages/supplier/supplier.module').then(m => m.SupplierModule)
+
+        path: 'pictures',
+        loadChildren: () => import('./pages/picture/picture.module').then(m => m.PictureModule)
       },
       {
-        path: 'orders',
-        loadChildren: () => import('./pages/order/order.module').then(m => m.OrderModule)
+        path: 'suppliers',
+        loadChildren: () => import('./pages/supplier/supplier.module').then(m => m.SupplierModule)
       }
     ]
   },
