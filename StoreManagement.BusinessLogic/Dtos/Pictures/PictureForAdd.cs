@@ -4,10 +4,10 @@ using System.Text;
 
 namespace StoreManagement.BusinessLogic.Dtos.Pictures
 {
-    public class PictureUI
+    public class PictureForAdd
     {
-        public int Id { get; set; }
-        public string ProductName { get; set; }
+        public int ProductId { get; set; }
         public string ImageUrl { get; set; }
+        
     }
 }

@@ -33,6 +33,10 @@ namespace StoreManagement.BusinessLogic.AutoMapper
             CreateMap<UserUpdateDto, User>();
 
             CreateMap<Picture, PictureUI>().ForMember(x => x.ProductName, y => { y.MapFrom(z => z.Product.Name); });
+            CreateMap<PictureUpdate, Picture>();
+            CreateMap<Picture, PictureDto>();
+            CreateMap<PictureForAdd, Picture>();
+
             CreateMap<Supplier, SupplierUI>();
             CreateMap<SupplierUI, Supplier>();
         }

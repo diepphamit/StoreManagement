@@ -8,6 +8,6 @@ namespace StoreManagement.BusinessLogic.Dtos.Pictures
     {
         public int Id { get; set; }
         public string ImageUrl { get; set; }
-        public int productId { get; set; }
+        public int ProductId { get; set; }
     }
 }

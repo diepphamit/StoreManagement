@@ -16,6 +16,11 @@ import { ToastrModule } from 'ngx-toastr';
 import { UserService } from './services/user.service';
 import { CategoryService } from './services/category.service';
 import { ProductService } from './services/product.sevice';
+import { PictureService } from './services/picture.service';
+
+export function tokenGetter() {
+  return localStorage.getItem(ACCESS_TOKEN);
+}
 
 @NgModule({
   declarations: [
@@ -34,9 +39,7 @@ import { ProductService } from './services/product.sevice';
   }),
     JwtModule.forRoot({
       config: {
-        tokenGetter: () => {
-          return localStorage.getItem(ACCESS_TOKEN);
-        },
+        tokenGetter: tokenGetter,
           whitelistedDomains: [
               'localhost:5000',
               'localhost:44327'
@@ -50,6 +53,7 @@ import { ProductService } from './services/product.sevice';
   ModalModule.forRoot()
   ],
   providers: [
+    PictureService,
     AuthService,
     UserService,
     CategoryService,
