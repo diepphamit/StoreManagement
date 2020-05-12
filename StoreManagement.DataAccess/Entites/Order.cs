@@ -13,6 +13,7 @@ namespace StoreManagement.DataAccess.Entites
         public DateTime OrderDate { get; set; }
         public bool Status { get; set; }
         public int Code { get; set; }
+        public int TotalPrice { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
