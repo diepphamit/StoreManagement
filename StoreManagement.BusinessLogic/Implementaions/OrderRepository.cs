@@ -61,14 +61,11 @@ namespace StoreManagement.BusinessLogic.Implementaions
             try
             {
                 order.Code = orderupdate.Code;
-                order.Customer = orderupdate.Customer;
                 order.CustomerId = orderupdate.CustomerId;
                 order.OrderDate = orderupdate.OrderDate;
-                order.OrderDetails = orderupdate.OrderDetails;
-                order.Staff = orderupdate.Staff;
                 order.StaffId = orderupdate.StaffId;
                 order.Status = orderupdate.Status;
-                order.TotalPrice = TotalPrice(id);
+                order.TotalPrice = orderupdate.TotalPrice;
                 await _context.SaveChangesAsync();
 
                 return true;
@@ -92,17 +89,6 @@ namespace StoreManagement.BusinessLogic.Implementaions
             return await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        int TotalPrice(int id)
-        {
-            var order = _context.Orders.Include(x => x.OrderDetails).FirstOrDefault(p => p.Id == id);
-            int totalPrice = 0;
-            foreach (var item in order.OrderDetails)
-            {
-                var product = _context.Products.Include(x => x.OrderDetails).FirstOrDefault(p => p.Id == item.ProductId);
-                totalPrice += product.Price;
-            }
-            return totalPrice;
-        }
 
     }
 }
