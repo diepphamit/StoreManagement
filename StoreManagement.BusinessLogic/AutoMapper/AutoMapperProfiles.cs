@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using StoreManagement.BusinessLogic.Dtos.Auth;
+using StoreManagement.BusinessLogic.Dtos.Branches;
 using StoreManagement.BusinessLogic.Dtos.Categories;
+using StoreManagement.BusinessLogic.Dtos.Orders;
 using StoreManagement.BusinessLogic.Dtos.Pictures;
 using StoreManagement.BusinessLogic.Dtos.Product;
 using StoreManagement.BusinessLogic.Dtos.Suppliers;
@@ -39,6 +41,10 @@ namespace StoreManagement.BusinessLogic.AutoMapper
 
             CreateMap<Supplier, SupplierUI>();
             CreateMap<SupplierUI, Supplier>();
+            CreateMap<Branch, BranchUI>();
+            CreateMap<BranchUI, Branch>();
+            CreateMap<Order, OrderUI>();
+            CreateMap<OrderUI, Order>();
         }
         
     }
