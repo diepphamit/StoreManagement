@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StoreManagement.BusinessLogic.Dtos.Suppliers
 {
-    class SupplierUI
+    public class SupplierUI
     {
         public int Id { get; set; }
         public string Name { get; set; }
