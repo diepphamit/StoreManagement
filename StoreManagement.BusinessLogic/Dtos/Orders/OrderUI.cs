@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace StoreManagement.DataAccess.Entites
+namespace StoreManagement.BusinessLogic.Dtos.Orders
 {
-    public class Order
+    public class OrderUI
     {
         public int Id { get; set; }
         public int StaffId { get; set; }
-        public virtual User Staff { get; set; }
-        public int?  CustomerId{ get; set; }
-        public virtual User Customer { get; set; }
+        public int? CustomerId { get; set; }
         public DateTime OrderDate { get; set; }
         public bool Status { get; set; }
         public int Code { get; set; }
         public int TotalPrice { get; set; }
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

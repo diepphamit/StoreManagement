@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace StoreManagement.BusinessLogic.Dtos.Suppliers
+namespace StoreManagement.BusinessLogic.Dtos.Branches
 {
-    public class SupplierUI
+    public class BranchUI
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
         public string Description { get; set; }
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
     }
-
 }
-
