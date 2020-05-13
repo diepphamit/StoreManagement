@@ -12,25 +12,14 @@
             <label>Tên đăng nhập</label>
             <input type="text" class="form-control" formControlName="username" placeholder="Tên đăng nhập"
               [ngClass]="{ 'is-invalid': f.username.errors }">
+              <app-control-messages [control]="addUserForm.get('username')"></app-control-messages>
           </div>
           <div class="form-group">
             <label>Email</label>
             <input type="text" class="form-control" formControlName="email" placeholder="Email"
               [ngClass]="{ 'is-invalid': f.email.errors }">
+              <app-control-messages [control]="addUserForm.get('email')"></app-control-messages>
           </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label>Mật Khẩu</label>
-            <input type="text" class="form-control" formControlName="password" placeholder="Mật khẩu"
-              [ngClass]="{ 'is-invalid': f.password.errors }">
-          </div>
-          <div class="form-group">
-            <label>Xác nhận mật khẩu</label>
-            <input type="text" class="form-control" placeholder="Nhập lại mật khẩu">
-          </div>
-        </div>
-        <div class="col-sm-6">
           <div class="form-group">
             <label>Họ và tên</label>
             <input type="text" class="form-control" formControlName="name" placeholder="Họ và tên"
@@ -43,9 +32,6 @@
               <option *ngFor="let role of roles1 " value={{role.key}}>{{role.value[0]}}</option>
             </select>
           </div>
-        </div>
-
-        <div class="col-sm-6">
           <div class="form-group">
             <label>Địa chỉ</label>
             <input type="text" class="form-control" formControlName="address" placeholder="Địa chỉ"
@@ -60,6 +46,18 @@
         </div>
         <div class="col-sm-6">
           <div class="form-group">
+            <label>Mật Khẩu</label>
+            <input type="text" class="form-control" formControlName="password" placeholder="Mật khẩu"
+              [ngClass]="{ 'is-invalid': f.password.errors }">
+              <app-control-messages [control]="addUserForm.get('password')"></app-control-messages>
+          </div>
+          <div class="form-group">
+            <label>Xác nhận mật khẩu</label>
+            <input type="text" class="form-control" placeholder="Nhập lại mật khẩu" formControlName="passwordAgain"
+            [ngClass]="{ 'is-invalid': f.passwordAgain.errors }">
+            <app-control-messages [control]="addUserForm.get('passwordAgain')"></app-control-messages>
+          </div>
+          <div class="form-group">
             <label>Ngày sinh</label>
             <input type="text" bsDatepicker class="form-control" formControlName="dateOfBirth" placeholder="Ngày Sinh"
               [ngClass]="{ 'is-invalid': f.dateOfBirth.errors }">
@@ -68,8 +66,6 @@
             <label>Hình ảnh</label>
             <input type="text" class="form-control" formControlName="image" placeholder="Hình Ảnh" [ngClass]="{ 'is-invalid': f.image.errors }">
           </div>
-        </div>
-        <div class="col-sm-6">
           <div class="form-group">
             <label>Số điện thoại</label>
             <input type="text" class="form-control" formControlName="phoneNumber" placeholder="Số điện thoại"

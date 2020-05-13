@@ -34,7 +34,7 @@ export class EditPictureComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.products = this.productService.getAllProducts('');
+    this.products = this.productService.getAllProducts('', 1, 1);
 
     this.route.params.subscribe(params => {
       this.id = params.id;

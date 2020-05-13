@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Product;
 using StoreManagement.BusinessLogic.Interfaces;
 using StoreManagement.DataAccess.Entites;
@@ -27,14 +28,32 @@ namespace StoreManagement.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllProducts(string keyword)
+        public IActionResult GetAllProducts(string keyword, int page = 1, int pageSize = 10)
         {
-            var products = _productRepository.GetAllProducts(keyword);
+            try
+            {
+                var list = _productRepository.GetAllProducts(keyword);
 
-            if (products == null)
-                return NotFound();
+                int totalCount = list.Count();
 
-            return Ok(_mapper.Map<IEnumerable<ProductReturn>>(products));
+                var query = list.OrderByDescending(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize);
+
+                var response = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductReturn>>(query);
+
+                var paginationSet = new PaginationSet<ProductReturn>()
+                {
+                    Items = response,
+                    Total = totalCount,
+                };
+
+                return Ok(paginationSet);
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError("Có lỗi trong quá trình lấy dữ liệu", ex.ToString());
+
+                return BadRequest();
+            }
 
         }
 

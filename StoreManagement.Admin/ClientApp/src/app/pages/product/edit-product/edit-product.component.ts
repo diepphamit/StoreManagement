@@ -7,6 +7,8 @@ import { CategoryService } from 'src/app/services/category.service';
 import { ProductService } from 'src/app/services/product.sevice';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ValidationService } from 'src/app/services/validation.service';
+import { SupplierService } from 'src/app/services/supplier.service';
 
 @Component({
   selector: 'app-edit-product',
@@ -26,21 +28,23 @@ export class EditProductComponent implements OnInit {
     private route: ActivatedRoute,
     private categoryService: CategoryService,
     private productService: ProductService,
+    private supplierService: SupplierService,
     private toastr: ToastrService
   ) {
     this.editProductForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      price: ['', Validators.required],
-      discount: ['', Validators.required],
-      barcode: ['', Validators.required],
-      supplierId: ['', Validators.required],
-      categoryId: ['', Validators.required]
+      name: ['', [ValidationService.requireValue]],
+      description: ['', [ValidationService.requireValue]],
+      price: ['', [ValidationService.requireValue, ValidationService.numberValidator]],
+      discount: ['', [ValidationService.requireValue, ValidationService.numberValidator]],
+      barcode: ['', [ValidationService.requireValue, ValidationService.numberValidator]],
+      supplierId: ['', [ValidationService.requireValue]],
+      categoryId: ['', [ValidationService.requireValue]]
     });
   }
 
   ngOnInit() {
     this.categories = this.categoryService.getAllCategories('');
+    this.suppliers = this.supplierService.getAllSuppliers('');
 
     this.route.params.subscribe(params => {
       this.id = params.id;
@@ -75,7 +79,7 @@ export class EditProductComponent implements OnInit {
     this.productService.editProduct(this.id, this.product).subscribe(
       () => {
         this.router.navigate(['/products']).then(() => {
-          this.toastr.success('Cập nhật khóa học thành công');
+          this.toastr.success('Cập nhật sản phẩm thành công');
         });
       },
       (error: HttpErrorResponse) => {

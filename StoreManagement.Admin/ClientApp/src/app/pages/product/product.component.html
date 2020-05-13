@@ -6,11 +6,11 @@
     <div class="row">
       <div class="col-sm-8">
         <div class="input-group">
-          <input class="form-control" type="text" [(ngModel)]="keyword" placeholder="Nhập từ khóa" />
+          <input class="form-control" type="text" [(ngModel)]="keyword" (keyup) = "searchCharacter()" placeholder="Nhập từ khóa" />
           <span class="input-group-btn">
-            <button class="btn btn-default" type="button" (click)="search()">
+            <!-- <button class="btn btn-default" type="button" (click)="search()">
               <i class="fa fa-search"></i>
-            </button>
+            </button> -->
             <button class="btn btn-default" type="button" (click)="refresh()">
               <i class="fa fa-refresh"></i>
             </button>
@@ -38,7 +38,7 @@
               <th>Hình ảnh</th>
               <th style="text-align: center;">Hành động</th>
             </tr>
-            <tr *ngFor="let item of itemsAsync | async">
+            <tr *ngFor="let item of itemsAsync | async | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: total }">
               <td>{{ item.id }}</td>
               <td>{{ item.name }}</td>
               <td>{{ item.description }}</td>
@@ -61,9 +61,12 @@
             </tr>
           </tbody>
         </table>
-        <!-- <pagination-controls class="custom-pagination" (pageChange)="getAllUsers($event)" autoHide="true"
+        <div class="text-center">
+          <pagination-controls class="custom-pagination" (pageChange)="getAllProducts($event)" autoHide="true"
                   responsive="true" previousLabel="Trước" nextLabel="Sau" directionLinks="true">
-              </pagination-controls> -->
+          </pagination-controls>
+        </div>
+
       </div>
     </div>
   </div>

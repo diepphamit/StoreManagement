@@ -7,6 +7,8 @@ import { ProductService } from 'src/app/services/product.sevice';
 import { CategoryService } from 'src/app/services/category.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ValidationService } from 'src/app/services/validation.service';
+import { SupplierService } from 'src/app/services/supplier.service';
 
 @Component({
   selector: 'app-add-product',
@@ -24,21 +26,23 @@ export class AddProductComponent implements OnInit {
     private router: Router,
     private productService: ProductService,
     private categoryService: CategoryService,
+    private supplierService: SupplierService,
     private toastr: ToastrService
   ) {
     this.addProductForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      price: ['', Validators.required],
-      discount: ['', Validators.required],
-      barcode: ['', Validators.required],
-      supplierId: ['', Validators.required],
-      categoryId: ['', Validators.required]
+      name: ['', [ValidationService.requireValue]],
+      description: ['', [ValidationService.requireValue]],
+      price: ['', [ValidationService.requireValue, ValidationService.numberValidator]],
+      discount: ['', [ValidationService.requireValue, ValidationService.numberValidator]],
+      barcode: ['', [ValidationService.requireValue, ValidationService.numberValidator]],
+      supplierId: ['', [ValidationService.requireValue]],
+      categoryId: ['', [ValidationService.requireValue]]
     });
   }
 
   ngOnInit() {
     this.categories = this.categoryService.getAllCategories('');
+    this.suppliers = this.supplierService.getAllSuppliers('');
   }
   addProduct() {
     this.product = Object.assign({}, this.addProductForm.value);
@@ -47,7 +51,7 @@ export class AddProductComponent implements OnInit {
     this.product.price = Number(this.product.price);
     this.product.discount = Number(this.product.discount);
     this.product.barcode = Number(this.product.barcode);
-
+    console.log(this.product);
     this.productService.createProduct(this.product).subscribe(
       () => {
         this.router.navigate(['/products']).then(() => {

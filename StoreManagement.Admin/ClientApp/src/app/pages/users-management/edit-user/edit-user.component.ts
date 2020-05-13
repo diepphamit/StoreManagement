@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { ValidationService } from 'src/app/services/validation.service';
 
 @Component({
   selector: 'app-edit-user',
@@ -37,7 +38,7 @@ export class EditUserComponent implements OnInit {
     private toastr: ToastrService
   ) {
     this.editUserForm = this.fb.group({
-      email: ['', Validators.required],
+      email: ['', [ValidationService.emailValidator]],
       name: [''],
       address: [''],
       phoneNumber: [''],

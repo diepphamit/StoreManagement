@@ -12,11 +12,21 @@
             <label>Email</label>
             <input type="text" class="form-control" formControlName="email" placeholder="Email"
               [ngClass]="{ 'is-invalid': f.email.errors }">
+              <app-control-messages [control]="editUserForm.get('email')"></app-control-messages>
           </div>
           <div class="form-group">
             <label>Họ và tên</label>
             <input type="text" class="form-control" formControlName="name" placeholder="Họ và tên"
               [ngClass]="{ 'is-invalid': f.name.errors }">
+          </div>
+          <div class="form-group">
+            <label>Ngày sinh</label>
+            <input type="text" bsDatepicker class="form-control" formControlName="dateOfBirth" placeholder="Ngày Sinh"
+              [ngClass]="{ 'is-invalid': f.dateOfBirth.errors }">
+          </div>
+          <div class="form-group">
+            <label>Hình ảnh</label>
+            <input type="text" class="form-control" formControlName="image" placeholder="Hình Ảnh" [ngClass]="{ 'is-invalid': f.image.errors }">
           </div>
         </div>
          <div class="col-sm-6">
@@ -31,19 +41,6 @@
               <option *ngFor="let gender1 of genders " value={{gender1.key}}>{{gender1.value[0]}}</option>
           </select>
           </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label>Ngày sinh</label>
-            <input type="text" bsDatepicker class="form-control" formControlName="dateOfBirth" placeholder="Ngày Sinh"
-              [ngClass]="{ 'is-invalid': f.dateOfBirth.errors }">
-          </div>
-          <div class="form-group">
-            <label>Hình ảnh</label>
-            <input type="text" class="form-control" formControlName="image" placeholder="Hình Ảnh" [ngClass]="{ 'is-invalid': f.image.errors }">
-          </div>
-        </div>
-        <div class="col-sm-6">
           <div class="form-group">
             <label>Số điện thoại</label>
             <input type="text" class="form-control" formControlName="phoneNumber" placeholder="Số điện thoại"

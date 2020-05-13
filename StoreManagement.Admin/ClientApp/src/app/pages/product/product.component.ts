@@ -6,6 +6,7 @@ import { ProductService } from 'src/app/services/product.sevice';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
+import { tap, map, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product',
@@ -17,6 +18,9 @@ export class ProductComponent implements OnInit {
   keyword: string;
   itemsAsync: Observable<any[]>;
   modalRef: BsModalRef;
+  page: number;
+  pageSize: number;
+  total: number;
 
   constructor(
     public productService: ProductService,
@@ -27,11 +31,20 @@ export class ProductComponent implements OnInit {
 
   ngOnInit() {
     this.keyword = '';
-    this.getAllProducts();
+    this.page = 1;
+    this.pageSize = 10;
+    this.getAllProducts(this.page);
   }
 
-  getAllProducts() {
-    this.itemsAsync = this.productService.getAllProducts(this.keyword);
+  getAllProducts(page: number) {
+    this.itemsAsync = this.productService.getAllProducts(this.keyword, page, this.pageSize)
+      .pipe(
+        tap(response => {
+          this.total = response.total;
+          this.page = page;
+        }),
+        map(response => response.items)
+      );
   }
 
   add() {
@@ -56,7 +69,7 @@ export class ProductComponent implements OnInit {
       this.productService.deleteProduct(this.product.id)
         .subscribe(
           () => {
-            this.getAllProducts();
+            this.getAllProducts(this.page);
             this.toastr.success(`Xóa sản phẩm thành công`);
           },
           (error: HttpErrorResponse) => {
@@ -74,12 +87,23 @@ export class ProductComponent implements OnInit {
   }
 
   search() {
-    this.getAllProducts();
+    this.getAllProducts(this.page);
   }
 
   refresh() {
     this.keyword = '';
-    this.getAllProducts();
+    this.getAllProducts(this.page);
   }
+
+  searchCharacter() {
+    this.itemsAsync = this.productService.getAllProducts(this.keyword, this.page, this.pageSize)
+        .pipe(
+            debounceTime(1000),
+            tap(response => {
+                this.total = response.total;
+            }),
+            map(response => response.items)
+        );
+}
 
 }

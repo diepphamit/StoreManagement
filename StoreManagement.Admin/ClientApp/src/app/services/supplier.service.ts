@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class SupplierService {
-  baseUrl = 'http://localhost:5000/api/' + 'supplier';
+  baseUrl = environment.apiUrl + 'supplier';
 
   constructor(private http: HttpClient) {
   }

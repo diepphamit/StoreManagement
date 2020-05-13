@@ -10,8 +10,8 @@ export class ProductService {
   constructor(private http: HttpClient) {
   }
 
-  getAllProducts(keyword: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}?keyword=${keyword}`);
+  getAllProducts(keyword: string, page: number, pageSize: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
   }
 
   getProductById(id: any): Observable<any> {
