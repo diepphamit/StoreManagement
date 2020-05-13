@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user/user.model';
+import { ValidationService } from 'src/app/services/validation.service';
 
 @Component({
   selector: 'app-add-user',
@@ -31,9 +32,10 @@ export class AddUserComponent implements OnInit {
     private toastr: ToastrService
   ) {
     this.addUserForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-      email: ['', Validators.required],
+      username: ['', [ValidationService.requireValue]],
+      password: ['', [ValidationService.requireValue, ValidationService.passwordValidator]],
+      passwordAgain: ['', [ValidationService.requireValue, ValidationService.passwordMatch]],
+      email: ['', [ValidationService.emailValidator]],
       name: [''],
       address: [''],
       phoneNumber: [''],

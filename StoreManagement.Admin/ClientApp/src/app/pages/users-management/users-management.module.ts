@@ -6,6 +6,9 @@ import { UsersManagementRoutingModule } from './users-management-routing.module'
 import { AddUserComponent } from './add-user/add-user.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ControlMessagesComponent } from 'src/app/helper/control-messages.component';
+import { AppModule } from 'src/app/app.module';
+import { ControlModule } from 'src/app/helper/control.module';
 
 @NgModule({
     imports: [
@@ -13,6 +16,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
         FormsModule,
         ReactiveFormsModule,
         UsersManagementRoutingModule,
+        ControlModule,
         BsDatepickerModule.forRoot()
     ],
     declarations: [

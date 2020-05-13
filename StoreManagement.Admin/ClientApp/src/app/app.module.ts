@@ -18,6 +18,8 @@ import { CategoryService } from './services/category.service';
 import { ProductService } from './services/product.sevice';
 import { PictureService } from './services/picture.service';
 import { SupplierService } from './services/supplier.service';
+import { AuthGuard } from './services/auth-guard.service';
+import { ValidationService } from './services/validation.service';
 
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
@@ -54,6 +56,8 @@ export function tokenGetter() {
   ModalModule.forRoot()
   ],
   providers: [
+    AuthGuard,
+    ValidationService,
     PictureService,
     AuthService,
     UserService,
@@ -61,6 +65,6 @@ export function tokenGetter() {
     ProductService,
     SupplierService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

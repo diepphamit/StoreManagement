@@ -34,7 +34,7 @@ export class AddPictureComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.products = this.productService.getAllProducts('');
+    this.products = this.productService.getAllProducts('', 1, 1);
   }
   addPicture() {
     this.picture = Object.assign({}, this.addPictureForm.value);
