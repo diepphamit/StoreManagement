@@ -1,4 +1,5 @@
-﻿using StoreManagement.DataAccess.Entites;
+﻿using StoreManagement.BusinessLogic.Dtos.Orders;
+using StoreManagement.DataAccess.Entites;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,5 +14,6 @@ namespace StoreManagement.BusinessLogic.Interfaces
         Task<bool> CreateOrderAsync(Order order);
         Task<bool> EditOrderAsync(int id, Order orderupdate);
         Task<bool> DeleteOrderAsync(int id);
+        Task<IEnumerable<RevenueUI>> GetRevenueMonth(DateTime date);
     }
 }

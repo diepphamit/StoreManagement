@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.OrderDetails;
 using StoreManagement.BusinessLogic.Interfaces;
 using StoreManagement.DataAccess.Entites;
@@ -25,14 +26,31 @@ namespace StoreManagement.API.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public IActionResult GetAllOrderDetail()
+        public IActionResult GetAllOrderDetail(int OrderId, int page = 1, int pagesize = 10)
         {
-            var orderDetail = _orderDetailRepository.GetAllOrderDetail();
+            try
+            {
+                var list = _orderDetailRepository.GetAllOrderDetail(OrderId);
 
-            if (orderDetail == null)
-                return NotFound();
+                int totalCount = list.Count();
 
-            return Ok(_mapper.Map<IEnumerable<OrderDetailUI>>(orderDetail));
+                var query = list.OrderByDescending(x => x.Id).Skip((page - 1) * pagesize).Take(pagesize);
+
+                var response = _mapper.Map<IEnumerable<OrderDetail>, IEnumerable<OrderDetailUI>>(query);
+
+                var paginationset = new PaginationSet<OrderDetailUI>()
+                {
+                    Items = response,
+                    Total = totalCount
+                };
+
+                return Ok(paginationset);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
         }
 
         [HttpGet("{id}")]

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Branches;
 using StoreManagement.BusinessLogic.Interfaces;
 using StoreManagement.DataAccess.Entites;
@@ -25,11 +26,31 @@ namespace StoreManagement.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllBranch(string keyword)
+        public IActionResult GetAllBranch(string keyword, int page = 1, int pagesize = 10)
         {
-            var branches = _branchRepository.GetAllBranches(keyword);
-            if(branches==null) return NotFound();
-            return Ok(_mapper.Map<IEnumerable<BranchUI>>(branches));
+            try
+            {
+                var list = _branchRepository.GetAllBranches(keyword);
+
+                int totalCount = list.Count();
+
+                var query = list.OrderByDescending(x => x.Id).Skip((page - 1) * pagesize).Take(pagesize);
+
+                var response = _mapper.Map<IEnumerable<Branch>, IEnumerable<BranchUI>>(query);
+
+                var pagination = new PaginationSet<BranchUI>()
+                {
+                    Items = response,
+                    Total = totalCount
+                };
+
+                return Ok(pagination);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
         }
 
         [HttpGet("{id}")]

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Pictures;
 using StoreManagement.BusinessLogic.Interfaces;
 using StoreManagement.DataAccess.Entites;
@@ -25,13 +26,31 @@ namespace StoreManagement.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllPicture()
+        public IActionResult GetAllPicture(int page = 1, int pagesize = 10)
         {
-            var pictures = _pictureRepository.GetAllPictures();
+            try
+            {
+                var list = _pictureRepository.GetAllPictures();
 
-            var picturesReturn = _mapper.Map<IEnumerable<PictureUI>>(pictures);
+                int totalCount = list.Count();
 
-            return Ok(picturesReturn);
+                var query = list.OrderByDescending(x => x.Id).Skip((page - 1) * pagesize).Take(pagesize);
+
+                var response = _mapper.Map<IEnumerable<Picture>, IEnumerable<PictureUI>>(query);
+
+                var paginationset = new PaginationSet<PictureUI>()
+                {
+                    Items = response,
+                    Total = totalCount
+                };
+
+                return Ok(paginationset);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
         }
 
         [HttpGet("{id}")]

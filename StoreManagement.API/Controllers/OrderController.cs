@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Orders;
 using StoreManagement.BusinessLogic.Interfaces;
 using StoreManagement.DataAccess.Entites;
@@ -23,15 +26,51 @@ namespace StoreManagement.API.Controllers
             _orderRepository = orderRepository;
             _mapper = mapper;
         }
+        [Route("GetAllOrder")]
         [HttpGet]
-        public IActionResult GetAllOrder(string keyword)
+        public IActionResult GetAllOrder(string keyword, int page = 1, int pagesize = 10)
         {
-            var order = _orderRepository.GetAllOrder(keyword);
-            if (order == null) 
-                return NotFound();
+            try
+            {
+                var list = _orderRepository.GetAllOrder(keyword);
 
-            return Ok(_mapper.Map<IEnumerable<OrderUI>>(order));
+                int totalCount = list.Count();
+
+                var query = list.OrderByDescending(x => x.Id).Skip((page - 1) * pagesize).Take(pagesize);
+
+                var response = _mapper.Map<IEnumerable<Order>, IEnumerable<OrderUI>>(query);
+
+                var paginationset = new PaginationSet<OrderUI>()
+                {
+                    Items = response,
+                    Total = totalCount
+                };
+
+                return Ok(paginationset);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
         }
+
+        [Route("Revenue")]
+        [HttpGet]
+        public async Task<IActionResult> GetRevenueMonth(DateTime date)
+        {
+
+            var revenue = await _orderRepository.GetRevenueMonth(date);
+           
+            var totalRevenueMonth = new TotalRevenueMonth()
+            {
+                Revenues = revenue,
+                Total = revenue.Sum(x => x.TotalRevenue)
+            };
+            return Ok(totalRevenueMonth);
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody]OrderUI orderUI)
         {
