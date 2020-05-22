@@ -8,7 +8,7 @@ namespace StoreManagement.BusinessLogic.Interfaces
 {
     public interface IOrderDetailRepository
     {
-        IEnumerable<OrderDetail> GetAllOrderDetail();
+        IEnumerable<OrderDetail> GetAllOrderDetail(int orderId);
         Task<OrderDetail> GetOrderDetailById(int id);
         Task<bool> createOrderDetail(OrderDetail orderDetailAdd);
         Task<bool> EditOrderDetail(int id, OrderDetail orderDetailUpdate);

@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using StoreManagement.BusinessLogic.Interfaces;
 using StoreManagement.BusinessLogic.Dtos.Suppliers;
 using StoreManagement.DataAccess.Entites;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Net.NetworkInformation;
+using StoreManagement.BusinessLogic.Core;
 
 namespace StoreManagement.API.Controllers
 {
@@ -25,11 +28,31 @@ namespace StoreManagement.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllSupplier(string keyword)
+        public IActionResult GetAllSupplier(string keyword, int page = 1, int pagesize = 10)
         {
-            var suppliers = _supplierRepository.GetAllSupplier(keyword);
-            if (suppliers == null) return NotFound();
-            return Ok(_mapper.Map<IEnumerable<SupplierUI>>(suppliers));
+            try
+            {
+                var list = _supplierRepository.GetAllSupplier(keyword);
+
+                int totalCount = list.Count();
+
+                var query = list.OrderByDescending(x => x.Id).Skip((page - 1) * pagesize).Take(pagesize);
+
+                var response = _mapper.Map<IEnumerable<Supplier>, IEnumerable<SupplierUI>>(query);
+
+                var paginationset = new PaginationSet<SupplierUI>()
+                {
+                    Total = totalCount,
+                    Items = response
+                };
+
+                return Ok(paginationset);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
         }
 
         [HttpGet("{id}")]

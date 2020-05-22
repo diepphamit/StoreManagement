@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Categories;
 using StoreManagement.BusinessLogic.Interfaces;
 using StoreManagement.DataAccess.Entites;
@@ -27,14 +29,29 @@ namespace StoreManagement.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllCategories(string keyword)
+        public IActionResult GetAllCategories(string keyword, int page = 1,int pagesize = 10)
         {
-            var categories = _categoryRepository.GetAllCategories(keyword);
+            try
+            {
+                var list = _categoryRepository.GetAllCategories(keyword);
+                int totalCount = list.Count();
 
-            if (categories == null)
-                return NotFound();
+                var query = list.OrderByDescending(x => x.Id).Skip((page - 1) * pagesize).Take(pagesize);
 
-            return Ok(_mapper.Map<IEnumerable<CategoryUI>>(categories));
+                var response = _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryUI>>(query);
+
+                var paginationset = new PaginationSet<CategoryUI>()
+                {
+                    Items = response,
+                    Total = totalCount
+                };
+                return Ok(paginationset);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
 
         }
 

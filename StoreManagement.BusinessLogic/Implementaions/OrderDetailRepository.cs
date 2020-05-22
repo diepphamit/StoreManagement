@@ -75,9 +75,9 @@ namespace StoreManagement.BusinessLogic.Implementaions
             }
         }
 
-        public IEnumerable<OrderDetail> GetAllOrderDetail()
+        public IEnumerable<OrderDetail> GetAllOrderDetail(int orderId)
         {
-            return _context.OrderDetails.Include(x => x.Product).AsEnumerable();
+            return _context.OrderDetails.Include(x => x.Product).Where(p => p.OrderId == orderId).AsEnumerable();
         }
 
         public async Task<OrderDetail> GetOrderDetailById(int id)
