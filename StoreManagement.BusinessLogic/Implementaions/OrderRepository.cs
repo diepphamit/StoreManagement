@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StoreManagement.BusinessLogic.Dtos.Orders;
 using StoreManagement.BusinessLogic.Interfaces;
 using StoreManagement.DataAccess.Data;
 using StoreManagement.DataAccess.Entites;
@@ -89,6 +90,57 @@ namespace StoreManagement.BusinessLogic.Implementaions
             return await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<IEnumerable<RevenueUI>> GetRevenueMonth(DateTime date)
+        {
+            List<RevenueUI> list = new List<RevenueUI>();
+            int totalRevenue;
+            RevenueUI RevenueUI;
+            var revenue = _context.Orders.Where(x => x.OrderDate.Year == date.Year && x.OrderDate.Month == date.Month);
+           
+            for(int i =1; i<=DaysInMonth(date.Month, date.Year); i++)
+            {
+                totalRevenue = 0;
+                RevenueUI = new RevenueUI();
 
+                foreach (var item in revenue)
+                {
+                    if(item.OrderDate.Day == i)
+                    {
+                        totalRevenue += item.TotalPrice;
+                    }
+                }
+                RevenueUI.TotalRevenue = totalRevenue;
+                RevenueUI.datetime = new DateTime(date.Year, date.Month, i);
+                //RevenueUI.TotalRevenue = (int)_context.Orders.Where(x => x.OrderDate.Year == date.Year && x.OrderDate.Month == date.Month && x.OrderDate.Day == i).Sum(p => p.TotalPrice);
+                //RevenueUI.datetime = new DateTime(date.Year, date.Month, i);
+
+                list.Add(RevenueUI);
+            }
+            return list.AsEnumerable();
+        }
+
+        private int DaysInMonth(int month, int year)
+        {
+            switch (month)
+            {
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 10:
+                case 12:
+                    return 31;
+                case 4:
+                case 6:
+                case 9:
+                case 11:
+                    return 30;
+                default:
+                    if (year % 4 == 0 && year % 100 != 0)
+                        return 29;
+                    return 28;
+            }
+        }
     }
 }
