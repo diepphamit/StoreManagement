@@ -19,11 +19,20 @@ namespace StoreManagement.BusinessLogic.Implementaions
         {
             _context = context;
         }
-        public async Task<bool> CreateOrderAsync(Order order)
+        public async Task<bool> CreateOrderAsync(Order order, IEnumerable<OrderDetail> orderDetail)
         {
             try
             {
+                order.OrderDate = DateTime.Now;
+                order.TotalPrice = TotalPrice(orderDetail);
                 _context.Orders.Add(order);
+
+                foreach (var item in orderDetail)
+                {
+                    item.Order = order;
+                    _context.OrderDetails.Add(item);
+                }
+
                 await _context.SaveChangesAsync();
 
                 return true;
@@ -66,7 +75,7 @@ namespace StoreManagement.BusinessLogic.Implementaions
                 order.OrderDate = orderupdate.OrderDate;
                 order.StaffId = orderupdate.StaffId;
                 order.Status = orderupdate.Status;
-                order.TotalPrice = orderupdate.TotalPrice;
+                order.TotalPrice = TotalPrice(order.OrderDetails);
                 await _context.SaveChangesAsync();
 
                 return true;
@@ -90,14 +99,14 @@ namespace StoreManagement.BusinessLogic.Implementaions
             return await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<RevenueUI>> GetRevenueMonth(DateTime date)
+        public IEnumerable<RevenueUI> GetRevenueMonth(DateTime date)
         {
             List<RevenueUI> list = new List<RevenueUI>();
             int totalRevenue;
             RevenueUI RevenueUI;
             var revenue = _context.Orders.Where(x => x.OrderDate.Year == date.Year && x.OrderDate.Month == date.Month);
            
-            for(int i =1; i<=DaysInMonth(date.Month, date.Year); i++)
+            for(int i =1; i <= DateTime.DaysInMonth(date.Year, date.Month); i++)
             {
                 totalRevenue = 0;
                 RevenueUI = new RevenueUI();
@@ -119,28 +128,39 @@ namespace StoreManagement.BusinessLogic.Implementaions
             return list.AsEnumerable();
         }
 
-        private int DaysInMonth(int month, int year)
+        private int TotalPrice(IEnumerable<OrderDetail> orderDetails)
         {
-            switch (month)
+            int totalPrice = 0;
+            foreach (var item in orderDetails)
             {
-                case 1:
-                case 3:
-                case 5:
-                case 7:
-                case 8:
-                case 10:
-                case 12:
-                    return 31;
-                case 4:
-                case 6:
-                case 9:
-                case 11:
-                    return 30;
-                default:
-                    if (year % 4 == 0 && year % 100 != 0)
-                        return 29;
-                    return 28;
+                var product = _context.Products.Include(x => x.OrderDetails).FirstOrDefault(p => p.Id == item.ProductId);
+                totalPrice += product.Price;
             }
+            return totalPrice;
         }
+
+        //private int DaysInMonth(int month, int year)
+        //{
+        //    switch (month)
+        //    {
+        //        case 1:
+        //        case 3:
+        //        case 5:
+        //        case 7:
+        //        case 8:
+        //        case 10:
+        //        case 12:
+        //            return 31;
+        //        case 4:
+        //        case 6:
+        //        case 9:
+        //        case 11:
+        //            return 30;
+        //        default:
+        //            if (year % 4 == 0 && year % 100 != 0)
+        //                return 29;
+        //            return 28;
+        //    }
+        //}
     }
 }

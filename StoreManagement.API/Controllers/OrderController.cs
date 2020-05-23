@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using StoreManagement.BusinessLogic.Core;
+using StoreManagement.BusinessLogic.Dtos.OrderDetails;
 using StoreManagement.BusinessLogic.Dtos.Orders;
 using StoreManagement.BusinessLogic.Interfaces;
 using StoreManagement.DataAccess.Entites;
@@ -19,11 +20,13 @@ namespace StoreManagement.API.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IMapper _mapper;
 
-        public OrderController(IOrderRepository orderRepository, IMapper mapper)
+        public OrderController(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
+            _orderDetailRepository = orderDetailRepository;
             _mapper = mapper;
         }
         [Route("GetAllOrder")]
@@ -57,10 +60,10 @@ namespace StoreManagement.API.Controllers
 
         [Route("Revenue")]
         [HttpGet]
-        public async Task<IActionResult> GetRevenueMonth(DateTime date)
+        public IActionResult GetRevenueMonth(DateTime date)
         {
 
-            var revenue = await _orderRepository.GetRevenueMonth(date);
+            var revenue = _orderRepository.GetRevenueMonth(date);
            
             var totalRevenueMonth = new TotalRevenueMonth()
             {
@@ -72,14 +75,21 @@ namespace StoreManagement.API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder([FromBody]OrderUI orderUI)
+        public async Task<IActionResult> CreateOrder(int staffId, int customerId, bool status, int code,[FromBody]IEnumerable<OrderDetailAdd> orderDetailAdd)
         {
-            if (!ModelState.IsValid) 
-                return BadRequest(ModelState);
+            var orderAdd = new OrderUI()
+            {
+                StaffId = staffId,
+                CustomerId = customerId,
+                Status = status,
+                Code = code
+            };
 
-            var order = _mapper.Map<Order>(orderUI);
-            var result = await _orderRepository.CreateOrderAsync(order);
-            if(result) 
+            var order = _mapper.Map<Order>(orderAdd);
+            var orderDetail = _mapper.Map<IEnumerable<OrderDetail>>(orderDetailAdd);
+
+            var result = await _orderRepository.CreateOrderAsync(order, orderDetail);
+            if (result)
                 return Ok();
 
             return BadRequest();
