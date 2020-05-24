@@ -1,0 +1,39 @@
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+      <h3 class="box-title">Cập nhật</h3>
+    </div>
+  
+    <form [formGroup]="editBranchForm" (submit)="editBranch()" novalidate>
+      <div class="box-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Mô tả</label>
+              <input type="text" class="form-control" formControlName="description" placeholder="Mô tả"
+                [ngClass]="{ 'is-invalid': f.description.errors }">
+                <app-control-messages [control]="editBranchForm.get('description')"></app-control-messages>
+            </div>
+            <div class="form-group">
+              <label>Số điện thoại</label>
+              <input type="text" class="form-control" formControlName="phoneNumber" placeholder="Số điện thoại"
+                [ngClass]="{ 'is-invalid': f.phoneNumber.errors }">
+                <app-control-messages [control]="editBranchForm.get('phoneNumber')"></app-control-messages>
+            </div>
+            <div class="form-group">
+              <label>Địa chỉ</label>
+              <input type="text" class="form-control" formControlName="address" placeholder="Địa chỉ"
+                [ngClass]="{ 'is-invalid': f.address.errors }">
+                <app-control-messages [control]="editBranchForm.get('address')"></app-control-messages>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box-footer text-center">
+        <button [routerLink]="['/branches']" class="btn btn-default">Hủy</button>
+        <button type="submit" [disabled]="editBranchForm.invalid" class="btn btn-success">Lưu</button>
+      </div>
+    </form>
+  
+  </div>
+  
