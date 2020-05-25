@@ -20,6 +20,7 @@ import { PictureService } from './services/picture.service';
 import { SupplierService } from './services/supplier.service';
 import { AuthGuard } from './services/auth-guard.service';
 import { ValidationService } from './services/validation.service';
+import { OrderModule } from './pages/order/order.module';
 
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
@@ -63,7 +64,8 @@ export function tokenGetter() {
     UserService,
     CategoryService,
     ProductService,
-    SupplierService
+    SupplierService,
+    OrderModule
   ],
   bootstrap: [AppComponent],
 })
