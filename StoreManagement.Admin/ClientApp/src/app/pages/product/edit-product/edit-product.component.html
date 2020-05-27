@@ -23,6 +23,7 @@
           <div class="form-group">
             <label>Danh mục</label>
             <select class="form-control" formControlName="categoryId" [ngClass]="{ 'is-invalid': f.categoryId.errors }">
+              
               <option *ngFor="let category of categories | async" value={{category.id}}>{{category.name}}</option>
             </select>
           </div>

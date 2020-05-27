@@ -1,11 +1,9 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/models/user/user.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, debounceTime } from 'rxjs/operators';
 import {  BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Supplier } from 'src/app/models/supplier/supplier.model';
 import { SupplierService } from 'src/app/services/supplier.service';
@@ -19,6 +17,9 @@ export class SupplierComponent implements OnInit {
     keyword: string;
     itemsAsync: Observable<any[]>;
     modalRef: BsModalRef;
+    page: number;
+    pageSize: number;
+    total: number;
 
     constructor(
         public supplierService: SupplierService,
@@ -29,11 +30,20 @@ export class SupplierComponent implements OnInit {
 
     ngOnInit() {
         this.keyword = '';
-        this.getAllSuppliers();
+        this.page = 1;
+        this.pageSize = 10;
+        this.getAllSuppliers(this.page);
     }
 
-    getAllSuppliers() {
-        this.itemsAsync = this.supplierService.getAllSuppliers(this.keyword);
+    getAllSuppliers(page: number) {
+        this.itemsAsync = this.supplierService.getAllSuppliers(this.keyword, page, this.pageSize)
+        .pipe(
+             tap(response => {
+                this.total = response.total;
+                this.page = page;
+            }),
+            map(response => response.items)
+            );
     }
 
     add() {
@@ -43,10 +53,6 @@ export class SupplierComponent implements OnInit {
     edit(id: any) {
         this.router.navigate(['/suppliers/edit/' + id]);
     }
-
-    // editFull(id: any) {
-    //     this.router.navigate(['/users/editfull/' + id]);
-    // }
 
     deleteConfirm(template: TemplateRef<any>, data: any) {
         this.supplier = Object.assign({}, data);
@@ -58,7 +64,7 @@ export class SupplierComponent implements OnInit {
             this.supplierService.deleteSupplier(this.supplier.id)
                 .subscribe(
                     () => {
-                        this.getAllSuppliers();
+                        this.getAllSuppliers(this.page);
                         this.toastr.success(`Xóa nhà cung cấp thành công`);
                     },
                     (error: HttpErrorResponse) => {
@@ -76,11 +82,23 @@ export class SupplierComponent implements OnInit {
     }
 
     search() {
-        this.getAllSuppliers();
+        this.getAllSuppliers(this.page);
     }
 
     refresh() {
         this.keyword = '';
-        this.getAllSuppliers();
+        this.getAllSuppliers(this.page);
+    }
+
+    searchCharacter() {
+        this.itemsAsync = this.supplierService.getAllSuppliers(this.keyword, this.page, this.pageSize)
+            .pipe(
+                debounceTime(1000),
+                tap(response => {
+                    this.total = response.total;
+                }),
+                map(response => response.items)
+            );
     }
 }
+

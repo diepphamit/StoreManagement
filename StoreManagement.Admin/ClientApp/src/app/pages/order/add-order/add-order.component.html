@@ -9,53 +9,43 @@
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label>StaffId</label>
-              <input type="text" class="form-control" formControlName="StaffId" placeholder="StaffId"
-                [ngClass]="{ 'is-invalid': f.StaffId.errors }">
-            </div>
-          </div>
-          <div class="col-sm-6">
+              <label>Nhân viên</label>
+              <select class="form-control" formControlName="staffIfd" [ngClass]="{ 'is-invalid': f.select.errors }">
+                <option value="">Choose your Staff</option>
+                <option *ngFor="let user of users | async" value={{user.id}}>{{user.name}}</option>
+              </select>
+            </div>        
             <div class="form-group">
-              <label>CustomerId</label>
-              <input type="text" class="form-control" formControlName="CustomerId" placeholder="CustomerId"
-                [ngClass]="{ 'is-invalid': f.CustomerId.errors }">
-            </div>
-          </div>
-          <div class="col-sm-6">
+              <label>Khách hàng</label>
+              <select class="form-control" formControlName="customerId" [ngClass]="{ 'is-invalid': f.select.errors }">
+                <option value="">Choose your Customer</option>
+                <option *ngFor="let user of users | async" value={{user.id}}>{{user.name}}</option>
+              </select>
+            </div>                    
             <div class="form-group">
               <label>OrderDate</label>
               <input type="text" bsDatepicker class="form-control" formControlName="OrderDate" placeholder="OrderDate"
                 [ngClass]="{ 'is-invalid': f.OrderDate.errors }">
-            </div>
-          </div>
-          <div class="col-sm-6">
+                <app-control-messages [control]="addOrderForm.get('OrderDate')"></app-control-messages>
+            </div>         
             <div class="form-group">
               <label>Code</label>
               <input type="text" class="form-control" formControlName="Code" placeholder="Code"
                 [ngClass]="{ 'is-invalid': f.Code.errors }">
-            </div>
-          </div>
-          <div class="col-sm-6">
+                <app-control-messages [control]="addOrderForm.get('Code')"></app-control-messages>
+            </div>                
             <div class="form-group">
               <label>totalPrice</label>
               <input type="text" class="form-control" formControlName="totalPrice" placeholder="text"
                 [ngClass]="{ 'is-invalid': f.totalPrice.errors }">
+                <app-control-messages [control]="addOrderForm.get('totalPrice')"></app-control-messages>
             </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label>Danh mục</label>
-              <select class="form-control" formControlName="userId" [ngClass]="{ 'is-invalid': f.user.errors }">
-                <option value="">Choose Customer</option>
-                <option *ngFor="let user of users | async" value={{user.id}}>{{user.groupRole}}</option>
-              </select>
             </div>
-          </div>
         </div>
       </div>
-      <div class="box-footer">
+      <div class="box-footer text-center">
         <button [routerLink]="['/orders']" class="btn btn-default">Hủy</button>
-        <button type="submit" [disabled]="addOrderForm.invalid" class="btn btn-success pull-right">Lưu</button>
+        <button type="submit" [disabled]="addOrderForm.invalid" class="btn btn-success">Lưu</button>
       </div>
     </form>
   

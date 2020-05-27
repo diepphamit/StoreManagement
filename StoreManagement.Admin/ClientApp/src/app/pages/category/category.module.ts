@@ -6,6 +6,8 @@ import { CategoryRoutingModule } from './category-routing.module';
 import { CategoryComponent } from './category.component';
 import { AddCategoryComponent } from './add-category/add-category.component';
 import { EditCategoryComponent } from './edit-category/edit-category.component';
+import { ControlModule } from 'src/app/helper/control.module';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
     imports: [
@@ -13,6 +15,8 @@ import { EditCategoryComponent } from './edit-category/edit-category.component';
         FormsModule,
         ReactiveFormsModule,
         CategoryRoutingModule,
+        ControlModule,
+        NgxPaginationModule,
         BsDatepickerModule.forRoot()
     ],
     declarations: [

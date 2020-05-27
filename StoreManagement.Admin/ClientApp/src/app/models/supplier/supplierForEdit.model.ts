@@ -1,21 +1,21 @@
 export class SupplierForEdit {
-  public id: string;
+  public id: number;
   public name: string;
   public description: string;
-  public phoneNumber: string;
+  public phoneNumber: number;
   public address: string;
 
   constructor(
-    id?: string,
+    id?: number,
     name?: string,
     description?: string,
-    phonenumber?: string,
+    phoneNumber?: number,
     address?: string
   ) {
     this.id = id;
     this.name = name;
     this.description = description;
-    this.phoneNumber = phonenumber;
+    this.phoneNumber = phoneNumber;
     this.address = address;
   }
 }

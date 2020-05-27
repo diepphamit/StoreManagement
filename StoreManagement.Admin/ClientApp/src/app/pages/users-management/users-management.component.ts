@@ -5,7 +5,7 @@ import { User } from 'src/app/models/user/user.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, debounceTime } from 'rxjs/operators';
 import {  BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -17,8 +17,12 @@ export class UsersManagementComponent implements OnInit {
     keyword: string;
     itemsAsync: Observable<any[]>;
     modalRef: BsModalRef;
+    page: Number;
+    pageSize: Number;
+    total: Number;
 
     constructor(
+        // tslint:disable-next-line:no-shadowed-variable
         public userService: UserService,
         private router: Router,
         private modalService: BsModalService,
@@ -27,11 +31,20 @@ export class UsersManagementComponent implements OnInit {
 
     ngOnInit() {
         this.keyword = '';
-        this.getAllUsers();
+        this.page = 1;
+        this.pageSize = 10;
+        this.getAllUsers(this.page);
     }
 
-    getAllUsers() {
-        this.itemsAsync = this.userService.getAllUsers(this.keyword);
+    getAllUsers(page: Number) {
+        this.itemsAsync = this.userService.getAllUsers(this.keyword, page, this.pageSize)
+        .pipe(
+            tap(response => {
+              this.total = response.total;
+              this.page = page;
+            }),
+            map(response => response.items)
+          );
     }
 
     add() {
@@ -56,17 +69,11 @@ export class UsersManagementComponent implements OnInit {
             this.userService.deleteUser(this.user.id)
                 .subscribe(
                     () => {
-                        this.getAllUsers();
-                        this.toastr.success(`Xóa tài khoản thành công`);
+                        this.getAllUsers(this.page);
+                        this.toastr.success(`Xóa tài khoản thành công`);
                     },
                     (error: HttpErrorResponse) => {
-                        let errors : any;
-
-                        if (!errors.length) {
-                            errors.push(`Xóa tài khoản không thành công!`);
-                        }
-
-                        this.toastr.error(errors.join(','));
+                        this.toastr.error(('Xóa tài khoản không thành công'));
                     }
                 );
         }
@@ -80,11 +87,22 @@ export class UsersManagementComponent implements OnInit {
     }
 
     search() {
-        this.getAllUsers();
+        this.getAllUsers(this.page);
     }
 
     refresh() {
         this.keyword = '';
-        this.getAllUsers();
+        this.getAllUsers(this.page);
+    }
+    searchCharacter() {
+        this.itemsAsync = this.userService.getAllUsers(this.keyword, this.page, this.pageSize)
+            .pipe(
+                debounceTime(1000),
+                tap(response => {
+                    this.total = response.total;
+                }),
+                map(response => response.items)
+            );
     }
 }
+

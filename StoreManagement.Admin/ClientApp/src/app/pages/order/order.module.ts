@@ -6,6 +6,8 @@ import { OrderRoutingModule } from './order-routing.module';
 import { AddOrderComponent } from './add-order/add-order.component';
 import { EditOrderComponent } from './edit-order/edit-order.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ControlModule } from 'src/app/helper/control.module';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
     imports: [
@@ -13,6 +15,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
         FormsModule,
         ReactiveFormsModule,
         OrderRoutingModule,
+        ControlModule,
+        NgxPaginationModule,
         BsDatepickerModule.forRoot()
     ],
     declarations: [

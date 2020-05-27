@@ -1,18 +1,18 @@
 export class SupplierForAdd {
   public name: string;
   public description: string;
-  public phoneNumber: string;
+  public phoneNumber: number;
   public address: string;
 
   constructor(
     name?: string,
     description?: string,
-    phonenumber?: string,
+    phoneNumber?: number,
     address?: string
   ) {
     this.name = name;
     this.description = description;
-    this.phoneNumber = phonenumber;
+    this.phoneNumber = phoneNumber;
     this.address = address;
   }
 }

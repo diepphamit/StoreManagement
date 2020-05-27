@@ -10,10 +10,9 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
-  getAllUsers(keyword: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}?keyword=${keyword}`);
+  getAllUsers(keyword: string, page: Number, pageSize: Number): Observable<any> {
+    return this.http.get(`${this.baseUrl}?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
   }
-
   getUserById(id: any): Observable<any> {
     return this.http.get(`${this.baseUrl}/${id}`);
   }

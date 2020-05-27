@@ -1,12 +1,12 @@
 export class OrderForEdit {
     public id: string;
-    public staffId: string;
-    public customerId: string;
+    public staffId: number;
+    public customerId: number;
     public orderDate: string;
     public code: string;
-    public totalprice: Number;
+    public totalprice: number;
 
-    constructor(id?: string, staffId?: string, customerId?: string, orderDate?: string, code?: string, totalPrice?: Number) {
+    constructor(id?: string, staffId?: number, customerId?: number, orderDate?: string, code?: string, totalPrice?: number) {
         this.id = id;
         this.staffId = staffId;
         this.customerId = customerId;

@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { OrderForAdd } from 'src/app/models/order/orderForAdd.model';
 import { OrderService } from 'src/app/services/order.service';
 import { UserService } from 'src/app/services/user.service';
+import { ValidationService } from 'src/app/services/validation.service';
 
 @Component({
   selector: 'app-add-order',
@@ -26,16 +27,16 @@ export class AddOrderComponent implements OnInit {
     private toastr: ToastrService
   ) {
     this.addOrderForm = this.fb.group({
-      customerId: ['', Validators.required],
-      staffId: ['', Validators.required],
-      orderDate: ['', Validators.required],
-      code: ['', Validators.required],
-      totalPrice: ['', Validators.required]
+      customerId: ['', [ValidationService.requireValue, ValidationService.numberValidator]],
+      staffId: ['', [ValidationService.requireValue, ValidationService.numberValidator]],
+      orderDate: ['', [ValidationService.requireValue, ValidationService.numberValidator]],
+      code: ['', ValidationService.requireValue],
+      totalPrice: ['', [ValidationService.requireValue, ValidationService.numberValidator]]
     });
   }
 
   ngOnInit() {
-    this.users = this.userService.getAllUsers('');
+    this.users = this.userService.getAllUsers('', 1, 1);
   }
   addOrder() {
     this.order = Object.assign({}, this.addOrderForm.value);

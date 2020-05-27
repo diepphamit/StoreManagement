@@ -6,6 +6,7 @@ import { CategoryService } from 'src/app/services/category.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CategoryForEdit } from 'src/app/models/category/categoryForEdit.model';
+import { ValidationService } from 'src/app/services/validation.service';
 
 @Component({
   selector: 'app-edit-category',
@@ -25,8 +26,8 @@ export class EditCategoryComponent implements OnInit {
     private toastr: ToastrService
   ) {
     this.editCategoryForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required]
+      name: ['', [ValidationService.requireValue]],
+      description: ['', [ValidationService.requireValue]]
     });
   }
 

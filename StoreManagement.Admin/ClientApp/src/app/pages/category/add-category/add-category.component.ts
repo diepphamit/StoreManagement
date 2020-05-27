@@ -3,10 +3,9 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Category } from 'src/app/models/category/category.model';
-import { CategoryComponent } from '../category.component';
 import { CategoryService } from 'src/app/services/category.service';
 import { CategoryForAdd } from 'src/app/models/category/categoryForAdd.model';
+import { ValidationService } from 'src/app/services/validation.service';
 
 @Component({
   selector: 'app-add-category',
@@ -24,8 +23,8 @@ export class AddCategoryComponent implements OnInit {
     private toastr: ToastrService
   ) {
     this.addCategoryForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
+      name: ['', [ValidationService.requireValue]],
+      description: ['', [ValidationService.requireValue]]
     });
   }
 

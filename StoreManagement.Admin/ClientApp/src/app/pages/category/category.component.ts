@@ -1,11 +1,9 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/models/user/user.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, debounceTime } from 'rxjs/operators';
 import {  BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CategoryService } from 'src/app/services/category.service';
 import { Category } from 'src/app/models/category/category.model';
@@ -19,6 +17,9 @@ export class CategoryComponent implements OnInit {
     keyword: string;
     itemsAsync: Observable<any[]>;
     modalRef: BsModalRef;
+    page: Number;
+    pageSize: Number;
+    total: Number;
 
     constructor(
         // tslint:disable-next-line:no-shadowed-variable
@@ -30,11 +31,20 @@ export class CategoryComponent implements OnInit {
 
     ngOnInit() {
         this.keyword = '';
-        this.getAllCategories();
+        this.page = 1;
+        this.pageSize = 10;
+        this.getAllCategories(this.page);
     }
 
-    getAllCategories() {
-        this.itemsAsync = this.CategoryService.getAllCategories(this.keyword);
+    getAllCategories(page: Number) {
+        this.itemsAsync = this.CategoryService.getAllCategories(this.keyword, page, this.pageSize)
+        .pipe(
+            tap(response => {
+              this.total = response.total;
+              this.page = page;
+            }),
+            map(response => response.items)
+          );
     }
 
     add() {
@@ -59,7 +69,7 @@ export class CategoryComponent implements OnInit {
             this.CategoryService.deleteCategory(this.category.id)
                 .subscribe(
                     () => {
-                        this.getAllCategories();
+                        this.getAllCategories(this.page);
                         this.toastr.success(`Xóa loại hàng thành công`);
                     },
                     (error: HttpErrorResponse) => {
@@ -77,11 +87,21 @@ export class CategoryComponent implements OnInit {
     }
 
     search() {
-        this.getAllCategories();
+        this.getAllCategories(this.page);
     }
 
     refresh() {
         this.keyword = '';
-        this.getAllCategories();
+        this.getAllCategories(this.page);
+    }
+    searchCharacter() {
+        this.itemsAsync = this.CategoryService.getAllCategories(this.keyword, this.page, this.pageSize)
+            .pipe(
+                debounceTime(1000),
+                tap(response => {
+                    this.total = response.total;
+                }),
+                map(response => response.items)
+            );
     }
 }

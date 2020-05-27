@@ -43,8 +43,8 @@ export class EditProductComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.categories = this.categoryService.getAllCategories('');
-    this.suppliers = this.supplierService.getAllSuppliers('');
+    this.categories = this.categoryService.getAllCategories('', 1, 1);
+    this.suppliers = this.supplierService.getAllSuppliers('', 1, 1);
 
     this.route.params.subscribe(params => {
       this.id = params.id;

@@ -1,64 +1,45 @@
 <div class="box box-primary">
 
-    <div class="box-header with-border">
-      <h3 class="box-title">Thêm mới</h3>
-    </div>
-  
-    <form [formGroup]="addSupplierForm" (submit)="addSupplier()" novalidate>
-      <div class="box-body">
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label>Tên nhà cung cấp</label>
-              <input type="text" class="form-control" formControlName="name" placeholder="Tên nhà cung cấp"
-                [ngClass]="{ 'is-invalid': f.name.errors }">
-            </div>
-            <div class="form-group">
-              <label>Mô tả</label>
-              <input type="text" class="form-control" formControlName="description" placeholder="Mô tả"
-                [ngClass]="{ 'is-invalid': f.description.errors }">
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label>Số điện thoại</label>
-              <input type="text" class="form-control" formControlName="phonenumber" placeholder="Số điện thoại"
-                [ngClass]="{ 'is-invalid': f.phonenumber.errors }">
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label>Địa chỉ</label>
-              <input type="text" class="form-control" formControlName="address" placeholder="Địa chỉ"
-                [ngClass]="{ 'is-invalid': f.address.errors }">
-            </div>
-          </div>
-        </div>
-        <!-- <div class="form-group">
-                <label class="col-sm-2 control-label">Thể loại cha</label>
-                <div class="col-sm-10">
-                    <select name="parentId" class="form-control" ng-model="genre.parentId"
-                        ng-options="option.id as option.name for option in parentCategories">
-                        <option value="">Thể loại gốc</option>
-                    </select>
-                    <input type="hidden" name="parentId" ng-model="genre.parentId" />
-                </div>
-            </div> -->
-  
-        <!-- <div class="form-group">
-                <label class="col-sm-2 control-label">Hình ảnh</label>
-                <div class="col-sm-10">
-                    <button class="btn btn-default" ng-click="chooseImage()" type="button">Chọn ảnh</button>
-                    <img ng-src="{{genre.image}}" width="100" />
-                </div>
-            </div> -->
-  
-      </div>
-      <div class="box-footer text-center">
-        <button [routerLink]="['/suppliers']" class="btn btn-default">Hủy</button>
-        <button type="submit" [disabled]="addSupplierForm.invalid" class="btn btn-success">Lưu</button>
-      </div>
-    </form>
-  
+  <div class="box-header with-border">
+    <h3 class="box-title">Thêm mới</h3>
   </div>
-  
+
+  <form [formGroup]="addSupplierForm" (submit)="addSupplier()" novalidate>
+    <div class="box-body">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label>Tên nhà cung cấp</label>
+            <input type="text" class="form-control" formControlName="name" placeholder="Tên nhà cung cấp"
+              [ngClass]="{ 'is-invalid': f.name.errors }">
+              <app-control-messages [control]="addSupplierForm.get('name')"></app-control-messages>
+          </div>
+          <div class="form-group">
+            <label>Mô tả</label>
+            <input type="text" class="form-control" formControlName="description" placeholder="Mô tả"
+              [ngClass]="{ 'is-invalid': f.description.errors }">
+              <app-control-messages [control]="addSupplierForm.get('description')"></app-control-messages>
+          </div>
+          <div class="form-group">
+            <label>Địa chỉ</label>
+            <input type="text" class="form-control" formControlName="address" placeholder="Địa chỉ"
+              [ngClass]="{ 'is-invalid': f.address.errors }">
+              <app-control-messages [control]="addSupplierForm.get('address')"></app-control-messages>
+          </div>
+          <div class="form-group">
+            <label>Số điện thoại</label>
+            <input type="text" class="form-control" formControlName="phoneNumber" placeholder="Số điện thoại"
+              [ngClass]="{ 'is-invalid': f.phoneNumber.errors }">
+              <app-control-messages [control]="addSupplierForm.get('phoneNumber')"></app-control-messages>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <div class="box-footer text-center">
+      <button [routerLink]="['/suppliers']" class="btn btn-default">Hủy</button>
+      <button type="submit" [disabled]="addSupplierForm.invalid" class="btn btn-success">Lưu</button>
+    </div>
+  </form>
+
+</div>

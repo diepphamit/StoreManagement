@@ -6,9 +6,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { SupplierService } from 'src/app/services/supplier.service';
 import { Supplier } from 'src/app/models/supplier/supplier.model';
 import { SupplierForAdd } from 'src/app/models/supplier/supplierForAdd.model';
+import { ValidationService } from 'src/app/services/validation.service';
 
 @Component({
-  selector: 'app-add-su',
+  selector: 'app-add-supplier',
   templateUrl: './add-supplier.component.html'
 })
 export class AddSupplierComponent implements OnInit {
@@ -22,10 +23,10 @@ export class AddSupplierComponent implements OnInit {
     private toastr: ToastrService
   ) {
     this.addSupplierForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      phonenumber: ['', Validators.required],
-      address: ['', Validators.required]
+      name: ['', [ValidationService.requireValue]],
+      description: ['', [ValidationService.requireValue]],
+      phoneNumber: ['', [ValidationService.requireValue, ValidationService.numberValidator]],
+      address: ['', [ValidationService.requireValue]]
     });
   }
 
@@ -34,14 +35,15 @@ export class AddSupplierComponent implements OnInit {
 
   addSupplier() {
     this.supplier = Object.assign({}, this.addSupplierForm.value);
+
     this.supplierService.createSupplier(this.supplier).subscribe(
       () => {
         this.router.navigate(['/suppliers']).then(() => {
-          this.toastr.success('Tạo nhà cung cấp thành công');
+          this.toastr.success('Thêm nhà cung cấp thành công');
         });
       },
       (error: HttpErrorResponse) =>
-        this.toastr.error('Tạo nhà cung cấp không thành công!')
+        this.toastr.error('Thêm nhà cung cấp không thành công!')
       );
   }
 

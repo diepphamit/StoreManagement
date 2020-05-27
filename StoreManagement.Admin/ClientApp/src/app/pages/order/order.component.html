@@ -38,10 +38,10 @@
                         </tr>
                         <tr
                             *ngFor="let item of itemsAsync | async">
-                            <td>{{ item.id }}</td>d>
+                            <td>{{ item.id }}</td>
                             <td>{{ item.staffName }}</td>
                             <td>{{ item.customerName }}</td>
-                            <td>{{ item.orderDate }}</td>
+                            <td>{{ item.orderDate | date:'medium' }}</td>
                             <td>{{ item.code }}</td>
                             <td>{{ item.totalPrice }}</td>
                             <td style=" text-align: center;">

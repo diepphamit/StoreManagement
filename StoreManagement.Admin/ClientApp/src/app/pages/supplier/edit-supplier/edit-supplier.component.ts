@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SupplierForList } from 'src/app/models/supplier/supplier.model';
 import { Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CategoryService } from 'src/app/services/category.service';
-import { SupplierService } from 'src/app/services/supplier.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ValidationService } from 'src/app/services/validation.service';
 import { SupplierForEdit } from 'src/app/models/supplier/supplierForEdit.model';
+import { SupplierService } from 'src/app/services/supplier.service';
 
 @Component({
   selector: 'app-edit-supplier',
@@ -27,10 +26,10 @@ export class EditSupplierComponent implements OnInit {
     private toastr: ToastrService
   ) {
     this.editSupplierForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      phonenumber: ['', Validators.required],
-      address: ['', Validators.required],
+      name: ['', [ValidationService.requireValue]],
+      description: ['', [ValidationService.requireValue]],
+      phoneNumber: ['', [ValidationService.requireValue, ValidationService.numberValidator]],
+      address: ['', [ValidationService.requireValue]]
     });
   }
 
@@ -43,7 +42,7 @@ export class EditSupplierComponent implements OnInit {
             this.supplier = result;
             this.editSupplierForm.controls.name.setValue(result.name);
             this.editSupplierForm.controls.description.setValue(result.description);
-            this.editSupplierForm.controls.phonenumber.setValue(result.phonenumber);
+            this.editSupplierForm.controls.phoneNumber.setValue(result.phoneNumber);
             this.editSupplierForm.controls.address.setValue(result.address);
           },
           () => {
@@ -59,15 +58,14 @@ export class EditSupplierComponent implements OnInit {
     this.supplierService.editSupplier(this.id, this.supplier).subscribe(
       () => {
         this.router.navigate(['/suppliers']).then(() => {
-          this.toastr.success('Cập nhật nhà cung cấp thành công');
+          this.toastr.success('Cập nhật lnhà cung cấp thành công');
         });
       },
       (error: HttpErrorResponse) => {
-        this.toastr.error('Cập nhật nhà cung cấp không thành công!');
+        this.toastr.error('Cập nhật loại hàng không thành công!');
       }
     );
   }
 
   get f() { return this.editSupplierForm.controls; }
-
 }

@@ -6,6 +6,8 @@ import { SupplierRoutingModule } from './supplier-routing.module';
 import { EditSupplierComponent} from './edit-supplier/edit-supplier.component';
 import { AddSupplierComponent } from './add-supplier/add-supplier.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ControlModule } from 'src/app/helper/control.module';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
     imports: [
@@ -13,6 +15,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
         FormsModule,
         ReactiveFormsModule,
         SupplierRoutingModule,
+        ControlModule,
+        NgxPaginationModule,
         BsDatepickerModule.forRoot()
     ],
     declarations: [
