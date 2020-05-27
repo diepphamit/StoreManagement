@@ -50,6 +50,7 @@ namespace StoreManagement.API
             services.AddScoped<IBranchRepository, BranchRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddScoped<IBranchProductRepository, BranchProductRepository>();
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",

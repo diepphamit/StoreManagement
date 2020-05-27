@@ -75,18 +75,19 @@ namespace StoreManagement.API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder(int staffId, int customerId, bool status, int code,[FromBody]IEnumerable<OrderDetailAdd> orderDetailAdd)
+        public async Task<IActionResult> CreateOrder([FromBody]OrderAdd orderAdd)
         {
-            var orderAdd = new OrderUI()
+            //int staffId, int customerId, bool status, int code,[FromBody]IEnumerable<OrderDetailAdd> orderDetailAdd
+            var newOrderAdd = new OrderUI()
             {
-                StaffId = staffId,
-                CustomerId = customerId,
-                Status = status,
-                Code = code
+                StaffId = orderAdd.StaffId,
+                CustomerId = orderAdd.CustomerId,
+                Status = orderAdd.Status,
+                Code = orderAdd.Code
             };
+            var order = _mapper.Map<Order>(newOrderAdd);
 
-            var order = _mapper.Map<Order>(orderAdd);
-            var orderDetail = _mapper.Map<IEnumerable<OrderDetail>>(orderDetailAdd);
+            var orderDetail = _mapper.Map<IEnumerable<OrderDetail>>(orderAdd.orderDetail);
 
             var result = await _orderRepository.CreateOrderAsync(order, orderDetail);
             if (result)
