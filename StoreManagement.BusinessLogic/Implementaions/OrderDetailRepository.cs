@@ -77,6 +77,8 @@ namespace StoreManagement.BusinessLogic.Implementaions
 
         public IEnumerable<OrderDetail> GetAllOrderDetail(int orderId)
         {
+            if (orderId == 0)
+                return _context.OrderDetails.ToList();
             return _context.OrderDetails.Include(x => x.Product).Where(p => p.OrderId == orderId).AsEnumerable();
         }
 
