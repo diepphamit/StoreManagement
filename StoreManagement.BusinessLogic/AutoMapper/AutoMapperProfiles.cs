@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using StoreManagement.BusinessLogic.Dtos.Auth;
 using StoreManagement.BusinessLogic.Dtos.Branches;
+using StoreManagement.BusinessLogic.Dtos.BranchProducts;
 using StoreManagement.BusinessLogic.Dtos.Categories;
 using StoreManagement.BusinessLogic.Dtos.OrderDetails;
 using StoreManagement.BusinessLogic.Dtos.Orders;
@@ -49,6 +50,9 @@ namespace StoreManagement.BusinessLogic.AutoMapper
             CreateMap<OrderDetail, OrderDetailUI>().ForMember(x => x.ProductName, y => { y.MapFrom(z => z.Product.Name); });
             CreateMap<OrderDetail, OrderDetailAdd>();
             CreateMap<OrderDetailAdd, OrderDetail>();
+            CreateMap<BranchProduct, BranchProductReturn>().ForMember(x => x.ProductName, y => { y.MapFrom(z => z.Product.Name); })
+                                                           .ForMember(x => x.BranchDescription, y => { y.MapFrom(z => z.Branch.Description); });
+            CreateMap<BranchProductUI, BranchProduct>();
         }
         
     }

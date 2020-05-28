@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Users;
 using StoreManagement.BusinessLogic.Interfaces;
 using StoreManagement.DataAccess.Entites;
@@ -25,11 +26,23 @@ namespace StoreManagement.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllUsers(string keyword)
+        public IActionResult GetAllUsers(string keyword, int page = 1, int pagesize = 10)
         {
             var listUsers = _userRepo.GetAllUsers(keyword);
 
-            return Ok(_mapper.Map<IEnumerable<UserDto>>(listUsers));
+            int totalCount = listUsers.Count();
+
+            var query = listUsers.OrderByDescending(x => x.Id).Skip((page - 1) * pagesize).Take(pagesize);
+
+            var respone = _mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(query);
+
+            var paginationset = new PaginationSet<UserDto>
+            {
+                Total = totalCount,
+                Items = respone
+            };
+
+            return Ok(paginationset);
 
         }
 
