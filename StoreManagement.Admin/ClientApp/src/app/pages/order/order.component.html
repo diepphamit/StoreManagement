@@ -37,7 +37,7 @@
                             <th style="text-align: center;">Hành động</th>
                         </tr>
                         <tr
-                            *ngFor="let item of itemsAsync | async">
+                            *ngFor="let item of itemsAsync | async |  paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: total }">
                             <td>{{ item.id }}</td>d>
                             <td>{{ item.staffName }}</td>
                             <td>{{ item.customerName }}</td>
@@ -56,14 +56,16 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- <pagination-controls class="custom-pagination" (pageChange)="getAllUsers($event)" autoHide="true"
-                    responsive="true" previousLabel="Trước" nextLabel="Sau" directionLinks="true">
-                </pagination-controls> -->
+                <div class="text-center">
+                  <pagination-controls class="custom-pagination" (pageChange)="getAllOrders($event)" autoHide="true"
+                          responsive="true" previousLabel="Trước" nextLabel="Sau" directionLinks="true">
+                  </pagination-controls>
+                </div>
             </div>
         </div>
     </div>
   </div>
-  
+
   <ng-template #template>
     <div class="modal-header">
         <button type="button" class="close" (click)="close()">&times;</button>
@@ -77,4 +79,3 @@
         <button type="button" class="btn btn-primary" (click)="confirm()">OK</button>
     </div>
   </ng-template>
-  

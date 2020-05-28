@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BsDatepickerConfig, BsDatepickerViewMode } from 'ngx-bootstrap/datepicker';
+import { OrderService } from 'src/app/services/order.service';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-chartdemo',
@@ -35,7 +37,7 @@ export class ChartdemoComponent implements OnInit {
   maxDate: Date;
   datePre: Date;
   dateAfter: Date;
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private orderService: OrderService) {
     this.maxDate = new Date();
     this.dateForm = this.fb.group({
       datePre: ['', Validators.required],
@@ -58,18 +60,37 @@ export class ChartdemoComponent implements OnInit {
       this.barChartLabels1[i - 1] = '' + i;
       data1[i - 1] = 50 - i;
     }
-    this.barChartData1 = [{data: data1, label : 'Diep'}];
+    this.barChartData1 = [{ data: data1, label: 'Diep' }];
+
   }
 
   drawChart() {
     const date = new Date(this.dateForm.value.datePre);
+    this.orderService.getRevenue(date).subscribe(data => {
+      console.log(data);
+      //items = JSON.parse(data);
+
+      const items: any[] = data['revenues'];
+
+      const data1 = [];
+
+      for (let i = 1; i <= items.length; i++) {
+        this.barChartLabels1[i - 1] = '' + i;
+        data1[i - 1] = items[i - 1]['totalRevenue'];
+        console.log(items[i - 1]['totalRevenue']);
+      }
+      this.barChartData1 = [{ data: data1, label: 'Diep' }];
+
+    });
+
     //console.log(new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate());
-    const data1 = [];
-    for (let i = 1; i <= new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate(); i++) {
-      this.barChartLabels1[i - 1] = '' + i;
-      data1[i - 1] = 50 - i;
-    }
-    this.barChartData1 = [{data: data1, label : 'Diep'}];
+    // const data1 = [];
+
+    // for (let i = 1; i <= new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate(); i++) {
+    //   this.barChartLabels1[i - 1] = '' + i;
+    //   data1[i - 1] = 50 - i;
+    // }
+    // this.barChartData1 = [{ data: data1, label: 'Diep' }];
     //console.log(this.barChartData1);
 
   }
