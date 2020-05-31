@@ -9,6 +9,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ControlMessagesComponent } from 'src/app/helper/control-messages.component';
 import { AppModule } from 'src/app/app.module';
 import { ControlModule } from 'src/app/helper/control.module';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
     imports: [
@@ -17,6 +18,7 @@ import { ControlModule } from 'src/app/helper/control.module';
         ReactiveFormsModule,
         UsersManagementRoutingModule,
         ControlModule,
+        NgxPaginationModule,
         BsDatepickerModule.forRoot()
     ],
     declarations: [

@@ -9,6 +9,11 @@ import { UserForList } from 'src/app/models/user/user.model';
 import { OrderAdd, ProductOrder } from 'src/app/models/order/orderAdd.model';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { CURRENT_USER } from 'src/app/constants/db-keys';
+import { OrderProductService } from 'src/app/services/order-product.service';
+import { OrderService } from 'src/app/services/order.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-add-order-product',
@@ -19,7 +24,7 @@ export class AddOrderProductComponent implements OnInit {
 
   itemsProduct: Observable<any[]>;
   itemsUser: Observable<any[]>;
-  itemCustomer: any = [];
+  itemCustomer: Observable<any[]>;
   itemStaff: any[];
   page: number;
   pageSize: number;
@@ -34,7 +39,10 @@ export class AddOrderProductComponent implements OnInit {
   orderAdd: OrderAdd;
   constructor(private fb: FormBuilder,
     private userService: UserService,
-    private productService: ProductService) {
+    private router: Router,
+    private toastr: ToastrService,
+    private productService: ProductService,
+    private orderService: OrderService) {
     this.addProductForm = this.fb.group({
       productId: ['', [ValidationService.requireValue]],
       quantity: ['', [ValidationService.requireValue, ValidationService.numberValidator]]
@@ -48,18 +56,21 @@ export class AddOrderProductComponent implements OnInit {
   ngOnInit() {
     this.page = 1;
     this.pageSize = 1000;
-    this.getAllUsers();
+    this.getAllUsers(this.page);
     this.getAllProducts(this.page);
   }
 
   getAllProducts(page: number) {
     this.itemsProduct = this.productService.getAllProducts('', page, this.pageSize)
       .pipe(
-        tap(response => {
-          this.total = response.total;
-          this.page = page;
-        }),
         map(response => response.items)
+      );
+  }
+
+  getAllUsers(page: number) {
+    this.itemCustomer = this.userService.getAllUsers('', page, this.pageSize)
+      .pipe(
+        map(response => response.items.filter(item => item.groupRole === 'Customer'))
       );
   }
 
@@ -83,6 +94,17 @@ export class AddOrderProductComponent implements OnInit {
 
     this.orderAdd = new OrderAdd(this.getId(), Number(this.addOrderForm.value.customerId),
       Boolean(this.addOrderForm.value.status), Number(this.addOrderForm.value.code), this.itemsAsync as ProductOrder[]);
+
+    this.orderService.createOrder(this.orderAdd).subscribe(
+      () => {
+        this.router.navigate(['/orders']).then(() => {
+          this.toastr.success('Tạo đơn hàng thành công');
+        });
+      },
+      (error: HttpErrorResponse) => {
+        this.toastr.error('Tạo đơn hàng không thành công!');
+      }
+    );;
     console.log(this.orderAdd);
 
   }
@@ -106,18 +128,6 @@ export class AddOrderProductComponent implements OnInit {
     });
 
     return isPush;
-  }
-
-  getAllUsers() {
-    this.itemsUser = this.userService.getAllUsers('');
-    this.itemsUser.subscribe(data => {
-      data.forEach(element => {
-        if (element.groupRole === 'Customer') {
-          this.itemCustomer.push(element);
-        }
-
-      });
-    });
   }
 
   get fProduct() { return this.addProductForm.controls; }

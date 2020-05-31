@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PictureService } from 'src/app/services/picture.service';
 import { ProductService } from 'src/app/services/product.sevice';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-picture',
@@ -34,7 +35,7 @@ export class EditPictureComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.products = this.productService.getAllProducts('', 1, 1);
+    this.getAllProducts();
 
     this.route.params.subscribe(params => {
       this.id = params.id;
@@ -52,6 +53,11 @@ export class EditPictureComponent implements OnInit {
     });
   }
 
+  getAllProducts() {
+    this.products = this.productService.getAllProducts('', 1, 1000).pipe(
+      map(response => response.items)
+    );
+  }
   editPicture() {
     this.picture = Object.assign({}, this.editPictureForm.value);
     this.picture.productId = Number(this.picture.productId);

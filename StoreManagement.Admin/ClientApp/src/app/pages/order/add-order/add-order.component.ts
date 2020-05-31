@@ -35,7 +35,7 @@ export class AddOrderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.users = this.userService.getAllUsers('');
+    this.users = this.userService.getAllUsers('', 1, 1000);
   }
   addOrder() {
     this.order = Object.assign({}, this.addOrderForm.value);

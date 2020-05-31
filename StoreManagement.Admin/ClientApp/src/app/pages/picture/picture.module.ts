@@ -6,6 +6,7 @@ import { PictureRoutingModule } from './picture-routing.module';
 import { PictureComponent } from './picture.component';
 import { AddPictureComponent } from './add-picture/add-picture.component';
 import { EditPictureComponent } from './edit-picture/edit-picture.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
     imports: [
@@ -13,6 +14,7 @@ import { EditPictureComponent } from './edit-picture/edit-picture.component';
         FormsModule,
         ReactiveFormsModule,
         PictureRoutingModule,
+        NgxPaginationModule,
         BsDatepickerModule.forRoot()
     ],
     declarations: [

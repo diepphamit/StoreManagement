@@ -10,8 +10,8 @@ export class SupplierService {
   constructor(private http: HttpClient) {
   }
 
-  getAllSuppliers(keyword: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}?keyword=${keyword}`);
+  getAllSuppliers(keyword: string, page: number, pageSize: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
   }
 
   getSuppliersById(id: any): Observable<any> {

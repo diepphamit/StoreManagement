@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StoreManagement.BusinessLogic.Dtos.Orders;
+using StoreManagement.BusinessLogic.Helper;
 using StoreManagement.BusinessLogic.Interfaces;
 using StoreManagement.DataAccess.Data;
 using StoreManagement.DataAccess.Entites;
@@ -14,10 +15,14 @@ namespace StoreManagement.BusinessLogic.Implementaions
     public class OrderRepository : IOrderRepository
     {
         private readonly DataContext _context;
+        private readonly IEmailSender _emailSender;
+        private readonly IUserRepository _userRepository;
 
-        public OrderRepository(DataContext context)
+        public OrderRepository(DataContext context, IEmailSender emailSender, IUserRepository userRepository)
         {
             _context = context;
+            _emailSender = emailSender;
+            _userRepository = userRepository;
         }
         public async Task<bool> CreateOrderAsync(Order order, IEnumerable<OrderDetail> orderDetail)
         {
@@ -34,6 +39,9 @@ namespace StoreManagement.BusinessLogic.Implementaions
                 }
 
                 await _context.SaveChangesAsync();
+                var customerUser = await _userRepository.GetUserByIdAsync((int)order.CustomerId);
+                var message = new Message(new string[] { customerUser.Email }, "Test email async", "This is the content from our async email.");
+                await _emailSender.SendEmailAsync(message);
 
                 return true;
             }

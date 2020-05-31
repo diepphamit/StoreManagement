@@ -25,7 +25,8 @@ export class OrderService {
   }
 
   createOrder(order: any) {
-    return this.http.post(this.baseUrl, order);
+    console.log(this.baseUrl);
+    return this.http.post('http://localhost:5000/api/order', order);
   }
 
   editOrder(id: any, order: any) {

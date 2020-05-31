@@ -10,8 +10,8 @@ export class PictureService {
   constructor(private http: HttpClient) {
   }
 
-  getAllPictures(keyword: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}?keyword=${keyword}`);
+  getAllPictures(keyword: string, page: number, pageSize: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
   }
 
   getPictureById(id: any): Observable<any> {

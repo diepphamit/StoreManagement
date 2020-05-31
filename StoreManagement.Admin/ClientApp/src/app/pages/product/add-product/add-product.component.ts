@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ValidationService } from 'src/app/services/validation.service';
 import { SupplierService } from 'src/app/services/supplier.service';
+import { tap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-product',
@@ -18,7 +19,9 @@ export class AddProductComponent implements OnInit {
 
   addProductForm: FormGroup;
   product: ProductForAdd;
-
+  page: number;
+  pageSize: number;
+  total: number;
   categories: Observable<any[]>;
   suppliers: Observable<any[]>;
   constructor(
@@ -41,9 +44,25 @@ export class AddProductComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.categories = this.categoryService.getAllCategories('');
-    this.suppliers = this.supplierService.getAllSuppliers('');
+    this.page = 1;
+    this.pageSize = 1000;
+    this.getAllCategories(this.page);
+    this.getAllSuppliers(this.page);
   }
+  getAllCategories(page: number) {
+    this.categories = this.categoryService.getAllCategories('', page, this.pageSize)
+    .pipe(
+      map(response => response.items)
+    );
+  }
+
+  getAllSuppliers(page: number) {
+    this.suppliers = this.supplierService.getAllSuppliers('', page, this.pageSize)
+    .pipe(
+      map(response => response.items)
+    );
+  }
+
   addProduct() {
     this.product = Object.assign({}, this.addProductForm.value);
     this.product.categoryId = Number(this.product.categoryId);

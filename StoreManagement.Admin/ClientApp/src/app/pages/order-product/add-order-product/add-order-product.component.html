@@ -12,7 +12,7 @@
             <label>Tên khách hàng</label>
             <select class="form-control" formControlName="customerId">
               <option value="">Choose Customer</option>
-              <option *ngFor="let item of itemCustomer" value={{item.id}}>{{item.username}}</option>
+              <option *ngFor="let item of itemCustomer | async" value={{item.id}}>{{item.username}}</option>
             </select>
           </div>
           <div class="form-group" >
