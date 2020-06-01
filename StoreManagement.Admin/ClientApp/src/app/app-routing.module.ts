@@ -42,7 +42,14 @@ const routes: Routes = [
         loadChildren: () => import('./pages/product/product.module').then(m => m.ProductModule)
       },
       {
-
+        path: 'orderproducts',
+        loadChildren: () => import('./pages/order-product/order-product.module').then(m => m.OrderProductModule)
+      },
+      {
+        path: 'charts',
+        loadChildren: () => import('./pages/chartdemo/chartdemo.module').then(m => m.ChartdemoModule)
+      },
+      {
         path: 'pictures',
         loadChildren: () => import('./pages/picture/picture.module').then(m => m.PictureModule)
       },

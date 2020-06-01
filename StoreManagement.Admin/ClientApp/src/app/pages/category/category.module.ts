@@ -6,6 +6,7 @@ import { CategoryRoutingModule } from './category-routing.module';
 import { CategoryComponent } from './category.component';
 import { AddCategoryComponent } from './add-category/add-category.component';
 import { EditCategoryComponent } from './edit-category/edit-category.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
     imports: [
@@ -13,6 +14,7 @@ import { EditCategoryComponent } from './edit-category/edit-category.component';
         FormsModule,
         ReactiveFormsModule,
         CategoryRoutingModule,
+        NgxPaginationModule,
         BsDatepickerModule.forRoot()
     ],
     declarations: [

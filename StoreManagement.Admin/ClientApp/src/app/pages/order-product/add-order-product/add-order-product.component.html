@@ -1,0 +1,86 @@
+<div class="box box-primary">
+
+  <div class="box-header with-border">
+    <h3 class="box-title">Thêm mới</h3>
+  </div>
+
+  <form [formGroup]="addOrderForm" (submit) ="addOrder()" novalidate>
+    <div class="box-body">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">
+            <label>Tên khách hàng</label>
+            <select class="form-control" formControlName="customerId">
+              <option value="">Choose Customer</option>
+              <option *ngFor="let item of itemCustomer | async" value={{item.id}}>{{item.username}}</option>
+            </select>
+          </div>
+          <div class="form-group" >
+            <label>Trạng thái</label>
+            <select class="form-control" formControlName="status">
+              <option value="">Choose the status</option>
+              <option *ngFor="let item of status " value={{item.value}}>{{item.name}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Code</label>
+            <input type="text" class="form-control" placeholder="Code" formControlName="code">
+          </div>
+        </div>
+        <div class="col-sm-8">
+          <form [formGroup]="addProductForm" (submit)="OK()" novalidate>
+            <div class="col-sm-6" >
+              <select class="form-control" formControlName="productId">
+                <option *ngFor="let item of itemsProduct | async" value={{item.id}}>{{item.name}}</option>
+              </select>
+            </div>
+            <div class="col-sm-4">
+              <input type="number" class="form-control" formControlName="quantity" placeholder="Số lượng">
+            </div>
+            <div class="col-sm-2">
+              <button class="btn btn-success" [disabled]="addProductForm.invalid">OK</button>
+            </div>
+          </form>
+          <br>
+          <label> </label>
+          <label> </label>
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <th style="width: 15%">Product Id</th>
+                <th>Tên sản phẩm</th>
+                <th>Đơn giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+                <th style="text-align: center;">Hành động</th>
+              </tr>
+              <tr *ngFor="let item of itemsAsync">
+                <td>{{ item.productId }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.totalPrice }}</td>
+                <td style=" text-align: center;">
+                  <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;" (click)="deleteProduct(item.productId)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr style="background-color: rgb(21, 255, 0);">
+                <td></td><td></td><td></td>
+                <td>Thành tiền</td>
+                <td > {{totalprice}}</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="box-footer text-center">
+      <button [routerLink]="['/products']" class="btn btn-default">Hủy</button>
+      <button type="submit" [disabled]="addOrderForm.invalid" class="btn btn-success">Lưu</button>
+    </div>
+  </form>
+
+</div>

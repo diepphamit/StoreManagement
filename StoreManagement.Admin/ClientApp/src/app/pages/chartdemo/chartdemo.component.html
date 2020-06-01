@@ -1,0 +1,38 @@
+<div class="box box-primary">
+  <form [formGroup]="dateForm" (submit)="drawChart()" novalidate>
+    <div class="box-body">
+      <div class="row">
+        <div class="col-md-offset-2 col-sm-3">
+          <div class="form-group">
+            <input type="text"  [bsConfig]="bsConfig"
+
+            bsDatepicker  class="form-control" placeholder="Tu"[maxDate]="maxDate" formControlName="datePre" >
+          </div>
+        </div>
+        <div class="col-sm-1 text-center">
+          <div class="form-group">
+            <label>--------></label>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <input type="text" bsDatepicker class="form-control" placeholder="Den" [maxDate]="maxDate" formControlName="dateAfter">
+          </div>
+        </div>
+        <div class="col-sm-1">
+          <button type="submit" class="btn btn-success">OK</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+</div>
+
+
+
+<div>
+  <div style="display: block">
+    <canvas baseChart [datasets]="barChartData1" [labels]="barChartLabels1" [options]="barChartOptions"
+      [legend]="barChartLegend" [chartType]="barChartType"></canvas>
+  </div>
+</div>

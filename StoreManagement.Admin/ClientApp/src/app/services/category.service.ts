@@ -10,8 +10,8 @@ export class CategoryService {
   constructor(private http: HttpClient) {
   }
 
-  getAllCategories(keyword: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}?keyword=${keyword}`);
+  getAllCategories(keyword: string, page: number, pageSize: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
   }
 
   getCategoryById(id: any): Observable<any> {

@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ValidationService } from 'src/app/services/validation.service';
 import { SupplierService } from 'src/app/services/supplier.service';
+import { tap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-product',
@@ -21,6 +22,9 @@ export class EditProductComponent implements OnInit {
   id: any;
   categories: Observable<any[]>;
   suppliers: Observable<any[]>;
+  page: number;
+  pageSize: number;
+  total: number;
 
   constructor(
     private fb: FormBuilder,
@@ -43,8 +47,10 @@ export class EditProductComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.categories = this.categoryService.getAllCategories('');
-    this.suppliers = this.supplierService.getAllSuppliers('');
+    this.page = 1;
+    this.pageSize = 1000;
+    this.getAllCategories(this.page);
+    this.getAllSuppliers(this.page);
 
     this.route.params.subscribe(params => {
       this.id = params.id;
@@ -65,6 +71,20 @@ export class EditProductComponent implements OnInit {
           });
       }
     });
+  }
+
+  getAllCategories(page: number) {
+    this.categories = this.categoryService.getAllCategories('', page, this.pageSize)
+      .pipe(
+        map(response => response.items)
+      );
+  }
+
+  getAllSuppliers(page: number) {
+    this.suppliers = this.supplierService.getAllSuppliers('', page, this.pageSize)
+      .pipe(
+        map(response => response.items)
+      );
   }
 
   editProduct() {

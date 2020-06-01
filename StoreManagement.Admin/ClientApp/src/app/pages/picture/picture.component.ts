@@ -6,6 +6,7 @@ import { PictureService } from 'src/app/services/picture.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
+import { tap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-picture',
@@ -17,6 +18,9 @@ export class PictureComponent implements OnInit {
   keyword: string;
   itemsAsync: Observable<any[]>;
   modalRef: BsModalRef;
+  page: number;
+  pageSize: number;
+  total: number;
 
   constructor(
     public pictureService: PictureService,
@@ -27,11 +31,20 @@ export class PictureComponent implements OnInit {
 
   ngOnInit() {
     this.keyword = '';
-    this.getAllPictures();
+    this.page = 1;
+    this.pageSize = 10;
+    this.getAllPictures(this.page);
   }
 
-  getAllPictures() {
-    this.itemsAsync = this.pictureService.getAllPictures(this.keyword);
+  getAllPictures(page: number) {
+    this.itemsAsync = this.pictureService.getAllPictures(this.keyword, page, this.pageSize)
+    .pipe(
+      tap(response => {
+        this.total = response.total;
+        this.page = page;
+      }),
+      map(response => response.items)
+    );
   }
 
   add() {
@@ -56,7 +69,7 @@ export class PictureComponent implements OnInit {
       this.pictureService.deletePicture(this.picture.id)
         .subscribe(
           () => {
-            this.getAllPictures();
+            this.getAllPictures(this.page);
             this.toastr.success(`Xóa hình ảnh thành công`);
           },
           (error: HttpErrorResponse) => {
@@ -74,12 +87,12 @@ export class PictureComponent implements OnInit {
   }
 
   search() {
-    this.getAllPictures();
+    this.getAllPictures(this.page);
   }
 
   refresh() {
     this.keyword = '';
-    this.getAllPictures();
+    this.getAllPictures(this.page);
   }
 
 }
