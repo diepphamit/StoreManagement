@@ -5,6 +5,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ChartdemoRoutingModule } from './chartdemo-routing.module';
 import { ChartsModule } from 'ng2-charts';
 import { ChartdemoComponent } from './chartdemo.component';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 
 @NgModule({
     imports: [
@@ -13,6 +14,7 @@ import { ChartdemoComponent } from './chartdemo.component';
         ReactiveFormsModule,
         ChartdemoRoutingModule,
         ChartsModule,
+        LoadingBarRouterModule,
         BsDatepickerModule.forRoot()
     ],
     declarations: [

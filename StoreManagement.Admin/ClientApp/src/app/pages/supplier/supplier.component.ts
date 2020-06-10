@@ -9,6 +9,7 @@ import { map, tap } from 'rxjs/operators';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Supplier } from 'src/app/models/supplier/supplier.model';
 import { SupplierService } from 'src/app/services/supplier.service';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 @Component({
   selector: 'app-supplier',
@@ -27,7 +28,8 @@ export class SupplierComponent implements OnInit {
     public supplierService: SupplierService,
     private router: Router,
     private modalService: BsModalService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private loadingBar: LoadingBarService
   ) { }
 
   ngOnInit() {
@@ -38,11 +40,13 @@ export class SupplierComponent implements OnInit {
   }
 
   getAllSuppliers(page: number) {
+    this.loadingBar.start();
     this.itemsAsync = this.supplierService.getAllSuppliers(this.keyword, page, this.pageSize)
       .pipe(
         tap(response => {
           this.total = response.total;
           this.page = page;
+          this.loadingBar.stop();
         }),
         map(response => response.items)
       );

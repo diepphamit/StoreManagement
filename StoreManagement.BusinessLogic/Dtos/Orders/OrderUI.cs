@@ -8,7 +8,9 @@ namespace StoreManagement.BusinessLogic.Dtos.Orders
     {
         public int Id { get; set; }
         public int StaffId { get; set; }
+        public string StaffName { get; set; }
         public int CustomerId { get; set; }
+        public string CustomerName { get; set; }
         public DateTime OrderDate { get; set; }
         public bool Status { get; set; }
         public int Code { get; set; }

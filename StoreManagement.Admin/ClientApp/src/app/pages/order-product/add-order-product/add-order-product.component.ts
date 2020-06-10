@@ -5,9 +5,7 @@ import { ProductService } from 'src/app/services/product.sevice';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
-import { UserForList } from 'src/app/models/user/user.model';
 import { OrderAdd, ProductOrder } from 'src/app/models/order/orderAdd.model';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { CURRENT_USER } from 'src/app/constants/db-keys';
 import { OrderProductService } from 'src/app/services/order-product.service';
 import { OrderService } from 'src/app/services/order.service';
@@ -97,15 +95,14 @@ export class AddOrderProductComponent implements OnInit {
 
     this.orderService.createOrder(this.orderAdd).subscribe(
       () => {
-        this.router.navigate(['/orders']).then(() => {
+        this.router.navigate(['/orderproducts/add']).then(() => {
           this.toastr.success('Tạo đơn hàng thành công');
         });
       },
       (error: HttpErrorResponse) => {
         this.toastr.error('Tạo đơn hàng không thành công!');
       }
-    );;
-    console.log(this.orderAdd);
+    );
 
   }
 

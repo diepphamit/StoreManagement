@@ -10,6 +10,7 @@ import { ControlMessagesComponent } from 'src/app/helper/control-messages.compon
 import { AppModule } from 'src/app/app.module';
 import { ControlModule } from 'src/app/helper/control.module';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 
 @NgModule({
     imports: [
@@ -19,6 +20,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
         UsersManagementRoutingModule,
         ControlModule,
         NgxPaginationModule,
+        LoadingBarRouterModule,
         BsDatepickerModule.forRoot()
     ],
     declarations: [

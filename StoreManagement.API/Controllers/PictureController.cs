@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Pictures;
 using StoreManagement.BusinessLogic.Interfaces;
+using StoreManagement.BusinessLogic.Storages;
 using StoreManagement.DataAccess.Entites;
 
 namespace StoreManagement.API.Controllers
@@ -18,11 +20,18 @@ namespace StoreManagement.API.Controllers
     {
         private readonly IPictureRepository _pictureRepository;
         private readonly IMapper _mapper;
+        private readonly IFileRepository _repository;
+        private readonly IAmazonS3StorageManager _storageManager;
 
-        public PictureController(IPictureRepository repo, IMapper mapper)
+        public PictureController(IPictureRepository repo,
+            IMapper mapper,
+            IFileRepository repository,
+            IAmazonS3StorageManager storageManager)
         {
             _pictureRepository = repo;
             _mapper = mapper;
+            _repository = repository;
+            _storageManager = storageManager;
         }
 
         [HttpGet]
@@ -35,6 +44,13 @@ namespace StoreManagement.API.Controllers
                 int totalCount = list.Count();
 
                 var query = list.OrderByDescending(x => x.Id).Skip((page - 1) * pagesize).Take(pagesize);
+
+                
+
+                foreach(var item in query)
+                {
+                    item.ImageUrl = _storageManager.GetCannedSignedURL(item.FileLocation);
+                }
 
                 var response = _mapper.Map<IEnumerable<Picture>, IEnumerable<PictureUI>>(query);
 
@@ -61,28 +77,77 @@ namespace StoreManagement.API.Controllers
             if (picture == null)
                 return NotFound();
 
-            return Ok(_mapper.Map<PictureDto>(picture));
+            var pictureToReturn = new PictureDto
+            {
+                Id = picture.Id,
+                ProductId = picture.ProductId,
+                ImageUrl = _storageManager.GetCannedSignedURL(picture.FileLocation)
+            };
+
+            return Ok(pictureToReturn);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePicture([FromBody]PictureForAdd pictureAdd)
+        public async Task<IActionResult> CreatePicture([FromForm]UploadFileDto pictureAdd)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            //if (!ModelState.IsValid)
+            //    return BadRequest(ModelState);
 
-            var picture = _mapper.Map<Picture>(pictureAdd);
-            var result = await _pictureRepository.CreatePictureAsync(picture);
+            //var picture = _mapper.Map<Picture>(pictureAdd);
+            //var result = await _pictureRepository.CreatePictureAsync(picture);
 
-            if (result)
-                return Ok();
+            //if (result)
+            //    return Ok();
 
-            return BadRequest();
+            //return BadRequest();
+
+            int? id = null;
+
+            try
+            {
+                var fileEntry = new Picture
+                {
+                    ProductId = pictureAdd.ProductId,
+                    Size = pictureAdd.FormFile.Length,
+                    UploadedTime = DateTime.Now,
+                    FileName = pictureAdd.FormFile.FileName,
+                    FileLocation = Guid.NewGuid().ToString()
+                };
+
+                _repository.Add(fileEntry);
+
+                id = fileEntry.Id;
+
+                using (var stream = new MemoryStream())
+                {
+                    await pictureAdd.FormFile.CopyToAsync(stream);
+                    _storageManager.Create(fileEntry, stream);
+                }
+
+                _repository.Update(fileEntry);
+
+                return Ok(fileEntry.Id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+
+                if (id.HasValue)
+                {
+                    _repository.Delete(id.Value);
+                }
+
+                return BadRequest();
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePicture(int id)
         {
+            var pictureInDb = _repository.Get(id);
             var result = await _pictureRepository.DeletePictureAsync(id);
+            _storageManager.Delete(pictureInDb);
+
             if (result)
                 return Ok();
 

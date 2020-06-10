@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { tap, map, debounceTime } from 'rxjs/operators';
 import { Branch } from 'src/app/models/branch/branch.model';
 import { BranchService } from 'src/app/services/branch.service';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 @Component({
   selector: 'app-branch',
@@ -26,7 +27,8 @@ export class BranchComponent implements OnInit {
     public branchService: BranchService,
     private router: Router,
     private modalService: BsModalService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private loadingBar: LoadingBarService
   ) { }
 
   ngOnInit() {
@@ -37,11 +39,13 @@ export class BranchComponent implements OnInit {
   }
 
   getAllBranches(page: number) {
+    this.loadingBar.start();
     this.itemsAsync = this.branchService.getAllBranches(this.keyword, page, this.pageSize)
       .pipe(
         tap(response => {
           this.total = response.total;
           this.page = page;
+          this.loadingBar.stop();
         }),
         map(response => response.items)
       );

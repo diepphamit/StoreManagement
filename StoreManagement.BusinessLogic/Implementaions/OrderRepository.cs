@@ -38,9 +38,11 @@ namespace StoreManagement.BusinessLogic.Implementaions
                     _context.OrderDetails.Add(item);
                 }
 
-                await _context.SaveChangesAsync();
-                var customerUser = await _userRepository.GetUserByIdAsync((int)order.CustomerId);
-                var message = new Message(new string[] { customerUser.Email }, "Test email async", "This is the content from our async email.");
+                //Test send mail
+                User customerUser = _context.Users.FirstOrDefault(x => x.Id == order.CustomerId);
+                string content = "Xin Chào " + customerUser.Name + "\n Cảm ơn bạn đã tin tưởng chúng tôi. \n Chúng tôi đã nhận được"
+                    + " đơn hàng của bạn và mời bạn đến của hàng gần nhất để nhận hàng";
+                var message = new Message(new string[] { customerUser.Email }, "StoreManagenment", content);
                 await _emailSender.SendEmailAsync(message);
 
                 return true;
@@ -99,7 +101,8 @@ namespace StoreManagement.BusinessLogic.Implementaions
         public IEnumerable<Order> GetAllOrder(string keyword)
         {
             if (string.IsNullOrEmpty(keyword)) keyword = "";
-            return _context.Orders.Where(x => x.Code.ToString().Contains(keyword.ToLower())).AsEnumerable();
+            return _context.Orders.Include(x => x.Customer).Include(x => x.Staff)
+                .Where(x => x.Code.ToString().Contains(keyword.ToLower())).AsEnumerable();
         }
 
         public async Task<Order> GetOrderByIdAsync(int id)

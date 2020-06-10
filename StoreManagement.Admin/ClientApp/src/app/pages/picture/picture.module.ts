@@ -7,6 +7,8 @@ import { PictureComponent } from './picture.component';
 import { AddPictureComponent } from './add-picture/add-picture.component';
 import { EditPictureComponent } from './edit-picture/edit-picture.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
+import { NgxFileDropModule } from 'ngx-file-drop';
 
 @NgModule({
     imports: [
@@ -15,6 +17,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
         ReactiveFormsModule,
         PictureRoutingModule,
         NgxPaginationModule,
+        LoadingBarRouterModule,
+        NgxFileDropModule,
         BsDatepickerModule.forRoot()
     ],
     declarations: [

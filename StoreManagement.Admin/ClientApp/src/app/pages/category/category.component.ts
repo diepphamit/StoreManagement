@@ -9,6 +9,7 @@ import { map, tap } from 'rxjs/operators';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CategoryService } from 'src/app/services/category.service';
 import { Category } from 'src/app/models/category/category.model';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 @Component({
   selector: 'app-category',
@@ -24,11 +25,11 @@ export class CategoryComponent implements OnInit {
   total: number;
 
   constructor(
-    // tslint:disable-next-line:no-shadowed-variable
-    public CategoryService: CategoryService,
+    public categoryService: CategoryService,
     private router: Router,
     private modalService: BsModalService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private loadingBar: LoadingBarService
   ) { }
 
   ngOnInit() {
@@ -39,11 +40,13 @@ export class CategoryComponent implements OnInit {
   }
 
   getAllCategories(page: number) {
-    this.itemsAsync = this.CategoryService.getAllCategories(this.keyword, page, this.pageSize)
+    this.loadingBar.start();
+    this.itemsAsync = this.categoryService.getAllCategories(this.keyword, page, this.pageSize)
     .pipe(
       tap(response => {
         this.total = response.total;
         this.page = page;
+        this.loadingBar.stop();
       }),
       map(response => response.items)
     );
@@ -68,7 +71,7 @@ export class CategoryComponent implements OnInit {
 
   confirm(): void {
     if (this.category) {
-      this.CategoryService.deleteCategory(this.category.id)
+      this.categoryService.deleteCategory(this.category.id)
         .subscribe(
           () => {
             this.getAllCategories(this.page);
