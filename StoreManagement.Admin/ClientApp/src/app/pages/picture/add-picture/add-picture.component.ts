@@ -9,6 +9,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PictureService } from 'src/app/services/picture.service';
 import { ProductService } from 'src/app/services/product.sevice';
 import { tap, map } from 'rxjs/operators';
+import { NgxFileDropEntry, FileSystemDirectoryEntry, FileSystemFileEntry } from 'ngx-file-drop';
+import { PictureToUpload } from 'src/app/models/pictures/pictureToUpload.model';
 
 @Component({
   selector: 'app-add-picture',
@@ -18,6 +20,9 @@ export class AddPictureComponent implements OnInit {
 
   addPictureForm: FormGroup;
   picture: PictureForAdd;
+
+  upload: PictureToUpload = new PictureToUpload;
+  public files: NgxFileDropEntry[] = [];
 
   products: Observable<any[]>;
   suppliers: Observable<any[]>;
@@ -29,7 +34,7 @@ export class AddPictureComponent implements OnInit {
     private toastr: ToastrService
   ) {
     this.addPictureForm = this.fb.group({
-      imageUrl: ['', Validators.required],
+      // imageUrl: ['', Validators.required],
       productId: ['', Validators.required]
     });
   }
@@ -47,19 +52,48 @@ export class AddPictureComponent implements OnInit {
   addPicture() {
     this.picture = Object.assign({}, this.addPictureForm.value);
     this.picture.productId = Number(this.picture.productId);
+    this.upload.productId = this.picture.productId;
 
-    this.pictureService.createPicture(this.picture).subscribe(
+    this.pictureService.createPicture(this.upload).subscribe(
       () => {
         this.router.navigate(['/pictures']).then(() => {
           this.toastr.success('Tạo hình ảnh thành công');
         });
       },
       (error: HttpErrorResponse) => {
+        console.log(error);
         this.toastr.error('Tạo hình ảnh không thành công!');
       }
     );
   }
 
   get f() { return this.addPictureForm.controls; }
+
+  public dropped(files: NgxFileDropEntry[]) {
+    this.files = files;
+    for (const droppedFile of files) {
+
+      // Is it a file?
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file((file: File) => {
+           this.upload.file = file;
+        });
+      } else {
+        const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
+        console.log(droppedFile.relativePath, fileEntry);
+      }
+    }
+
+
+  }
+
+  public fileOver(event) {
+    console.log(event);
+  }
+
+  public fileLeave(event) {
+    console.log(event);
+  }
 
 }

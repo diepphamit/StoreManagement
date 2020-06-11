@@ -23,7 +23,11 @@ export class PictureService {
   // }
 
   createPicture(picture: any) {
-    return this.http.post(this.baseUrl, picture);
+    const formData = new FormData();
+    formData.append('formFile', picture.file, picture.file.name);
+    formData.append('productId', picture.productId);
+
+    return this.http.post(this.baseUrl, formData);
   }
 
   editPicture(id: any, picture: any) {

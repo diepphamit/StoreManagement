@@ -17,6 +17,7 @@ using StoreManagement.BusinessLogic.AutoMapper;
 using StoreManagement.BusinessLogic.Helper;
 using StoreManagement.BusinessLogic.Implementaions;
 using StoreManagement.BusinessLogic.Interfaces;
+using StoreManagement.BusinessLogic.Storages;
 using StoreManagement.DataAccess.Data;
 
 namespace StoreManagement.API
@@ -49,6 +50,13 @@ namespace StoreManagement.API
                 o.MemoryBufferThreshold = int.MaxValue;
             });
 
+            services.Configure<AmazonStorageSetting>(Configuration.GetSection("AmazonStorage"));
+            services.Configure<AmazonCloudFront>(Configuration.GetSection("AmazonCloudFront"));
+            //services.AddDistributedRedisCache(options =>
+            //{
+            //    options.Configuration = Configuration.GetConnectionString("RedisConnection");
+            //});
+
             services.AddControllers();
 
             services.AddAuthentication();
@@ -56,6 +64,8 @@ namespace StoreManagement.API
 
             services.AddAutoMapper(typeof(AutoMapperProfiles), typeof(AutoMapperProfiles));
             //Repository
+            services.AddScoped<IFileRepository, FileRepository>();
+            services.AddScoped<IAmazonS3StorageManager, AmazonS3StorageManager>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
@@ -66,6 +76,7 @@ namespace StoreManagement.API
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<IBranchProductRepository, BranchProductRepository>();
+            
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",

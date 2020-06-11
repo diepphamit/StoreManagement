@@ -16,11 +16,32 @@
             </select>
           </div>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-3">
           <div class="form-group">
             <label>Đường dẫn</label>
-            <input type="text" class="form-control" formControlName="imageUrl" placeholder="Đường dẫn"
-              [ngClass]="{ 'is-invalid': f.imageUrl.errors }">
+            <!-- <input type="text" class="form-control" formControlName="imageUrl" placeholder="Đường dẫn"
+              [ngClass]="{ 'is-invalid': f.imageUrl.errors }"> -->
+            <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
+              (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+              <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+                Thả hình ảnh vào đây
+                <button type="button" (click)="openFileSelector()">Browse Files</button>
+              </ng-template>
+            </ngx-file-drop>
+            <div class="upload-table">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                  </tr>
+                </thead>
+                <tbody class="upload-name-style">
+                  <tr *ngFor="let item of files; let i=index">
+                    <td><strong>{{ item.relativePath }}</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -28,7 +49,7 @@
     </div>
     <div class="box-footer text-center">
       <button [routerLink]="['/products']" class="btn btn-default">Hủy</button>
-      <button type="submit" [disabled]="addPictureForm.invalid" class="btn btn-success pull-right">Lưu</button>
+      <button type="submit" [disabled]="addPictureForm.invalid" class="btn btn-success">Lưu</button>
     </div>
   </form>
 

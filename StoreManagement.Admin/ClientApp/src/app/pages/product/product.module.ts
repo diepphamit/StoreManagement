@@ -8,6 +8,7 @@ import { AddProductComponent } from './add-product/add-product.component';
 import { EditProductComponent } from './edit-product/edit-product.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ControlModule } from 'src/app/helper/control.module';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 
 @NgModule({
     imports: [
@@ -17,6 +18,7 @@ import { ControlModule } from 'src/app/helper/control.module';
         ProductRoutingModule,
         ControlModule,
         NgxPaginationModule,
+        LoadingBarRouterModule,
         BsDatepickerModule.forRoot()
     ],
     declarations: [

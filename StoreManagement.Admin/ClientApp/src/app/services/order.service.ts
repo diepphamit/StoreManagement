@@ -12,7 +12,7 @@ export class OrderService {
   }
 
   getAllOrders(keyword: string, page: number, pageSize: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
+    return this.http.get(`${this.baseUrl}/GetAllOrder?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
   }
 
   getRevenue(date: Date): Observable<any> {

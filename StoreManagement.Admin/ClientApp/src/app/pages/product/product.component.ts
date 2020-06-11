@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { tap, map, debounceTime } from 'rxjs/operators';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 @Component({
   selector: 'app-product',
@@ -26,7 +27,8 @@ export class ProductComponent implements OnInit {
     public productService: ProductService,
     private router: Router,
     private modalService: BsModalService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private loadingBar: LoadingBarService
   ) { }
 
   ngOnInit() {
@@ -37,11 +39,13 @@ export class ProductComponent implements OnInit {
   }
 
   getAllProducts(page: number) {
+    this.loadingBar.start();
     this.itemsAsync = this.productService.getAllProducts(this.keyword, page, this.pageSize)
       .pipe(
         tap(response => {
           this.total = response.total;
           this.page = page;
+          this.loadingBar.stop();
         }),
         map(response => response.items)
       );

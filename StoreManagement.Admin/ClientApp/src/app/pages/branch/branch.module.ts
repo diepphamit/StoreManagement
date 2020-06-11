@@ -8,6 +8,7 @@ import { AddBranchComponent } from './add-branch/add-branch.component';
 import { EditBranchComponent } from './edit-branch/edit-branch.component';
 import { ControlModule } from 'src/app/helper/control.module';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 
 @NgModule({
     imports: [
@@ -17,6 +18,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
         BranchRoutingModule,
         ControlModule,
         NgxPaginationModule,
+        LoadingBarRouterModule,
         BsDatepickerModule.forRoot()
     ],
     declarations: [

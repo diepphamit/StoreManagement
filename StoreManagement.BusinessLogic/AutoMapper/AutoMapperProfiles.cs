@@ -45,7 +45,9 @@ namespace StoreManagement.BusinessLogic.AutoMapper
             CreateMap<SupplierUI, Supplier>();
             CreateMap<Branch, BranchUI>();
             CreateMap<BranchUI, Branch>();
-            CreateMap<Order, OrderUI>();
+            CreateMap<Order, OrderUI>()
+                .ForMember(x => x.CustomerName, y => { y.MapFrom(z => z.Customer.Username); })
+                .ForMember(x => x.StaffName, y => { y.MapFrom(z => z.Staff.Username); });
             CreateMap<OrderUI, Order>();
             CreateMap<OrderDetail, OrderDetailUI>().ForMember(x => x.ProductName, y => { y.MapFrom(z => z.Product.Name); });
             CreateMap<OrderDetail, OrderDetailAdd>();

@@ -1,3 +1,4 @@
+<ngx-loading-bar [height]="'5px'" [color]="'#FFFF66'"></ngx-loading-bar>
 <div class="box box-primary">
   <div class="box-header with-border">
     <h3 class="box-title">Quản lý hình ảnh</h3>
@@ -35,7 +36,7 @@
             <tr *ngFor="let item of itemsAsync | async | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: total }">
               <td>{{ item.id }}</td>
               <td>{{ item.productName }}</td>
-              <td>{{ item.imageUrl }}</td>
+              <td><img src="{{ item.imageUrl }}" alt="Girl in a jacket" style="width:50px;height:60px;"></td>
               <td style=" text-align: center;">
                 <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;" (click)="edit(item.id)">
                   <i class="fa fa-pencil"></i>

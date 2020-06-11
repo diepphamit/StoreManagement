@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 @Component({
   selector: 'app-users-management',
@@ -25,7 +26,8 @@ export class UsersManagementComponent implements OnInit {
     public userService: UserService,
     private router: Router,
     private modalService: BsModalService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private loadingBar: LoadingBarService
   ) { }
 
   ngOnInit() {
@@ -36,11 +38,13 @@ export class UsersManagementComponent implements OnInit {
   }
 
   getAllUsers(page: number) {
+    this.loadingBar.start();
     this.itemsAsync = this.userService.getAllUsers(this.keyword, page, this.pageSize)
     .pipe(
       tap(response => {
         this.total = response.total;
         this.page = page;
+        this.loadingBar.stop();
       }),
       map(response => response.items)
     );
