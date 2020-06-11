@@ -76,7 +76,7 @@ namespace StoreManagement.API
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<IBranchProductRepository, BranchProductRepository>();
-            
+            services.AddScoped<IStatisticalRepository, StatisticalRepository>();
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",

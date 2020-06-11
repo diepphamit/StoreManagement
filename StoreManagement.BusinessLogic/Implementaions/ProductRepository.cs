@@ -87,9 +87,21 @@ namespace StoreManagement.BusinessLogic.Implementaions
                 .Where(x => x.Name.ToLower().Contains(keyword.ToLower())).AsEnumerable();
         }
 
+
+        public IEnumerable<BranchProduct> GetAllProductsInBranch(int branchId)
+        {
+            if(branchId == 0)
+                return _context.BranchProducts.Include(x => x.Product).ThenInclude(x => x.Category)
+                                   .Include(x => x.Product).ThenInclude(x => x.Supplier)
+                                   .Include(x => x.Product).ThenInclude(x => x.Pictures).AsEnumerable();
+            return _context.BranchProducts.Include(x => x.Product).ThenInclude(x => x.Category)
+                                   .Include(x => x.Product).ThenInclude(x => x.Supplier)
+                                   .Include(x => x.Product).ThenInclude(x => x.Pictures).Where(y => y.BrachId == branchId).AsEnumerable();
+        }
+
         public async Task<Product> GetProductByIdAsync(int id)
         {
-            return await _context.Products.Include(x => x.Pictures).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Products.Include(x => x.Pictures).Include(y => y.Supplier).Include(z => z.Category).FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

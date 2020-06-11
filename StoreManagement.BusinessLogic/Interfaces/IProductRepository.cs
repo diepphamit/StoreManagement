@@ -9,9 +9,11 @@ namespace StoreManagement.BusinessLogic.Interfaces
     public interface IProductRepository
     {
         IEnumerable<Product> GetAllProducts(string keyword);
+        IEnumerable<BranchProduct> GetAllProductsInBranch(int BranchId);
         Task<Product> GetProductByIdAsync(int id);
         Task<bool> CreateProductAsync(Product product);
         Task<bool> EditProductAsync(int id, Product product);
         Task<bool> DeleteProductAsync(int id);
+
     }
 }
