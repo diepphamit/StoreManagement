@@ -9,7 +9,7 @@ namespace StoreManagement.BusinessLogic.Interfaces
 {
     public interface IOrderRepository
     {
-        IEnumerable<Order> GetAllOrder(string keyword);
+        IEnumerable<Order> GetAllOrder(GetOrderUI getOrderUI);
         Task<Order> GetOrderByIdAsync(int id);
         Task<bool> CreateOrderAsync(Order order, IEnumerable<OrderDetail> orderDetail);
         Task<bool> EditOrderAsync(int id, Order orderupdate);

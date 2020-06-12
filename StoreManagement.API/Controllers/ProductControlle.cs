@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Math.EC.Rfc7748;
 using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Product;
 using StoreManagement.BusinessLogic.Interfaces;
@@ -52,6 +53,34 @@ namespace StoreManagement.API.Controllers
             {
                 //_logger.LogError("Có lỗi trong quá trình lấy dữ liệu", ex.ToString());
 
+                return BadRequest();
+            }
+
+        }
+        [Route("GetAllProductInBranch")]
+        [HttpGet]
+        public IActionResult GetAllProductInBranches(int BranchId, int page = 1, int pagesize = 10)
+        {
+            var products = _productRepository.GetAllProductsInBranch(BranchId);
+
+            int totalCount = products.Count();
+
+            try
+            {
+                var query = products.OrderByDescending(x => x.ProductId).Skip((page - 1) * pagesize).Take(pagesize);
+
+                var respone = _mapper.Map<IEnumerable<BranchProduct>, IEnumerable<ProductReturn>>(query);
+
+                var paginationset = new PaginationSet<ProductReturn>
+                {
+                    Items = respone,
+                    Total = totalCount
+                };
+
+                return Ok(paginationset);
+            }
+            catch (Exception)
+            {
                 return BadRequest();
             }
 
