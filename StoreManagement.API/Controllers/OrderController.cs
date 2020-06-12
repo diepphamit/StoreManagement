@@ -31,11 +31,17 @@ namespace StoreManagement.API.Controllers
         }
         [Route("GetAllOrder")]
         [HttpGet]
-        public IActionResult GetAllOrder(string keyword, int page = 1, int pagesize = 10)
+        public IActionResult GetAllOrder(int customerId, DateTime startDay, DateTime endDay, bool status = true, int page = 1, int pagesize = 10)
         {
             try
             {
-                var list = _orderRepository.GetAllOrder(keyword);
+                var getOrderUI = new GetOrderUI();
+                getOrderUI.customerId = customerId;
+                getOrderUI.status = status;
+                getOrderUI.startDay = startDay;
+                getOrderUI.endDay = endDay;
+
+                var list = _orderRepository.GetAllOrder(getOrderUI);
 
                 int totalCount = list.Count();
 

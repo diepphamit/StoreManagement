@@ -82,6 +82,8 @@ namespace StoreManagement.API
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<IBranchProductRepository, BranchProductRepository>();
+            services.AddScoped<IStatisticalRepository, StatisticalRepository>();
+
             services.AddScoped<PermissionFilter>();
 
             services.AddAuthentication(x =>
@@ -108,6 +110,7 @@ namespace StoreManagement.API
                 
             }) ;
 
+            
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",

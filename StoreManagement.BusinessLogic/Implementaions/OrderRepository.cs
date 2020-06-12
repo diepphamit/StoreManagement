@@ -36,6 +36,8 @@ namespace StoreManagement.BusinessLogic.Implementaions
                 {
                     item.Order = order;
                     _context.OrderDetails.Add(item);
+                    var branchProduct = await _context.BranchProducts.FirstOrDefaultAsync(x => x.ProductId == item.ProductId);
+                    branchProduct.Quantity -= item.Quantity;
                 }
 
                 //Test send mail
@@ -98,11 +100,15 @@ namespace StoreManagement.BusinessLogic.Implementaions
         }
 
 
-        public IEnumerable<Order> GetAllOrder(string keyword)
+        public IEnumerable<Order> GetAllOrder(GetOrderUI getOrderUI)
         {
-            if (string.IsNullOrEmpty(keyword)) keyword = "";
+            if (string.IsNullOrEmpty(getOrderUI.keyword)) getOrderUI.keyword = "";
+         
+            if (getOrderUI.customerId == 0)
+                return _context.Orders.Include(x => x.Customer).Include(x => x.Staff)
+                    .Where(x => x.Status == getOrderUI.status && x.OrderDate >= getOrderUI.startDay && x.OrderDate <= getOrderUI.endDay).AsEnumerable();
             return _context.Orders.Include(x => x.Customer).Include(x => x.Staff)
-                .Where(x => x.Code.ToString().Contains(keyword.ToLower())).AsEnumerable();
+                 .Where(x => x.CustomerId == getOrderUI.customerId && x.Status == getOrderUI.status && x.OrderDate >= getOrderUI.startDay && x.OrderDate <= getOrderUI.endDay).AsEnumerable();
         }
 
         public async Task<Order> GetOrderByIdAsync(int id)
@@ -115,7 +121,7 @@ namespace StoreManagement.BusinessLogic.Implementaions
             List<RevenueUI> list = new List<RevenueUI>();
             int totalRevenue;
             RevenueUI RevenueUI;
-            var revenue = _context.Orders.Where(x => x.OrderDate.Year == date.Year && x.OrderDate.Month == date.Month);
+            var revenue = _context.Orders.Where(x => x.OrderDate.Year == date.Year && x.OrderDate.Month == date.Month && x.Status == true);
            
             for(int i =1; i <= DateTime.DaysInMonth(date.Year, date.Month); i++)
             {
@@ -149,6 +155,7 @@ namespace StoreManagement.BusinessLogic.Implementaions
             }
             return totalPrice;
         }
+
 
         //private int DaysInMonth(int month, int year)
         //{
