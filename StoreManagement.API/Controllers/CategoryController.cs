@@ -4,9 +4,11 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using AutoMapper;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StoreManagement.API.Helpers;
 using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Categories;
 using StoreManagement.BusinessLogic.Helper;
@@ -18,7 +20,7 @@ using Twilio.Types;
 
 namespace StoreManagement.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
@@ -34,6 +36,8 @@ namespace StoreManagement.API.Controllers
             _emailSender = emailSender;
         }
 
+
+        [PermissionFilter(Permissions = "VIEW_CATEGORY")]
         [HttpGet]
         public IActionResult GetAllCategories(string keyword, int page = 1,int pagesize = 10)
         {
@@ -61,30 +65,31 @@ namespace StoreManagement.API.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategoryById(int id)
         {
             //var message = new Message(new string[] { "daviddiep17101998@gmail.com" }, "Test email async", "This is the content from our async email.");
             //await _emailSender.SendEmailAsync(message);
 
-            try
-            {
-                // Find your Account Sid and Auth Token at twilio.com/user/account  
-                const string accountSid = "ACb35d3041ed494f0b9f768d1418c01232";
-                const string authToken = "a40e2417a5fd1810c1b87eca02df71c7";
-                TwilioClient.Init(accountSid, authToken);
+            //try
+            //{
+            //    // Find your Account Sid and Auth Token at twilio.com/user/account  
+            //    const string accountSid = "ACb35d3041ed494f0b9f768d1418c01232";
+            //    const string authToken = "a40e2417a5fd1810c1b87eca02df71c7";
+            //    TwilioClient.Init(accountSid, authToken);
 
-                var to = new PhoneNumber("+12513222850");
-                var message = MessageResource.Create(
-                    to,
-                    from: new PhoneNumber("+84349679477"), //  From number, must be an SMS-enabled Twilio number ( This will send sms from ur "To" numbers ).  
-                    body: $"Hello Diep !! Welcome to Asp.Net Core With Twilio SMS API !!");
+            //    var to = new PhoneNumber("+12513222850");
+            //    var message = MessageResource.Create(
+            //        to,
+            //        from: new PhoneNumber("+84349679477"), //  From number, must be an SMS-enabled Twilio number ( This will send sms from ur "To" numbers ).  
+            //        body: $"Hello Diep !! Welcome to Asp.Net Core With Twilio SMS API !!");
 
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
 
             var category = await _categoryRepository.GetCategoryByIdAsync(id);
 
@@ -94,6 +99,7 @@ namespace StoreManagement.API.Controllers
             return Ok(_mapper.Map<CategoryUI>(category));
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CreateCategory([FromBody]CategoryUI category)
         {
@@ -109,6 +115,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
+        [PermissionFilter(Permissions = "DELETE_CATEGORY")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
@@ -119,6 +126,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
+        [PermissionFilter(Permissions = "EDIT_CATEGORY")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(int id, [FromBody]CategoryUI category)
         {

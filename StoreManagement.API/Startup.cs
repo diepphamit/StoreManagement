@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
@@ -12,7 +15,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using StoreManagement.API.Helpers;
 using StoreManagement.BusinessLogic.AutoMapper;
 using StoreManagement.BusinessLogic.Helper;
 using StoreManagement.BusinessLogic.Implementaions;
@@ -56,11 +61,12 @@ namespace StoreManagement.API
             //{
             //    options.Configuration = Configuration.GetConnectionString("RedisConnection");
             //});
+            
+
 
             services.AddControllers();
-
-            services.AddAuthentication();
-            services.AddAuthorization();
+            
+            
 
             services.AddAutoMapper(typeof(AutoMapperProfiles), typeof(AutoMapperProfiles));
             //Repository
@@ -77,6 +83,34 @@ namespace StoreManagement.API
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<IBranchProductRepository, BranchProductRepository>();
             services.AddScoped<IStatisticalRepository, StatisticalRepository>();
+
+            services.AddScoped<PermissionFilter>();
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                    .AddJwtBearer(x =>
+                    {
+                        x.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
+                                    .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                            ValidateIssuer = false,
+                            ValidateAudience = false
+                        };
+                    });
+
+            //services.AddAuthorization();
+
+            services.AddMvc(ops => {
+                ops.EnableEndpointRouting = false;
+                
+            }) ;
+
+            
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -108,9 +142,12 @@ namespace StoreManagement.API
             });
 
             app.UseRouting();
-
+            
+            
             app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthorization();
+            app.UseMvc();
+
 
             app.UseEndpoints(endpoints =>
             {
