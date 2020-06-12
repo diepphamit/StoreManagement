@@ -12,10 +12,15 @@ namespace StoreManagement.DataAccess.Data
 {
     public class DataContext : DbContext
     {
+        public DataContext()
+        {
+        }
+
         public DataContext(DbContextOptions options) : base(options)
         {
         }
 
+        
         public DbSet<Branch> Branches { get; set; }
         public DbSet<BranchProduct> BranchProducts { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -31,6 +36,19 @@ namespace StoreManagement.DataAccess.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<PermissionDetail> PermissionDetails { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                   .SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json")
+                   .Build();
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
+                optionsBuilder.UseSqlServer(connectionString);
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
