@@ -8,6 +8,7 @@ import { SupplierService } from 'src/app/services/supplier.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SupplierForEdit } from 'src/app/models/supplier/supplierForEdit.model';
+import { ValidationService } from 'src/app/services/validation.service';
 
 @Component({
   selector: 'app-edit-supplier',
@@ -27,10 +28,10 @@ export class EditSupplierComponent implements OnInit {
     private toastr: ToastrService
   ) {
     this.editSupplierForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      phonenumber: ['', Validators.required],
-      address: ['', Validators.required],
+      name: ['', [Validators.required, ValidationService.requireValue]],
+      description: ['', [Validators.required, ValidationService.requireValue]],
+      phonenumber: ['', [Validators.required, ValidationService.numberValidator]],
+      address: ['', [Validators.required, ValidationService.requireValue]],
     });
   }
 
@@ -43,7 +44,7 @@ export class EditSupplierComponent implements OnInit {
             this.supplier = result;
             this.editSupplierForm.controls.name.setValue(result.name);
             this.editSupplierForm.controls.description.setValue(result.description);
-            this.editSupplierForm.controls.phonenumber.setValue(result.phonenumber);
+            this.editSupplierForm.controls.phonenumber.setValue(result.phoneNumber);
             this.editSupplierForm.controls.address.setValue(result.address);
           },
           () => {

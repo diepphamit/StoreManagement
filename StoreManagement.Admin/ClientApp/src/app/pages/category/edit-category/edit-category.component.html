@@ -12,6 +12,7 @@
               <label>Tên loại hàng</label>
               <input type="text" class="form-control" formControlName="name" placeholder="Tên loại hàng"
                 [ngClass]="{ 'is-invalid': f.name.errors }">
+                <app-control-messages [control]="editCategoryForm.get('name')"></app-control-messages>
             </div>
           </div>
           <div class="col-sm-6">
@@ -19,14 +20,15 @@
               <label>Mô tả</label>
               <input type="text" class="form-control" formControlName="description" placeholder="Mô tả"
                 [ngClass]="{ 'is-invalid': f.description.errors }">
+                <app-control-messages [control]="editCategoryForm.get('description')"></app-control-messages>
             </div>
           </div>
           </div>
         </div>
-      <div class="box-footer text-center">
-        <button [routerLink]="['/categories']" class="btn btn-default">Hủy</button>
-        <button type="submit" [disabled]="editCategoryForm.invalid" class="btn btn-success pull-right">Lưu</button>
-      </div>
+        <div class="box-footer text-center">
+          <button [routerLink]="['/categories']" class="btn btn-default">Hủy</button>
+          <button type="submit" [disabled]="editCategoryForm.invalid" class="btn btn-success">Lưu</button>
+        </div>
     </form>
   
   </div>

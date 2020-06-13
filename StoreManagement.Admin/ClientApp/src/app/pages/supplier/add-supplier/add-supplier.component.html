@@ -12,11 +12,13 @@
               <label>Tên nhà cung cấp</label>
               <input type="text" class="form-control" formControlName="name" placeholder="Tên nhà cung cấp"
                 [ngClass]="{ 'is-invalid': f.name.errors }">
+                <app-control-messages [control]="addSupplierForm.get('name')"></app-control-messages>
             </div>
             <div class="form-group">
               <label>Mô tả</label>
               <input type="text" class="form-control" formControlName="description" placeholder="Mô tả"
                 [ngClass]="{ 'is-invalid': f.description.errors }">
+                <app-control-messages [control]="addSupplierForm.get('description')"></app-control-messages>
             </div>
           </div>
           <div class="col-sm-6">
@@ -24,6 +26,7 @@
               <label>Số điện thoại</label>
               <input type="text" class="form-control" formControlName="phonenumber" placeholder="Số điện thoại"
                 [ngClass]="{ 'is-invalid': f.phonenumber.errors }">
+                <app-control-messages [control]="addSupplierForm.get('phonenumber')"></app-control-messages>
             </div>
           </div>
           <div class="col-sm-6">
@@ -31,6 +34,7 @@
               <label>Địa chỉ</label>
               <input type="text" class="form-control" formControlName="address" placeholder="Địa chỉ"
                 [ngClass]="{ 'is-invalid': f.address.errors }">
+                <app-control-messages [control]="addSupplierForm.get('address')"></app-control-messages>
             </div>
           </div>
         </div>
