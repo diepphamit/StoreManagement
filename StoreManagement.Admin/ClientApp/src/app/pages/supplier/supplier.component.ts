@@ -5,7 +5,7 @@ import { User } from 'src/app/models/user/user.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, debounceTime } from 'rxjs/operators';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Supplier } from 'src/app/models/supplier/supplier.model';
 import { SupplierService } from 'src/app/services/supplier.service';
@@ -99,4 +99,15 @@ export class SupplierComponent implements OnInit {
     this.keyword = '';
     this.getAllSuppliers(this.page);
   }
+
+  searchCharacter() {
+    this.itemsAsync = this.supplierService.getAllSuppliers(this.keyword, this.page, this.pageSize)
+        .pipe(
+            debounceTime(1000),
+            tap(response => {
+                this.total = response.total;
+            }),
+            map(response => response.items)
+        );
+ }
 }
