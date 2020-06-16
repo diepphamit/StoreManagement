@@ -8,6 +8,8 @@ import { CategoryComponent } from '../category.component';
 import { CategoryService } from 'src/app/services/category.service';
 import { CategoryForAdd } from 'src/app/models/category/categoryForAdd.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { ValidationService } from 'src/app/services/validation.service';
+
 
 @Component({
   selector: 'app-add-category',
@@ -26,8 +28,8 @@ export class AddCategoryComponent implements OnInit {
     private authService: AuthService
   ) {
     this.addCategoryForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
+      name: ['', [Validators.required, ValidationService.requireValue]],
+      description: ['', [Validators.required, ValidationService.requireValue]],
     });
   }
 

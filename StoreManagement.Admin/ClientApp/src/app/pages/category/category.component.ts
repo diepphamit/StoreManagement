@@ -5,7 +5,7 @@ import { User } from 'src/app/models/user/user.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, debounceTime } from 'rxjs/operators';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CategoryService } from 'src/app/services/category.service';
 import { Category } from 'src/app/models/category/category.model';
@@ -110,6 +110,7 @@ export class CategoryComponent implements OnInit {
     this.getAllCategories(this.page);
   }
 
+
   loadPermisson() {
     this.permissons = this.authService.getRoles().filter(x => x.includes('CATEGORY'));
 
@@ -125,4 +126,16 @@ export class CategoryComponent implements OnInit {
       this.canCreate = 'disabled';
     }
   }
+
+  searchCharacter() {
+    this.itemsAsync = this.categoryService.getAllCategories(this.keyword, this.page, this.pageSize)
+        .pipe(
+            debounceTime(1000),
+            tap(response => {
+                this.total = response.total;
+            }),
+            map(response => response.items)
+        );
+ }
+
 }

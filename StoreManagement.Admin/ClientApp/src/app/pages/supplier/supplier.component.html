@@ -7,11 +7,11 @@
     <div class="row">
       <div class="col-sm-8">
         <div class="input-group">
-          <input class="form-control" type="text" [(ngModel)]="keyword" placeholder="Nhập từ khóa" />
+          <input class="form-control" type="text" [(ngModel)]="keyword" placeholder="Nhập từ khóa" (keyup) = "searchCharacter()"/>
           <span class="input-group-btn">
-            <button class="btn btn-default" type="button" (click)="search()">
+            <!-- <button class="btn btn-default" type="button" (click)="search()">
               <i class="fa fa-search"></i>
-            </button>
+            </button> -->
             <button class="btn btn-default" type="button" (click)="refresh()">
               <i class="fa fa-refresh"></i>
             </button>
