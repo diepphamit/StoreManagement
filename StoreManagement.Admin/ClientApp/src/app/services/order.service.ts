@@ -15,6 +15,10 @@ export class OrderService {
     return this.http.get(`${this.baseUrl}/GetAllOrder?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
   }
 
+  getAllOrdersByStaffId(id: any, keyword: string, page: number, pageSize: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/GetAllOrderByStaffId/?staffId=${id}&keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
+  }
+
   getRevenue(date: Date): Observable<any> {
     const dateFormat = formatDate(date, 'MM-dd-yyyy', 'en-US');
     return this.http.get(`${this.baseUrl}/Revenue?date=${dateFormat}`);

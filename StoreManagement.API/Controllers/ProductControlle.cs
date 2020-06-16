@@ -10,6 +10,7 @@ using Org.BouncyCastle.Math.EC.Rfc7748;
 using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Product;
 using StoreManagement.BusinessLogic.Interfaces;
+using StoreManagement.BusinessLogic.Storages;
 using StoreManagement.DataAccess.Entites;
 
 namespace StoreManagement.API.Controllers
@@ -21,11 +22,13 @@ namespace StoreManagement.API.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
+        private readonly IAmazonS3StorageManager _storageManager;
 
-        public ProductController(IProductRepository productRepository, IMapper mapper)
+        public ProductController(IProductRepository productRepository, IMapper mapper, IAmazonS3StorageManager storageManager)
         {
             _productRepository = productRepository;
             _mapper = mapper;
+            _storageManager = storageManager;
         }
 
         [HttpGet]
@@ -38,8 +41,20 @@ namespace StoreManagement.API.Controllers
                 int totalCount = list.Count();
 
                 var query = list.OrderByDescending(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize);
+                foreach (var item in query)
+                {
+                    if (item.Pictures != null)
+                    {
+                        foreach (var pic in item.Pictures)
+                        {
+                            pic.ImageUrl = _storageManager.GetCannedSignedURL(pic.FileLocation);
+                        }
+                    }
+
+                }
 
                 var response = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductReturn>>(query);
+                
 
                 var paginationSet = new PaginationSet<ProductReturn>()
                 {
@@ -69,6 +84,18 @@ namespace StoreManagement.API.Controllers
             {
                 var query = products.OrderByDescending(x => x.ProductId).Skip((page - 1) * pagesize).Take(pagesize);
 
+                foreach (var item in query)
+                {
+                    if (item.Product.Pictures != null)
+                    {
+                        foreach (var pic in item.Product.Pictures)
+                        {
+                            pic.ImageUrl = _storageManager.GetCannedSignedURL(pic.FileLocation);
+                        }
+                    }
+
+                }
+
                 var respone = _mapper.Map<IEnumerable<BranchProduct>, IEnumerable<ProductReturn>>(query);
 
                 var paginationset = new PaginationSet<ProductReturn>
@@ -94,6 +121,14 @@ namespace StoreManagement.API.Controllers
             if (product == null)
                 return NotFound();
 
+            if (product.Pictures != null)
+            {
+                foreach (var pic in product.Pictures)
+                {
+                    pic.ImageUrl = _storageManager.GetCannedSignedURL(pic.FileLocation);
+                }
+            }
+        
             return Ok(_mapper.Map<ProductReturn>(product));
         }
 

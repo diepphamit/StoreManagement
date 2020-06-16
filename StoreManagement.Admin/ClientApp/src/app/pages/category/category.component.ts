@@ -10,6 +10,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CategoryService } from 'src/app/services/category.service';
 import { Category } from 'src/app/models/category/category.model';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-category',
@@ -24,12 +25,19 @@ export class CategoryComponent implements OnInit {
   pageSize: number;
   total: number;
 
+  permissons: string[];
+
+  canDelete = '';
+  canUpdate = '';
+  canCreate = '';
+
   constructor(
     public categoryService: CategoryService,
     private router: Router,
     private modalService: BsModalService,
     private toastr: ToastrService,
-    private loadingBar: LoadingBarService
+    private loadingBar: LoadingBarService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -37,6 +45,7 @@ export class CategoryComponent implements OnInit {
     this.page = 1;
     this.pageSize = 10;
     this.getAllCategories(this.page);
+    this.loadPermisson();
   }
 
   getAllCategories(page: number) {
@@ -50,6 +59,7 @@ export class CategoryComponent implements OnInit {
       }),
       map(response => response.items)
     );
+
   }
 
   add() {
@@ -98,5 +108,21 @@ export class CategoryComponent implements OnInit {
   refresh() {
     this.keyword = '';
     this.getAllCategories(this.page);
+  }
+
+  loadPermisson() {
+    this.permissons = this.authService.getRoles().filter(x => x.includes('CATEGORY'));
+
+    if (this.permissons.filter(x => x.includes('DELETE')).length === 0) {
+      this.canDelete = 'disabled';
+    }
+
+    if (this.permissons.filter(x => x.includes('UPDATE')).length === 0) {
+      this.canUpdate = 'disabled';
+    }
+
+    if (this.permissons.filter(x => x.includes('CREATE')).length === 0) {
+      this.canCreate = 'disabled';
+    }
   }
 }

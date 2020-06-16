@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Token, LoginResponse } from '../models/user/login-response.model';
-import { User } from '../models/user/user.model';
-import { Observable } from 'rxjs';
+import { User, UserSave } from '../models/user/user.model';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ACCESS_TOKEN, CURRENT_USER } from '../constants/db-keys';
 import { environment } from 'src/environments/environment';
@@ -14,9 +14,10 @@ import { UserLogin } from '../models/user/user-login.model';
 export class AuthService {
   baseUrl = environment.apiUrl + 'Auth/';
   decodedToken: Token;
-  currentUser: User;
+  currentUser: UserSave;
   loginRedirectUrl: string;
   logoutRedirectUrl: string;
+  private roles: string[];
 
   constructor(private http: HttpClient, public jwtHelper: JwtHelperService) {
 
@@ -40,11 +41,12 @@ export class AuthService {
     }
     this.decodedToken = this.jwtHelper.decodeToken(response.access_token) as Token;
 
-    this.currentUser = new User(
+    this.currentUser = new UserSave(
       userResponse.id,
       userResponse.username,
       userResponse.email,
-      userResponse.groupRole
+      userResponse.groupRole,
+      userResponse.roles
     );
 
     localStorage.setItem(ACCESS_TOKEN, token);
@@ -61,5 +63,14 @@ export class AuthService {
   get loggedIn() {
     const token = localStorage.getItem(ACCESS_TOKEN);
     return !this.jwtHelper.isTokenExpired(token);
+  }
+
+  getRoles() {
+    const user = JSON.parse(localStorage.getItem(CURRENT_USER));
+    if (user) {
+      this.roles = user.roles;
+      return this.roles;
+    }
+    return [];
   }
 }

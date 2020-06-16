@@ -1,25 +1,12 @@
 <ngx-loading-bar [height]="'5px'" [color]="'#FFFF66'"></ngx-loading-bar>
 <div class="box box-primary">
   <div class="box-header with-border">
-    <h3 class="box-title">Quản lý loại hàng</h3>
+    <h3 class="box-title">Quản lý đơn hàng</h3>
   </div>
   <div class="box-body">
     <div class="row">
-      <div class="col-sm-8">
-        <div class="input-group">
-          <input class="form-control" type="text" [(ngModel)]="keyword" placeholder="Nhập từ khóa" />
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" (click)="search()">
-              <i class="fa fa-search"></i>
-            </button>
-            <button class="btn btn-default" type="button" (click)="refresh()">
-              <i class="fa fa-refresh"></i>
-            </button>
-          </span>
-        </div>
-      </div>
       <div class="col-sm-4">
-        <button class="btn btn-success {{canCreate}}" (click)="add()">Thêm mới</button>
+        <button class="btn btn-success" (click)="add()">Thêm mới</button>
       </div>
     </div>
     <br />
@@ -29,21 +16,25 @@
           <tbody>
             <tr>
               <th style="width: 5%">Id</th>
-              <th>Tên loại</th>
-              <th>Mô tả</th>
+              <th>Tên sản phẩm</th>
+              <th>Đơn giá</th>
+              <th>Số lượng</th>
+              <th>Thành tiền</th>
               <th style="text-align: center;">Hành động</th>
             </tr>
             <tr
               *ngFor="let item of itemsAsync | async | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: total }">
               <td>{{ item.id }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.description }}</td>
+              <td>{{ item.productName }}</td>
+              <td>{{ item.price }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.price * item.quantity}}</td>
               <td style=" text-align: center;">
-                <button class="btn btn-sm btn-primary {{canUpdate}}" style="margin-right: 10px; margin-bottom: 5px;"
+                <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;"
                   (click)="edit(item.id)">
                   <i class="fa fa-pencil"></i>
                 </button>
-              <button class="btn btn-sm btn-danger {{canDelete}}" style="margin-right: 10px; margin-bottom: 5px;"
+                <button class="btn btn-sm btn-danger" style="margin-right: 10px; margin-bottom: 5px;"
                   (click)="deleteConfirm(template,item)">
                   <i class="fa fa-trash"></i>
                 </button>
@@ -52,7 +43,7 @@
           </tbody>
         </table>
         <div class="text-center">
-          <pagination-controls class="custom-pagination" (pageChange)="getAllCategories($event)" autoHide="true"
+          <pagination-controls class="custom-pagination" (pageChange)="getAllOrderDetail($event)" autoHide="true"
             responsive="true" previousLabel="Trước" nextLabel="Sau" directionLinks="true">
           </pagination-controls>
         </div>
@@ -68,7 +59,7 @@
     <h4 class="modal-title">Xác nhận</h4>
   </div>
   <div class="modal-body">
-    <p>Bạn có chắc chắn muốn xóa loại hàng này không?</p>
+    <p>Bạn có chắc chắn muốn xóa đơn hàng này không?</p>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" (click)="close()">Đóng</button>

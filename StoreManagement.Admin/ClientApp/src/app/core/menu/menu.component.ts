@@ -31,4 +31,22 @@ export class MenuComponent implements OnInit {
     return 0;
   }
 
+  get isAdmin() {
+    const user = JSON.parse(localStorage.getItem(CURRENT_USER));
+    if (user != null) {
+      return user.groupRole === 'Admin';
+    }
+
+    return false;
+  }
+
+  get isStaffManager() {
+    const user = JSON.parse(localStorage.getItem(CURRENT_USER));
+    if (user != null) {
+      return user.groupRole === 'StaffManager';
+    }
+
+    return false;
+  }
+
 }

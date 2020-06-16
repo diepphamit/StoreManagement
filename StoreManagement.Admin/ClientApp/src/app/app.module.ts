@@ -24,6 +24,7 @@ import { ValidationService } from './services/validation.service';
 import { OrderModule } from './pages/order/order.module';
 import { OrderService } from './services/order.service';
 import { OrderProductService } from './services/order-product.service';
+import { OrderDetailService } from './services/order-detail.service';
 
 
 export function tokenGetter() {
@@ -69,6 +70,7 @@ export function tokenGetter() {
     UserService,
     CategoryService,
     ProductService,
+    OrderDetailService,
     SupplierService,
     OrderService,
     OrderProductService

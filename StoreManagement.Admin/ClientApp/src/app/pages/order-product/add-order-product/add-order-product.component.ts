@@ -47,8 +47,7 @@ export class AddOrderProductComponent implements OnInit {
     });
     this.addOrderForm = this.fb.group({
       customerId: ['', [ValidationService.requireValue, ValidationService.numberValidator]],
-      status: ['', [ValidationService.requireValue]],
-      code: ['', [ValidationService.requireValue, ValidationService.numberValidator]]
+      status: ['', [ValidationService.requireValue]]
     });
   }
   ngOnInit() {
@@ -91,11 +90,11 @@ export class AddOrderProductComponent implements OnInit {
     // this.orderAdd = Object.assign(Object.assign({}, this.addOrderForm.value), this.itemsAsync);
 
     this.orderAdd = new OrderAdd(this.getId(), Number(this.addOrderForm.value.customerId),
-      Boolean(this.addOrderForm.value.status), Number(this.addOrderForm.value.code), this.itemsAsync as ProductOrder[]);
+      Boolean(this.addOrderForm.value.status), 0, this.itemsAsync as ProductOrder[]);
 
     this.orderService.createOrder(this.orderAdd).subscribe(
       () => {
-        this.router.navigate(['/orderproducts/add']).then(() => {
+        this.router.navigate(['/orderproducts']).then(() => {
           this.toastr.success('Tạo đơn hàng thành công');
         });
       },

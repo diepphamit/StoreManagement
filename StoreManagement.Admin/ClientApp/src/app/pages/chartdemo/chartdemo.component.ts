@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BsDatepickerConfig, BsDatepickerViewMode } from 'ngx-bootstrap/datepicker';
 import { OrderService } from 'src/app/services/order.service';
 import { formatDate } from '@angular/common';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 @Component({
   selector: 'app-chartdemo',
@@ -11,6 +12,7 @@ import { formatDate } from '@angular/common';
 export class ChartdemoComponent implements OnInit {
 
   dateForm: FormGroup;
+  checkData = false;
 
   public barChartOptions = {
     scaleShowVerticalLines: true,
@@ -23,17 +25,12 @@ export class ChartdemoComponent implements OnInit {
 
   public barChartData = [];
 
-  public barChartLabels1 = [];
-  public barChartData1 = [];
-
-  public barChartLabels2 = [];
-  public barChartData2 = [];
 
   maxDate: Date;
   datePre: Date;
   dateAfter: Date;
 
-  constructor(private fb: FormBuilder, private orderService: OrderService) {
+  constructor(private fb: FormBuilder, private orderService: OrderService, private loadingBar: LoadingBarService) {
     this.maxDate = new Date();
     this.dateForm = this.fb.group({
       datePre: ['', Validators.required],
@@ -51,55 +48,63 @@ export class ChartdemoComponent implements OnInit {
       minMode: this.minMode,
       dateInputFormat: 'MM/YYYY'
     });
-
-    //this.drawChartByDate(new Date(Date.now()));
-
+    for (let i = 1; i <= 31; i++) {
+      this.barChartLabels[i - 1] = '' + i;
+    }
+    this.drawChartByDate(new Date(Date.now()));
   }
 
   drawChart() {
     const date = new Date(this.dateForm.value.datePre);
     const dateCompare = new Date(this.dateForm.value.dateAfter);
+    this.barChartData = [];
+    this.loadingBar.start();
     this.orderService.getRevenue(date).subscribe(data => {
       const items: any[] = data['revenues'];
 
-      const data1 = [];
+      const dataChart = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
       for (let i = 1; i <= items.length; i++) {
-        this.barChartLabels1[i - 1] = '' + i;
-        data1[i - 1] = items[i - 1]['totalRevenue'];
+
+        dataChart[i - 1] = items[i - 1]['totalRevenue'];
       }
-      this.barChartData1 = [{ data: data1, label: 'Tháng ' +  date.getDay()}];
+      this.barChartData = [{ data: dataChart, label: 'Tháng ' + (date.getMonth() + 1) }];
+
+      this.orderService.getRevenue(dateCompare).subscribe(data1 => {
+        const items1: any[] = data1['revenues'];
+
+        const dataChart1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+        for (let i = 1; i <= items1.length; i++) {
+
+          dataChart1[i - 1] = items1[i - 1]['totalRevenue'];
+        }
+        this.barChartData.push({ data: dataChart1, label: 'Tháng ' + (dateCompare.getMonth() + 1) });
+        this.loadingBar.stop();
+      });
 
     });
 
-    this.orderService.getRevenue(dateCompare).subscribe(data => {
-      const items: any[] = data['revenues'];
 
-      const data1 = [];
-
-      for (let i = 1; i <= items.length; i++) {
-        this.barChartLabels2[i - 1] = '' + i;
-        data1[i - 1] = items[i - 1]['totalRevenue'];
-      }
-      this.barChartData2 = [{ data: data1, label: 'Tháng ' +  date.getDay()}];
-
-    });
   }
   get f() { return this.dateForm.controls; }
 
   drawChartByDate(date: Date) {
+    this.loadingBar.start();
     this.orderService.getRevenue(date).subscribe(data => {
       if (data != null) {
         const items: any[] = data['revenues'];
 
-      const data1 = [];
+        const data1 = [];
 
-      for (let i = 1; i <= items.length; i++) {
-        this.barChartLabels1[i - 1] = '' + i;
-        data1[i - 1] = items[i - 1]['totalRevenue'];
-      }
-      console.log(data1);
-      this.barChartData1 = [{ data: data1, label: 'Tháng ' +  date.getDay()}];
+        for (let i = 1; i <= items.length; i++) {
+          this.barChartLabels[i - 1] = '' + i;
+          data1[i - 1] = items[i - 1]['totalRevenue'];
+        }
+
+        this.barChartData = [{ data: data1, label: 'Tháng ' + (date.getMonth() + 1) }];
+        this.checkData = true;
+        this.loadingBar.stop();
       }
     });
   }

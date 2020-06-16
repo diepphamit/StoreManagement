@@ -28,6 +28,7 @@ namespace StoreManagement.BusinessLogic.Implementaions
         {
             try
             {
+                order.Code = new Random().Next(1000000000, Int32.MaxValue);
                 order.OrderDate = DateTime.Now;
                 order.TotalPrice = TotalPrice(orderDetail);
                 _context.Orders.Add(order);
@@ -40,10 +41,12 @@ namespace StoreManagement.BusinessLogic.Implementaions
                     branchProduct.Quantity -= item.Quantity;
                 }
 
+                await _context.SaveChangesAsync();
+
                 //Test send mail
                 User customerUser = _context.Users.FirstOrDefault(x => x.Id == order.CustomerId);
                 string content = "Xin Chào " + customerUser.Name + "\n Cảm ơn bạn đã tin tưởng chúng tôi. \n Chúng tôi đã nhận được"
-                    + " đơn hàng của bạn và mời bạn đến của hàng gần nhất để nhận hàng";
+                    + " đơn hàng của bạn và mời bạn đến của hàng gần nhất để nhận hàng\nMã đơn hàng là "+ order.Code;
                 var message = new Message(new string[] { customerUser.Email }, "StoreManagenment", content);
                 await _emailSender.SendEmailAsync(message);
 
@@ -87,7 +90,7 @@ namespace StoreManagement.BusinessLogic.Implementaions
                 order.OrderDate = orderupdate.OrderDate;
                 order.StaffId = orderupdate.StaffId;
                 order.Status = orderupdate.Status;
-                order.TotalPrice = TotalPrice(order.OrderDetails);
+                //order.TotalPrice = TotalPrice(order.OrderDetails);
                 await _context.SaveChangesAsync();
 
                 return true;
@@ -109,6 +112,15 @@ namespace StoreManagement.BusinessLogic.Implementaions
                     .Where(x => x.Status == getOrderUI.status && x.OrderDate >= getOrderUI.startDay && x.OrderDate <= getOrderUI.endDay).AsEnumerable();
             return _context.Orders.Include(x => x.Customer).Include(x => x.Staff)
                  .Where(x => x.CustomerId == getOrderUI.customerId && x.Status == getOrderUI.status && x.OrderDate >= getOrderUI.startDay && x.OrderDate <= getOrderUI.endDay).AsEnumerable();
+        }
+
+        public IEnumerable<Order> GetAllOrderByStaffId(int staffId, string keyword)
+        {
+            if (string.IsNullOrEmpty(keyword)) keyword = "";
+
+            return _context.Orders.Include(x => x.Customer).Include(y => y.Staff).Where(x =>
+                ((x.StaffId == staffId || x.StaffId == 1) && x.Code.ToString().Contains(keyword)))
+                .ToList();
         }
 
         public async Task<Order> GetOrderByIdAsync(int id)
@@ -151,10 +163,11 @@ namespace StoreManagement.BusinessLogic.Implementaions
             foreach (var item in orderDetails)
             {
                 var product = _context.Products.Include(x => x.OrderDetails).FirstOrDefault(p => p.Id == item.ProductId);
-                totalPrice += product.Price;
+                totalPrice += product.Price * item.Quantity;
             }
             return totalPrice;
         }
+
 
 
         //private int DaysInMonth(int month, int year)

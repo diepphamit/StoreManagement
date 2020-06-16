@@ -32,9 +32,9 @@
               <th>Tên nhân viên</th>
               <th>Tên khách hàng</th>
               <th>Tổng tiền</th>
-              <th>Trạng thái</th>
               <th>Ngày đặt</th>
               <th>Mã code</th>
+              <th>Trạng thái</th>
               <th style="text-align: center;">Hành động</th>
             </tr>
             <tr
@@ -43,10 +43,17 @@
               <td>{{ item.staffName }}</td>
               <td>{{ item.customerName }}</td>
               <td>{{ item.totalPrice }}</td>
-              <td>{{ item.status }}</td>
               <td>{{ item.orderDate | date }}</td>
               <td>{{ item.code }}</td>
+              <td style=" text-align: center;"><button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;"
+                (click)="updateStatus(item.id, item.status)">
+                {{item.status ? 'Đã duyệt' : 'Chưa duyệt'}}
+              </button></td>
               <td style=" text-align: center;">
+                <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;"
+                  (click)="showDetail(item.id)">
+                  <i class="fa fa-pencil"></i>
+                </button>
                 <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;"
                   (click)="edit(item.id)">
                   <i class="fa fa-pencil"></i>
@@ -60,7 +67,7 @@
           </tbody>
         </table>
         <div class="text-center">
-          <pagination-controls class="custom-pagination" (pageChange)="getAllOrders($event)" autoHide="true"
+          <pagination-controls class="custom-pagination" (pageChange)="getAllOrdersByStaffId($event)" autoHide="true"
             responsive="true" previousLabel="Trước" nextLabel="Sau" directionLinks="true">
           </pagination-controls>
         </div>
