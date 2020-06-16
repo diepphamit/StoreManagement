@@ -9,6 +9,7 @@ export interface UserResponse {
     email: string;
     username: string;
     groupRole: string;
+    roles: string[];
 }
 
 export interface Token {

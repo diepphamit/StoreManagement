@@ -37,7 +37,7 @@ namespace StoreManagement.API.Controllers
         }
 
 
-        [PermissionFilter(Permissions = "VIEW_CATEGORY")]
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetAllCategories(string keyword, int page = 1,int pagesize = 10)
         {
@@ -126,7 +126,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
-        [PermissionFilter(Permissions = "EDIT_CATEGORY")]
+        [PermissionFilter(Permissions = "UPDATE_CATEGORY")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(int id, [FromBody]CategoryUI category)
         {

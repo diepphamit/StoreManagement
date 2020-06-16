@@ -5,19 +5,6 @@
   </div>
   <div class="box-body">
     <div class="row">
-      <div class="col-sm-8">
-        <div class="input-group">
-          <input class="form-control" type="text" [(ngModel)]="keyword" placeholder="Nhập từ khóa" />
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" (click)="search()">
-              <i class="fa fa-search"></i>
-            </button>
-            <button class="btn btn-default" type="button" (click)="refresh()">
-              <i class="fa fa-refresh"></i>
-            </button>
-          </span>
-        </div>
-      </div>
       <div class="col-sm-4">
         <button class="btn btn-success" (click)="add()">Thêm mới</button>
       </div>
@@ -29,31 +16,20 @@
           <tbody>
             <tr>
               <th style="width: 5%">Id</th>
-              <th>Tên nhân viên</th>
-              <th>Tên khách hàng</th>
-              <th>Tổng tiền</th>
-              <th>Ngày đặt</th>
-              <th>Mã code</th>
-              <th>Trạng thái</th>
+              <th>Tên sản phẩm</th>
+              <th>Đơn giá</th>
+              <th>Số lượng</th>
+              <th>Thành tiền</th>
               <th style="text-align: center;">Hành động</th>
             </tr>
             <tr
               *ngFor="let item of itemsAsync | async | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: total }">
               <td>{{ item.id }}</td>
-              <td>{{ item.staffName }}</td>
-              <td>{{ item.customerName }}</td>
-              <td>{{ item.totalPrice }}</td>
-              <td>{{ item.orderDate | date }}</td>
-              <td>{{ item.code }}</td>
-              <td style=" text-align: center;"><button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;"
-                (click)="updateStatus(item.id, item.status)">
-                {{item.status ? 'Đã duyệt' : 'Chưa duyệt'}}
-              </button></td>
+              <td>{{ item.productName }}</td>
+              <td>{{ item.price }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.price * item.quantity}}</td>
               <td style=" text-align: center;">
-                <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;"
-                  (click)="showDetail(item.id)">
-                  <i class="fa fa-pencil"></i>
-                </button>
                 <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;"
                   (click)="edit(item.id)">
                   <i class="fa fa-pencil"></i>
@@ -67,7 +43,7 @@
           </tbody>
         </table>
         <div class="text-center">
-          <pagination-controls class="custom-pagination" (pageChange)="getAllOrdersByStaffId($event)" autoHide="true"
+          <pagination-controls class="custom-pagination" (pageChange)="getAllOrderDetail($event)" autoHide="true"
             responsive="true" previousLabel="Trước" nextLabel="Sau" directionLinks="true">
           </pagination-controls>
         </div>

@@ -6,6 +6,7 @@ import { CategoryService } from 'src/app/services/category.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CategoryForEdit } from 'src/app/models/category/categoryForEdit.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-edit-category',
@@ -22,7 +23,8 @@ export class EditCategoryComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private categoryService: CategoryService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {
     this.editCategoryForm = this.fb.group({
       name: ['', Validators.required],
@@ -31,6 +33,9 @@ export class EditCategoryComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authService.getRoles().filter(x => x.includes('CREATE_CATEGORY')).length === 0) {
+      this.router.navigate(['/categories']);
+    }
     this.route.params.subscribe(params => {
       this.id = params.id;
       if (this.id) {

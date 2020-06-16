@@ -19,7 +19,7 @@
         </div>
       </div>
       <div class="col-sm-4">
-        <button class="btn btn-success" (click)="add()">Thêm mới</button>
+        <button class="btn btn-success {{canCreate}}" (click)="add()">Thêm mới</button>
       </div>
     </div>
     <br />
@@ -39,11 +39,11 @@
               <td>{{ item.name }}</td>
               <td>{{ item.description }}</td>
               <td style=" text-align: center;">
-                <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;"
+                <button class="btn btn-sm btn-primary {{canUpdate}}" style="margin-right: 10px; margin-bottom: 5px;"
                   (click)="edit(item.id)">
                   <i class="fa fa-pencil"></i>
                 </button>
-                <button class="btn btn-sm btn-danger" style="margin-right: 10px; margin-bottom: 5px;"
+              <button class="btn btn-sm btn-danger {{canDelete}}" style="margin-right: 10px; margin-bottom: 5px;"
                   (click)="deleteConfirm(template,item)">
                   <i class="fa fa-trash"></i>
                 </button>

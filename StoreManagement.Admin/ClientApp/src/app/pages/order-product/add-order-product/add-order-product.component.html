@@ -22,10 +22,6 @@
               <option *ngFor="let item of status " value={{item.value}}>{{item.name}}</option>
             </select>
           </div>
-          <div class="form-group">
-            <label>Code</label>
-            <input type="text" class="form-control" placeholder="Code" formControlName="code">
-          </div>
         </div>
         <div class="col-sm-8">
           <form [formGroup]="addProductForm" (submit)="OK()" novalidate>

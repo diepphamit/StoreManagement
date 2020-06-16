@@ -12,5 +12,6 @@ namespace StoreManagement.BusinessLogic.Interfaces
         Task<User> Login(string username, string password);
         Task<User> LoginAdminPage(string username, string password);
         Task<bool> UserExists(string username);
+        List<string> getRolesByUsername(string username);
     }
 }

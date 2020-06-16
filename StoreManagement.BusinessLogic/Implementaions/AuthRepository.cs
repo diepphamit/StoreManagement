@@ -91,5 +91,17 @@ namespace StoreManagement.BusinessLogic.Implementaions
 
             return user;
         }
+
+        public List<string> getRolesByUsername(string username)
+        {
+            List<string> listPermission = (from user in _context.Users
+                                           join userGroup in _context.GroupUsers on user.GroupUserId equals userGroup.Id
+                                           join userPer in _context.UserPermissions on userGroup.Id equals userPer.GroupUserId
+                                           join per in _context.Permissions on userPer.PermissionId equals per.Id
+                                           where (user.Username == username && userPer.Licensed == true)
+                                           select per.Name).ToList();
+
+            return listPermission;
+        }
     }
 }

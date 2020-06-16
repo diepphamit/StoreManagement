@@ -9,6 +9,7 @@ import { OrderProductRoutingModule } from './oder-product-routing.module';
 import { OrderProductComponent } from './order-product.component';
 import { AddOrderProductComponent } from './add-order-product/add-order-product.component';
 import { EditOrderProductComponent } from './edit-order-product/edit-order-product.component';
+import { OrderDetailComponent } from './order-detail/order-detail.component';
 
 @NgModule({
     imports: [
@@ -24,7 +25,8 @@ import { EditOrderProductComponent } from './edit-order-product/edit-order-produ
     declarations: [
         OrderProductComponent,
         AddOrderProductComponent,
-        EditOrderProductComponent
+        EditOrderProductComponent,
+        OrderDetailComponent
     ]
 })
 export class OrderProductModule { }

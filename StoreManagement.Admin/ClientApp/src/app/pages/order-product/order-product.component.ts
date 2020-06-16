@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { tap, map } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { CURRENT_USER } from 'src/app/constants/db-keys';
 
 @Component({
   selector: 'app-order-product',
@@ -22,6 +23,7 @@ export class OrderProductComponent implements OnInit {
   page: number;
   pageSize: number;
   total: number;
+  idStaff: any;
 
   constructor(
     public orderService: OrderService,
@@ -32,23 +34,40 @@ export class OrderProductComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    const user = JSON.parse(localStorage.getItem(CURRENT_USER));
+    if (user) {
+      this.idStaff = user.id;
+    }
     this.keyword = '';
     this.page = 1;
     this.pageSize = 10;
-    this.getAllOrders(this.page);
+    this.getAllOrdersByStaffId(this.page);
   }
 
   getAllOrders(page: number) {
     this.loadingBar.start();
     this.itemsAsync = this.orderService.getAllOrders(this.keyword, page, this.pageSize)
-    .pipe(
-      tap(response => {
-        this.total = response.total;
-        this.page = page;
-        this.loadingBar.stop();
-      }),
-      map(response => response.items)
-    );
+      .pipe(
+        tap(response => {
+          this.total = response.total;
+          this.page = page;
+          this.loadingBar.stop();
+        }),
+        map(response => response.items)
+      );
+  }
+
+  getAllOrdersByStaffId(page: number) {
+    this.loadingBar.start();
+    this.itemsAsync = this.orderService.getAllOrdersByStaffId(this.idStaff, this.keyword, page, this.pageSize)
+      .pipe(
+        tap(response => {
+          this.total = response.total;
+          this.page = page;
+          this.loadingBar.stop();
+        }),
+        map(response => response.items)
+      );
   }
 
   add() {
@@ -91,12 +110,30 @@ export class OrderProductComponent implements OnInit {
   }
 
   search() {
-    this.getAllOrders(this.page);
+    this.getAllOrdersByStaffId(this.page);
   }
 
   refresh() {
     this.keyword = '';
-    this.getAllOrders(this.page);
+    this.getAllOrdersByStaffId(this.page);
   }
 
+  updateStatus(id: any, status: boolean) {
+    this.orderService.getOrderById(id).subscribe(data => {
+      data.status = !status;
+      this.orderService.editOrder(id, data).subscribe(
+        () => {
+          this.getAllOrdersByStaffId(this.page);
+          this.toastr.success('Cập nhật trạng thái thành công');
+        },
+        (error: HttpErrorResponse) => {
+          this.toastr.error('Cập nhật trạng thái không thành công!');
+        }
+      );
+    });
+  }
+
+  showDetail(id: any) {
+    this.router.navigate(['/orderproducts/' + id]);
+  }
 }

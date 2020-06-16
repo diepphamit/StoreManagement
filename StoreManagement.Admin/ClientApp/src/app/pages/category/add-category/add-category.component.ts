@@ -7,7 +7,9 @@ import { Category } from 'src/app/models/category/category.model';
 import { CategoryComponent } from '../category.component';
 import { CategoryService } from 'src/app/services/category.service';
 import { CategoryForAdd } from 'src/app/models/category/categoryForAdd.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { ValidationService } from 'src/app/services/validation.service';
+
 
 @Component({
   selector: 'app-add-category',
@@ -22,7 +24,8 @@ export class AddCategoryComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private categoryService: CategoryService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {
     this.addCategoryForm = this.fb.group({
       name: ['', [Validators.required, ValidationService.requireValue]],
@@ -31,6 +34,9 @@ export class AddCategoryComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authService.getRoles().filter(x => x.includes('CREATE_CATEGORY')).length === 0) {
+      this.router.navigate(['/categories']);
+    }
   }
 
   addCategory() {

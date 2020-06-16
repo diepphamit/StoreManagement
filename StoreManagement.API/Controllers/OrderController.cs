@@ -64,6 +64,36 @@ namespace StoreManagement.API.Controllers
             }
         }
 
+        [Route("GetAllOrderByStaffId")]
+        [HttpGet]
+        public IActionResult GetAllOrder(int staffId, string keyword, int page = 1, int pagesize = 10)
+        {
+            try
+            { 
+
+                var list = _orderRepository.GetAllOrderByStaffId(staffId, keyword);
+
+                int totalCount = list.Count();
+
+                var query = list.OrderByDescending(x => x.Id).Skip((page - 1) * pagesize).Take(pagesize);
+
+                var response = _mapper.Map<IEnumerable<Order>, IEnumerable<OrderUI>>(query);
+
+                var paginationset = new PaginationSet<OrderUI>()
+                {
+                    Items = response,
+                    Total = totalCount
+                };
+
+                return Ok(paginationset);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
+        }
+
         [Route("Revenue")]
         [HttpGet]
         public IActionResult GetRevenueMonth(DateTime date)
