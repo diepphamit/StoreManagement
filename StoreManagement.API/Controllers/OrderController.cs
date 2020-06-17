@@ -34,17 +34,12 @@ namespace StoreManagement.API.Controllers
         [AllowAnonymous]
         [Route("GetAllOrder")]
         [HttpGet]
-        public IActionResult GetAllOrder(int customerId, DateTime startDay, DateTime endDay, bool status = true, int page = 1, int pagesize = 10)
+        public IActionResult GetAllOrder(int customerId, string keyword, int page = 1, int pagesize = 10)
         {
             try
             {
-                var getOrderUI = new GetOrderUI();
-                getOrderUI.customerId = customerId;
-                getOrderUI.status = status;
-                getOrderUI.startDay = startDay;
-                getOrderUI.endDay = endDay;
 
-                var list = _orderRepository.GetAllOrder(getOrderUI);
+                var list = _orderRepository.GetAllOrder(customerId, keyword);
 
                 int totalCount = list.Count();
 
@@ -70,7 +65,7 @@ namespace StoreManagement.API.Controllers
         [AllowAnonymous]
         [Route("GetAllOrderByStaffId")]
         [HttpGet]
-        public IActionResult GetAllOrder(int staffId, string keyword, int page = 1, int pagesize = 10)
+        public IActionResult GetAllOrderByStaffId(int staffId, string keyword, int page = 1, int pagesize = 10)
         {
             try
             { 

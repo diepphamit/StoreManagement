@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using StoreManagement.BusinessLogic.Dtos.Orders;
 using StoreManagement.BusinessLogic.Helper;
 using StoreManagement.BusinessLogic.Interfaces;
@@ -103,15 +104,15 @@ namespace StoreManagement.BusinessLogic.Implementaions
         }
 
 
-        public IEnumerable<Order> GetAllOrder(GetOrderUI getOrderUI)
+        public IEnumerable<Order> GetAllOrder(int customerId, string keyword)
         {
-            if (string.IsNullOrEmpty(getOrderUI.keyword)) getOrderUI.keyword = "";
+            if (string.IsNullOrEmpty(keyword)) keyword = "";
          
-            if (getOrderUI.customerId == 0)
+            if (customerId == 0)
                 return _context.Orders.Include(x => x.Customer).Include(x => x.Staff)
-                    .Where(x => x.Status == getOrderUI.status && x.OrderDate >= getOrderUI.startDay && x.OrderDate <= getOrderUI.endDay).AsEnumerable();
+                    .Where(x => x.Code.ToString().Contains(keyword)).AsEnumerable();
             return _context.Orders.Include(x => x.Customer).Include(x => x.Staff)
-                 .Where(x => x.CustomerId == getOrderUI.customerId && x.Status == getOrderUI.status && x.OrderDate >= getOrderUI.startDay && x.OrderDate <= getOrderUI.endDay).AsEnumerable();
+                 .Where(x => x.CustomerId == customerId && x.Code.ToString().Contains(keyword)).AsEnumerable();
         }
 
         public IEnumerable<Order> GetAllOrderByStaffId(int staffId, string keyword)

@@ -30,11 +30,11 @@ namespace StoreManagement.API.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult GetAllBranchProduct(int page = 1, int pagesize = 10)
+        public IActionResult GetAllBranchProduct(int branchId, string keyword, int page = 1, int pagesize = 10)
         {
             try
             {
-                var branchProduct = _branchProductRepository.GetAllBranchProduct();
+                var branchProduct = _branchProductRepository.GetAllBranchProduct(branchId, keyword);
 
                 int totalCount = branchProduct.Count();
 
