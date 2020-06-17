@@ -58,7 +58,13 @@ namespace StoreManagement.BusinessLogic.AutoMapper
             CreateMap<OrderDetail, OrderDetailAdd>();
             CreateMap<OrderDetailAdd, OrderDetail>();
             CreateMap<BranchProduct, BranchProductReturn>().ForMember(x => x.ProductName, y => { y.MapFrom(z => z.Product.Name); })
-                                                           .ForMember(x => x.BranchDescription, y => { y.MapFrom(z => z.Branch.Description); });
+                                                           .ForMember(x => x.BranchDescription, y => { y.MapFrom(z => z.Branch.Description); })
+                                                           .ForMember(x => x.Price, y => { y.MapFrom(z => z.Product.Price); })
+                                                           .ForMember(x => x.Discount, y => { y.MapFrom(z => z.Product.Discount); })
+                                                           .ForMember(x => x.Barcode, y => { y.MapFrom(z => z.Product.Barcode); })
+                                                           .ForMember(x => x.Pictures, y => { y.MapFrom(z => z.Product.Pictures); })
+                                                           .ForMember(x => x.SupplierName, y => { y.MapFrom(z => z.Product.Supplier.Name); })
+                                                           .ForMember(x => x.CategoryName, y => { y.MapFrom(z => z.Product.Category.Name); });
             CreateMap<BranchProductUI, BranchProduct>();
             CreateMap<ProductStatistical, ProductSoleUI>().ForMember(x => x.Name, y => y.MapFrom(z => z.product.Name))
                                                    .ForMember(x => x.Description, y => y.MapFrom(z => z.product.Description))
