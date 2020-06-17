@@ -7,6 +7,7 @@ export class ValidationService {
       'invalidEmailAddress': 'Email không đúng.',
       'invalidPassword': 'Mật khẩu phải 6 kí tự và chưa số.',
       'invalidNumber': 'Bạn phải nhập số.',
+      'invalidPhoneNumber': 'Bạn phải nhập số.',
       'minlength': `Minimum length ${validatorValue.requiredLength}`,
       'ConfirmPassword': 'Hai mật khẩu phải giống nhau.'
     };
@@ -37,6 +38,14 @@ export class ValidationService {
 
   static numberValidator(control) {
     if (control.value.toString().match(/^(\d*([.,](?=\d{3}))?\d+)+((?!\2)[.,]\d\d)?$/)) {
+      return null;
+    } else {
+      return { 'invalidNumber': true };
+    }
+  }
+
+  static phonenumberValidator(control) {
+    if (control.value.toString().match(/^(\d*([.,](?=\d{3}))?\d+)+((?!\2)[.,]\d\d)?$/) || control.value.toString() === '') {
       return null;
     } else {
       return { 'invalidNumber': true };

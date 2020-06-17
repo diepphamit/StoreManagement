@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StoreManagement.BusinessLogic.Core;
@@ -34,6 +35,8 @@ namespace StoreManagement.API.Controllers
             _storageManager = storageManager;
         }
 
+        [AllowAnonymous]
+        [Route("GetAllPicture")]
         [HttpGet]
         public IActionResult GetAllPicture(int page = 1, int pagesize = 10)
         {
@@ -69,6 +72,44 @@ namespace StoreManagement.API.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [Route("GetAllPictureByProductId")]
+        [HttpGet]
+        public IActionResult GetAllPictureByProductId(int productId, int page = 1, int pagesize = 10)
+        {
+            try
+            {
+                var list = _pictureRepository.GetAllPicturesByIdProduct(productId);
+
+                int totalCount = list.Count();
+
+                var query = list.OrderByDescending(x => x.Id).Skip((page - 1) * pagesize).Take(pagesize);
+
+
+
+                foreach (var item in query)
+                {
+                    item.ImageUrl = _storageManager.GetCannedSignedURL(item.FileLocation);
+                }
+
+                var response = _mapper.Map<IEnumerable<Picture>, IEnumerable<PictureUI>>(query);
+
+                var paginationset = new PaginationSet<PictureUI>()
+                {
+                    Items = response,
+                    Total = totalCount
+                };
+
+                return Ok(paginationset);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
+        }
+
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPictureById(int id)
         {

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StoreManagement.API.Helpers;
 using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Branches;
 using StoreManagement.BusinessLogic.Interfaces;
@@ -25,6 +27,7 @@ namespace StoreManagement.API.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetAllBranch(string keyword, int page = 1, int pagesize = 10)
         {
@@ -53,6 +56,7 @@ namespace StoreManagement.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBranchByid(int id)
         {
@@ -61,6 +65,7 @@ namespace StoreManagement.API.Controllers
             return Ok(_mapper.Map<BranchUI>(branch));
         }
 
+        [PermissionFilter(Permissions = "CREATE_BRANCH")]
         [HttpPost]
         public async Task<IActionResult> CreateBranch([FromBody]BranchUI branchUI)
         {
@@ -71,6 +76,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
+        [PermissionFilter(Permissions = "UPDATE_BRANCH")]
         [HttpPut("{id}")]
         public async Task<IActionResult> EditBranch(int id, [FromBody]BranchUI branchUI)
         {
@@ -81,6 +87,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
+        [PermissionFilter(Permissions = "DELETE_BRANCH")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBranch(int id)
         {

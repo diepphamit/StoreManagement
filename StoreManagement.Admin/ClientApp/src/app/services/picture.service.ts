@@ -11,7 +11,11 @@ export class PictureService {
   }
 
   getAllPictures(keyword: string, page: number, pageSize: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
+    return this.http.get(`${this.baseUrl}/GetAllPicture?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
+  }
+
+  getAllPicturesById(id: any, keyword: string, page: number, pageSize: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/GetAllPictureByProductId?productId=${id}&keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
   }
 
   getPictureById(id: any): Observable<any> {

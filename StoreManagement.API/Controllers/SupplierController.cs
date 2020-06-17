@@ -11,6 +11,7 @@ using StoreManagement.DataAccess.Entites;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net.NetworkInformation;
 using StoreManagement.BusinessLogic.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StoreManagement.API.Controllers
 {
@@ -27,6 +28,7 @@ namespace StoreManagement.API.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetAllSupplier(string keyword, int page = 1, int pagesize = 10)
         {
@@ -55,6 +57,7 @@ namespace StoreManagement.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSupplierById(int id)
         {

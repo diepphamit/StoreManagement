@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { tap, map } from 'rxjs/operators';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { ProductService } from 'src/app/services/product.sevice';
 
 @Component({
   selector: 'app-picture',
@@ -22,13 +23,15 @@ export class PictureComponent implements OnInit {
   page: number;
   pageSize: number;
   total: number;
+  itemsProduct: Observable<any[]>;
 
   constructor(
     public pictureService: PictureService,
     private router: Router,
     private modalService: BsModalService,
     private toastr: ToastrService,
-    private loadingBar: LoadingBarService
+    private loadingBar: LoadingBarService,
+    private productService: ProductService
   ) { }
 
   ngOnInit() {
@@ -36,19 +39,33 @@ export class PictureComponent implements OnInit {
     this.page = 1;
     this.pageSize = 10;
     this.getAllPictures(this.page);
+    this.getAllProducts();
   }
 
   getAllPictures(page: number) {
     this.loadingBar.start();
     this.itemsAsync = this.pictureService.getAllPictures(this.keyword, page, this.pageSize)
-    .pipe(
-      tap(response => {
-        this.total = response.total;
-        this.page = page;
-        this.loadingBar.stop();
-      }),
-      map(response => response.items)
-    );
+      .pipe(
+        tap(response => {
+          this.total = response.total;
+          this.page = page;
+          this.loadingBar.stop();
+        }),
+        map(response => response.items)
+      );
+  }
+
+  getAllPicturesByProductId(id: any, page: number) {
+    this.loadingBar.start();
+    this.itemsAsync = this.pictureService.getAllPicturesById(id, '', page, this.pageSize)
+      .pipe(
+        tap(response => {
+          this.total = response.total;
+          this.page = page;
+          this.loadingBar.stop();
+        }),
+        map(response => response.items)
+      );
   }
 
   add() {
@@ -58,10 +75,6 @@ export class PictureComponent implements OnInit {
   edit(id: any) {
     this.router.navigate(['/pictures/edit/' + id]);
   }
-
-  // editFull(id: any) {
-  //     this.router.navigate(['/users/editfull/' + id]);
-  // }
 
   deleteConfirm(template: TemplateRef<any>, data: any) {
     this.picture = Object.assign({}, data);
@@ -97,6 +110,21 @@ export class PictureComponent implements OnInit {
   refresh() {
     this.keyword = '';
     this.getAllPictures(this.page);
+  }
+
+  getAllProducts() {
+    this.itemsProduct = this.productService.getAllProducts('', 1, 1000)
+      .pipe(
+        map(response => response.items)
+      );
+  }
+
+  filterPictures(id: any) {
+    if (Number(id) === 0) {
+      this.getAllPictures(this.page);
+    } else {
+      this.getAllPicturesByProductId(id, this.page);
+    }
   }
 
 }

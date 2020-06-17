@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -29,6 +30,8 @@ namespace StoreManagement.API.Controllers
             _orderDetailRepository = orderDetailRepository;
             _mapper = mapper;
         }
+
+        [AllowAnonymous]
         [Route("GetAllOrder")]
         [HttpGet]
         public IActionResult GetAllOrder(int customerId, string keyword, int page = 1, int pagesize = 10)
@@ -59,6 +62,7 @@ namespace StoreManagement.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [Route("GetAllOrderByStaffId")]
         [HttpGet]
         public IActionResult GetAllOrderByStaffId(int staffId, string keyword, int page = 1, int pagesize = 10)
@@ -89,6 +93,7 @@ namespace StoreManagement.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [Route("Revenue")]
         [HttpGet]
         public IActionResult GetRevenueMonth(DateTime date)

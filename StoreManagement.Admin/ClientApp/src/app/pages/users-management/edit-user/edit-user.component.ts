@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { ValidationService } from 'src/app/services/validation.service';
+import { CURRENT_USER } from 'src/app/constants/db-keys';
 
 @Component({
   selector: 'app-edit-user',
@@ -21,7 +22,8 @@ export class EditUserComponent implements OnInit {
   roles1: any[] = [
     { key: 1, value: ['Admin'] },
     { key: 2, value: ['Staff'] },
-    { key: 3, value: ['Customer'] }
+    { key: 3, value: ['Customer'] },
+    { key: 4, value: ['StaffManager'] }
   ];
   genders: any[] = [
     { key: false, value: ['Nữ'] },
@@ -41,7 +43,7 @@ export class EditUserComponent implements OnInit {
       email: ['', [ValidationService.emailValidator]],
       name: [''],
       address: [''],
-      phoneNumber: [''],
+      phoneNumber: ['', ValidationService.phonenumberValidator],
       gender: [],
       dateOfBirth: [''],
       image: [''],
@@ -93,6 +95,16 @@ export class EditUserComponent implements OnInit {
     if (name === 'Admin') { return 1; }
     if (name === 'Staff') { return 2; }
     if (name === 'Customer') { return 3; }
+    if (name === 'StaffManager') { return 4; }
+  }
+
+  get getId() {
+    const user = JSON.parse(localStorage.getItem(CURRENT_USER));
+    if (user != null) {
+      return user.id;
+    }
+
+    return 0;
   }
 
 }

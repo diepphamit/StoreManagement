@@ -137,6 +137,8 @@ namespace StoreManagement.API.Controllers
             var token = tokenHandler.CreateToken(tokenDescription);
 
             var userReturn = _mapper.Map<UserAuthReturn>(userInDb);
+            userReturn.Roles = _authRepository.getRolesByUsername(userInDb.Username);
+
             return Ok(new
             {
                 access_token = tokenHandler.WriteToken(token),

@@ -14,11 +14,12 @@ import { ValidationService } from 'src/app/services/validation.service';
 export class AddUserComponent implements OnInit {
 
   addUserForm: FormGroup;
-  user: User;
+  user: any;
   roles1: any[] = [
     { key: 1, value: ['Admin'] },
     { key: 2, value: ['Staff'] },
-    { key: 3, value: ['Customer'] }
+    { key: 3, value: ['Customer'] },
+    { key: 4, value: ['StaffManager'] }
   ];
   genders: any[] = [
     { key: false, value: ['Nữ'] },
@@ -32,13 +33,13 @@ export class AddUserComponent implements OnInit {
     private toastr: ToastrService
   ) {
     this.addUserForm = this.fb.group({
-      username: ['', [ValidationService.requireValue]],
-      password: ['', [ValidationService.requireValue, ValidationService.passwordValidator]],
-      passwordAgain: ['', [ValidationService.requireValue, ValidationService.passwordMatch]],
-      email: ['', [ValidationService.emailValidator]],
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required, ValidationService.passwordValidator]],
+      passwordAgain: ['', [Validators.required, ValidationService.passwordMatch]],
+      email: ['', [Validators.required, ValidationService.emailValidator]],
       name: [''],
       address: [''],
-      phoneNumber: [''],
+      phoneNumber: ['', ValidationService.phonenumberValidator],
       gender: [true],
       dateOfBirth: [''],
       image: [''],
@@ -51,6 +52,7 @@ export class AddUserComponent implements OnInit {
 
   addUser() {
     this.user = Object.assign({}, this.addUserForm.value);
+    this.user.groupUserId = Number(this.user.groupUserId);
     this.userService.createUser(this.user).subscribe(
       () => {
         this.router.navigate(['/users']).then(() => {

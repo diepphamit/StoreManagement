@@ -14,7 +14,9 @@ namespace StoreManagement.BusinessLogic.Dtos.Product
         public int Discount { get; set; }
         public int Barcode { get; set; }
         public string SupplierName { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public int SupplierId { get; set; }
         public List<PictureDto> Pictures{ get; set; }
     }
 }

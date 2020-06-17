@@ -12,6 +12,7 @@ import { OrderService } from 'src/app/services/order.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 @Component({
   selector: 'app-add-order-product',
@@ -40,6 +41,7 @@ export class AddOrderProductComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService,
     private productService: ProductService,
+    private loadingBar: LoadingBarService,
     private orderService: OrderService) {
     this.addProductForm = this.fb.group({
       productId: ['', [ValidationService.requireValue]],
@@ -88,7 +90,7 @@ export class AddOrderProductComponent implements OnInit {
 
   addOrder() {
     // this.orderAdd = Object.assign(Object.assign({}, this.addOrderForm.value), this.itemsAsync);
-
+    this.loadingBar.start();
     this.orderAdd = new OrderAdd(this.getId(), Number(this.addOrderForm.value.customerId),
       Boolean(this.addOrderForm.value.status), 0, this.itemsAsync as ProductOrder[]);
 
@@ -96,10 +98,12 @@ export class AddOrderProductComponent implements OnInit {
       () => {
         this.router.navigate(['/orderproducts']).then(() => {
           this.toastr.success('Tạo đơn hàng thành công');
+          this.loadingBar.stop();
         });
       },
       (error: HttpErrorResponse) => {
         this.toastr.error('Tạo đơn hàng không thành công!');
+        this.loadingBar.stop();
       }
     );
 

@@ -24,7 +24,7 @@ export class AuthService {
   }
 
   login(model: any): Observable<any> {
-    return this.http.post(this.baseUrl + 'login', model)
+    return this.http.post(this.baseUrl + 'loginadmin', model)
       .pipe(
         map((response: LoginResponse) => {
           return this.processLoginResponse(response);

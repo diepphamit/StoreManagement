@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { CURRENT_USER } from 'src/app/constants/db-keys';
 
 @Component({
   selector: 'app-users-management',
@@ -31,6 +32,9 @@ export class UsersManagementComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    if (this.getId !== 1) {
+      this.router.navigate(['/home']);
+    }
     this.keyword = '';
     this.page = 1;
     this.pageSize = 10;
@@ -102,5 +106,14 @@ export class UsersManagementComponent implements OnInit {
   refresh() {
     this.keyword = '';
     this.getAllUsers(this.page);
+  }
+
+  get getId() {
+    const user = JSON.parse(localStorage.getItem(CURRENT_USER));
+    if (user != null) {
+      return user.id;
+    }
+
+    return 0;
   }
 }
