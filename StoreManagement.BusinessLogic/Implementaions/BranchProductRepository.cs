@@ -70,15 +70,18 @@ namespace StoreManagement.BusinessLogic.Implementaions
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
 
-        public IEnumerable<BranchProduct> GetAllBranchProduct()
+        public IEnumerable<BranchProduct> GetAllBranchProduct(int branchId, string keyword)
         {
-            
-            return _context.BranchProducts.Include(x => x.Branch).Include(p => p.Product).ToList();
+            if (string.IsNullOrEmpty(keyword)) keyword = "";
+            return _context.BranchProducts.Include(x => x.Branch)
+                                   .Include(x => x.Product).ThenInclude(x => x.Category)
+                                   .Include(x => x.Product).ThenInclude(x => x.Supplier)
+                                   .Include(x => x.Product).ThenInclude(x => x.Pictures).Where(y => y.BrachId == branchId && y.Product.Name.ToLower().Contains(keyword.ToLower())).AsEnumerable();
+
         }
 
         public async Task<BranchProduct> GetBranchProductByIdAsync(int id)

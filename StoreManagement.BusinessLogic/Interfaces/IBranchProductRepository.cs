@@ -8,7 +8,7 @@ namespace StoreManagement.BusinessLogic.Interfaces
 {
     public interface IBranchProductRepository
     {
-        IEnumerable<BranchProduct> GetAllBranchProduct();
+        IEnumerable<BranchProduct> GetAllBranchProduct(int BranchId, string keyword);
         Task<BranchProduct> GetBranchProductByIdAsync(int id);
         Task<bool> CreateBranchProductAsync(BranchProduct branchProduct);
         Task<bool> EditBranchProductAsync(int id, BranchProduct branchProductUpdate);
