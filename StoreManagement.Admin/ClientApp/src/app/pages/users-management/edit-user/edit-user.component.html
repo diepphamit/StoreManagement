@@ -45,6 +45,7 @@
             <label>Số điện thoại</label>
             <input type="text" class="form-control" formControlName="phoneNumber" placeholder="Số điện thoại"
               [ngClass]="{ 'is-invalid': f.phoneNumber.errors }">
+              <app-control-messages [control]="editUserForm.get('phoneNumber')"></app-control-messages>
           </div>
           <div class="form-group" *ngIf="getId == 1">
             <label>Vai trò</label>

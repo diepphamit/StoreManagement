@@ -32,7 +32,8 @@ namespace StoreManagement.BusinessLogic.AutoMapper
                 .ForMember(x => x.SupplierName, y => { y.MapFrom(z => z.Supplier.Name); })
                 .ForMember(x => x.CategoryName, y => { y.MapFrom(z => z.Category.Name); });
             CreateMap<ProductForCreate, Product>();
-            CreateMap<ProductForUpdate, Product>();
+            CreateMap<ProductForReturn, Product>();
+            CreateMap<Product, ProductForReturn>();
 
             CreateMap<User, UserDto>().ForMember(x => x.GroupRole, y => { y.MapFrom(z => z.GroupUser.Name); });
             CreateMap<UserForCreate, User>();

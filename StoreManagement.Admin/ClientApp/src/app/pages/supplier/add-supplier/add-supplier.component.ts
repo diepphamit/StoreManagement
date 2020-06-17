@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { SupplierService } from 'src/app/services/supplier.service';
 import { Supplier } from 'src/app/models/supplier/supplier.model';
 import { SupplierForAdd } from 'src/app/models/supplier/supplierForAdd.model';
+import { ValidationService } from 'src/app/services/validation.service';
 
 @Component({
   selector: 'app-add-su',
@@ -24,7 +25,7 @@ export class AddSupplierComponent implements OnInit {
     this.addSupplierForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      phonenumber: ['', Validators.required],
+      phonenumber: ['', [Validators.required, ValidationService.numberValidator]],
       address: ['', Validators.required]
     });
   }
