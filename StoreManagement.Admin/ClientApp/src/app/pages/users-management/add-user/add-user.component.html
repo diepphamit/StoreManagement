@@ -70,6 +70,7 @@
             <label>Số điện thoại</label>
             <input type="text" class="form-control" formControlName="phoneNumber" placeholder="Số điện thoại"
               [ngClass]="{ 'is-invalid': f.phoneNumber.errors }">
+              <app-control-messages [control]="addUserForm.get('phoneNumber')"></app-control-messages>
           </div>
         </div>
       </div>

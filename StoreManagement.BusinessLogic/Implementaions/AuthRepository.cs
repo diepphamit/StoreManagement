@@ -82,7 +82,7 @@ namespace StoreManagement.BusinessLogic.Implementaions
 
         public async Task<User> LoginAdminPage(string username, string password)
         {
-            var user = await _context.Users.Where(x => (x.GroupUserId == 1 || x.GroupUserId == 2))
+            var user = await _context.Users.Where(x => (x.GroupUserId == 1 || x.GroupUserId == 2 || x.GroupUserId == 4))
                 .Include(p => p.GroupUser).FirstOrDefaultAsync(x => x.Username == username);
             if (user == null) return null;
 

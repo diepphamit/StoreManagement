@@ -7,7 +7,10 @@
     <div class="row">
       <div class="col-sm-8">
         <div class="input-group">
-          <input class="form-control" type="text" [(ngModel)]="keyword" placeholder="Nhập từ khóa" />
+          <select class="form-control" (change)="filterPictures($event.target.value)" >
+            <option value = 0>ALL</option>
+            <option *ngFor="let item of itemsProduct | async" value={{item.id}}>{{item.name}}</option>
+          </select>
           <span class="input-group-btn">
             <button class="btn btn-default" type="button" (click)="search()">
               <i class="fa fa-search"></i>
@@ -38,9 +41,9 @@
               <td>{{ item.productName }}</td>
               <td><img src="{{ item.imageUrl }}" alt="Girl in a jacket" style="width:50px;height:60px;"></td>
               <td style=" text-align: center;">
-                <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;" (click)="edit(item.id)">
+                <!-- <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;" (click)="edit(item.id)">
                   <i class="fa fa-pencil"></i>
-                </button>
+                </button> -->
                 <button class="btn btn-sm btn-danger" style="margin-right: 10px; margin-bottom: 5px;"
                   (click)="deleteConfirm(template,item)">
                   <i class="fa fa-trash"></i>

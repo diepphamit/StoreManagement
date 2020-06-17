@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StoreManagement.API.Helpers;
 using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Users;
 using StoreManagement.BusinessLogic.Interfaces;
@@ -25,10 +26,13 @@ namespace StoreManagement.API.Controllers
             _mapper = mapper;
         }
 
+        [PermissionFilter(Permissions = "READ_USER")]
         [HttpGet]
         public IActionResult GetAllUsers(string keyword, int page = 1, int pagesize = 10)
         {
+            var currentUser = HttpContext.User.Identity.Name;
             var listUsers = _userRepo.GetAllUsers(keyword);
+            listUsers = listUsers.Where(x => x.Username != currentUser);
 
             int totalCount = listUsers.Count();
 
@@ -46,6 +50,7 @@ namespace StoreManagement.API.Controllers
 
         }
 
+        [PermissionFilter(Permissions = "READ_USER")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
@@ -57,6 +62,7 @@ namespace StoreManagement.API.Controllers
             return Ok(_mapper.Map<UserDto>(user));
         }
 
+        [PermissionFilter(Permissions = "CREATE_USER")]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] UserForCreate userForCreate)
         {
@@ -73,6 +79,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
+        [PermissionFilter(Permissions = "UPDATE_USER")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDto userForUpdate)
         {
@@ -86,6 +93,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
+        [PermissionFilter(Permissions = "DELETE_USER")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

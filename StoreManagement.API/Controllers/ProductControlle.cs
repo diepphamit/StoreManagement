@@ -31,6 +31,7 @@ namespace StoreManagement.API.Controllers
             _storageManager = storageManager;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetAllProducts(string keyword, int page = 1, int pageSize = 10)
         {
@@ -72,6 +73,7 @@ namespace StoreManagement.API.Controllers
             }
 
         }
+        [AllowAnonymous]
         [Route("GetAllProductInBranch")]
         [HttpGet]
         public IActionResult GetAllProductInBranches(int BranchId, int page = 1, int pagesize = 10)
@@ -113,6 +115,7 @@ namespace StoreManagement.API.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductById(int id)
         {

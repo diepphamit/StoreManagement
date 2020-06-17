@@ -61,6 +61,11 @@ namespace StoreManagement.BusinessLogic.Implementaions
             return _context.Pictures.Include(x => x.Product).AsEnumerable();
         }
 
+        public IEnumerable<Picture> GetAllPicturesByIdProduct(int productId)
+        {
+            return _context.Pictures.Include(x => x.Product).Where(x => x.ProductId == productId).AsEnumerable();
+        }
+
         public async Task<Picture> GetPictureByIdAsync(int id)
         {
             return await _context.Pictures.Include(x => x.Product).FirstOrDefaultAsync(x => x.Id == id);

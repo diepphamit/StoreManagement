@@ -118,9 +118,15 @@ namespace StoreManagement.BusinessLogic.Implementaions
         {
             if (string.IsNullOrEmpty(keyword)) keyword = "";
 
-            return _context.Orders.Include(x => x.Customer).Include(y => y.Staff).Where(x =>
-                ((x.StaffId == staffId || x.StaffId == 1) && x.Code.ToString().Contains(keyword)))
-                .ToList();
+            if(staffId != 1)
+            {
+                return _context.Orders.Include(x => x.Customer).Include(y => y.Staff).Where(x =>
+               ((x.StaffId == staffId || x.StaffId == 1) && x.Code.ToString().Contains(keyword)))
+               .ToList();
+            }
+            else return _context.Orders.Include(x => x.Customer).Include(y => y.Staff).Where(x => x.Code.ToString().Contains(keyword))
+              .ToList();
+
         }
 
         public async Task<Order> GetOrderByIdAsync(int id)

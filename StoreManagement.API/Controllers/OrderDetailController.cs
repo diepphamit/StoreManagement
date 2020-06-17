@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -25,6 +26,8 @@ namespace StoreManagement.API.Controllers
             _orderDetailRepository = orderDetailRepository;
             _mapper = mapper;
         }
+
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetAllOrderDetail(int OrderId, int page = 1, int pagesize = 10)
         {
@@ -53,6 +56,7 @@ namespace StoreManagement.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderDetailByid(int id)
         {
