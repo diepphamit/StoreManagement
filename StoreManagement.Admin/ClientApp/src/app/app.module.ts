@@ -25,6 +25,8 @@ import { OrderModule } from './pages/order/order.module';
 import { OrderService } from './services/order.service';
 import { OrderProductService } from './services/order-product.service';
 import { OrderDetailService } from './services/order-detail.service';
+import { StatisticalService } from './services/statistical.service';
+import { ExportService } from './services/export.service';
 
 
 export function tokenGetter() {
@@ -52,7 +54,8 @@ export function tokenGetter() {
         tokenGetter: tokenGetter,
           whitelistedDomains: [
               'localhost:5000',
-              'localhost:44327'
+              'localhost:44327',
+              '52.77.233.77:8081'
           ],
           blacklistedRoutes: [
               'localhost:5000/api/auth/login',
@@ -72,6 +75,8 @@ export function tokenGetter() {
     ProductService,
     OrderDetailService,
     SupplierService,
+    StatisticalService,
+    ExportService,
     OrderService,
     OrderProductService
   ],

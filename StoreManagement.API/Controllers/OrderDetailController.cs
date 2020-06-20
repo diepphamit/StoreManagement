@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.OrderDetails;
 using StoreManagement.BusinessLogic.Interfaces;
+using StoreManagement.BusinessLogic.Storages;
 using StoreManagement.DataAccess.Entites;
 
 namespace StoreManagement.API.Controllers
@@ -20,11 +21,15 @@ namespace StoreManagement.API.Controllers
     {
         private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IMapper _mapper;
+        private readonly IAmazonS3StorageManager _storageManager;
 
-        public OrderDetailController(IOrderDetailRepository orderDetailRepository, IMapper mapper)
+        public OrderDetailController(IOrderDetailRepository orderDetailRepository, 
+            IMapper mapper, 
+            IAmazonS3StorageManager storageManager)
         {
             _orderDetailRepository = orderDetailRepository;
             _mapper = mapper;
+            _storageManager = storageManager;
         }
 
         [AllowAnonymous]
@@ -39,7 +44,18 @@ namespace StoreManagement.API.Controllers
 
                 var query = list.OrderByDescending(x => x.Id).Skip((page - 1) * pagesize).Take(pagesize);
 
-                var response = _mapper.Map<IEnumerable<OrderDetail>, IEnumerable<OrderDetailUI>>(query);
+                foreach (var item in query)
+                {
+                    if (item.Product.Pictures != null)
+                    {
+                        foreach (var pic in item.Product.Pictures)
+                        {
+                            pic.ImageUrl = _storageManager.GetCannedSignedURL(pic.FileLocation);
+                        }
+                    }
+                }
+
+                    var response = _mapper.Map<IEnumerable<OrderDetail>, IEnumerable<OrderDetailUI>>(query);
 
                 var paginationset = new PaginationSet<OrderDetailUI>()
                 {
@@ -64,6 +80,11 @@ namespace StoreManagement.API.Controllers
 
             if (orderDetail == null)
                 return NotFound();
+
+            foreach (var pic in orderDetail.Product.Pictures)
+            {
+                pic.ImageUrl = _storageManager.GetCannedSignedURL(pic.FileLocation);
+            }
 
             return Ok(_mapper.Map<OrderDetailUI>(orderDetail));
         }

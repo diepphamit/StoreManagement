@@ -62,6 +62,10 @@ const routes: Routes = [
         loadChildren: () => import('./pages/order-detail/order-detail.module').then(m => m.OrderDetailModule)
       },
       {
+        path: 'statistical',
+        loadChildren: () => import('./pages/statistical/statistical.module').then(m => m.StatisticalModule)
+      },
+      {
         path: 'orders',
         loadChildren: () => import('./pages/order/order.module').then(m => m.OrderModule)
       },

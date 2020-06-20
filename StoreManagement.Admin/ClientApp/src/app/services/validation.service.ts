@@ -45,7 +45,7 @@ export class ValidationService {
   }
 
   static phonenumberValidator(control) {
-    if (control.value.toString().match(/^(\d*([.,](?=\d{3}))?\d+)+((?!\2)[.,]\d\d)?$/) || control.value.toString() === '') {
+    if (control.value == null || control.value.toString() === '' ||  control.value.toString().match(/^(\d*([.,](?=\d{3}))?\d+)+((?!\2)[.,]\d\d)?$/) ) {
       return null;
     } else {
       return { 'invalidNumber': true };

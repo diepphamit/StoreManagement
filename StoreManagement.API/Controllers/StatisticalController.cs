@@ -78,5 +78,59 @@ namespace StoreManagement.API.Controllers
                 return BadRequest();
             }
         }
+
+        [Route("GetCustomers")]
+        [HttpGet]
+        public ActionResult GetCustomers(int page = 1, int pagesize = 10)
+        {
+            var listCustomers = _statistical.GetAllCustomerByProduct();
+
+            int totalCount = listCustomers.Count();
+
+            try
+            {
+                var query = listCustomers.OrderByDescending(x => x.TotalPrice).Skip((page - 1) * pagesize).Take(pagesize);
+
+                var paginationset = new PaginationSet<CustomerByProduct>
+                {
+                    Total = totalCount,
+                    Items = query
+                };
+
+                return Ok(paginationset);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
+        }
+
+        [Route("GetStaffs")]
+        [HttpGet]
+        public ActionResult GetStaffs(int page = 1, int pagesize = 10)
+        {
+            var listStaffs = _statistical.GetAllStaffByProduct();
+
+            int totalCount = listStaffs.Count();
+
+            try
+            {
+                var query = listStaffs.OrderByDescending(x => x.TotalPrice).Skip((page - 1) * pagesize).Take(pagesize);
+
+                var paginationset = new PaginationSet<CustomerByProduct>
+                {
+                    Total = totalCount,
+                    Items = query
+                };
+
+                return Ok(paginationset);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using StoreManagement.BusinessLogic.Helper;
+﻿using StoreManagement.BusinessLogic.Dtos.Statistical;
+using StoreManagement.BusinessLogic.Helper;
 using StoreManagement.DataAccess.Entites;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace StoreManagement.BusinessLogic.Interfaces
     {
         IEnumerable<ProductStatistical> ProductSoles();
         IEnumerable<ProductStatistical> ProductNotTaken();
+        IEnumerable<CustomerByProduct> GetAllCustomerByProduct();
+        IEnumerable<CustomerByProduct> GetAllStaffByProduct();
 
     }
 }
