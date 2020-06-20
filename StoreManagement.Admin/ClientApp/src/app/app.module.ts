@@ -25,6 +25,10 @@ import { OrderModule } from './pages/order/order.module';
 import { OrderService } from './services/order.service';
 import { OrderProductService } from './services/order-product.service';
 import { OrderDetailService } from './services/order-detail.service';
+import { Branch } from './models/branch/branch.model';
+import { BranchService } from './services/branch.service';
+import { BranchProductService } from './services/branch-product.service';
+
 
 
 export function tokenGetter() {
@@ -73,7 +77,9 @@ export function tokenGetter() {
     OrderDetailService,
     SupplierService,
     OrderService,
-    OrderProductService
+    OrderProductService,
+    BranchService,
+    BranchProductService
   ],
   bootstrap: [AppComponent],
 })

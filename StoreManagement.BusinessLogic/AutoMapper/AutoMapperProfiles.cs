@@ -32,7 +32,8 @@ namespace StoreManagement.BusinessLogic.AutoMapper
                 .ForMember(x => x.SupplierName, y => { y.MapFrom(z => z.Supplier.Name); })
                 .ForMember(x => x.CategoryName, y => { y.MapFrom(z => z.Category.Name); });
             CreateMap<ProductForCreate, Product>();
-            CreateMap<ProductForUpdate, Product>();
+            CreateMap<ProductForReturn, Product>();
+            CreateMap<Product, ProductForReturn>();
 
             CreateMap<User, UserDto>().ForMember(x => x.GroupRole, y => { y.MapFrom(z => z.GroupUser.Name); });
             CreateMap<UserForCreate, User>();
@@ -66,6 +67,7 @@ namespace StoreManagement.BusinessLogic.AutoMapper
                                                            .ForMember(x => x.SupplierName, y => { y.MapFrom(z => z.Product.Supplier.Name); })
                                                            .ForMember(x => x.CategoryName, y => { y.MapFrom(z => z.Product.Category.Name); });
             CreateMap<BranchProductUI, BranchProduct>();
+            CreateMap<BranchProduct, BranchProductUI>();
             CreateMap<ProductStatistical, ProductSoleUI>().ForMember(x => x.Name, y => y.MapFrom(z => z.product.Name))
                                                    .ForMember(x => x.Description, y => y.MapFrom(z => z.product.Description))
                                                    .ForMember(x => x.Price, y => y.MapFrom(z => z.product.Price))

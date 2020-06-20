@@ -5,7 +5,7 @@ using System.Text;
 
 namespace StoreManagement.BusinessLogic.Dtos.Product
 {
-    public class ProductForUpdate
+    public class ProductForReturn
     {
         [Required]
         public string Name { get; set; }

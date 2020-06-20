@@ -44,7 +44,6 @@ export class EditUserComponent implements OnInit {
       name: [''],
       address: [''],
       phoneNumber: ['', ValidationService.phonenumberValidator],
-      gender: [],
       dateOfBirth: [''],
       image: [''],
       groupUserId: []
