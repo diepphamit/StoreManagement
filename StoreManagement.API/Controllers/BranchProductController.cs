@@ -65,7 +65,7 @@ namespace StoreManagement.API.Controllers
                 return BadRequest();
 
             return
-                Ok(_mapper.Map<BranchProductReturn>(branchProduct));
+                Ok(_mapper.Map<BranchProductUI>(branchProduct));
         }
 
         [PermissionFilter(Permissions = "CREATE_BRANCH")]

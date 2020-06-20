@@ -72,6 +72,10 @@ const routes: Routes = [
       {
         path: 'branches',
         loadChildren: () => import('./pages/branch/branch.module').then(m => m.BranchModule)
+      },
+      {
+        path: 'branchproducts',
+        loadChildren: () => import('./pages/branch-product/branch-product.module').then(m => m.BranchProductModule)
       }
     ]
   },

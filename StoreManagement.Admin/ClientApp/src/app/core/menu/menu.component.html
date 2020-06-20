@@ -61,7 +61,13 @@
           <i class="fa fa-id-card"></i> <span>Thống kê khách hàng</span>
         </a>
       </li>
+      <li *ngIf="isAdmin || isStaffManager">
+        <a routerLink="/branchproducts">
+            <i class="fa fa-id-card"></i> <span>Quản lý chi nhánh sản phẩm</span>
+        </a>
+    </li>
       <!-- <li>
+
               <a routerLink="/comments">
                   <i class="fa fa-id-card"></i> <span>Quản lý câu bình luận</span>
               </a>

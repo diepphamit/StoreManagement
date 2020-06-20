@@ -124,6 +124,7 @@ namespace StoreManagement.API.Controllers
             if (product == null)
                 return NotFound();
 
+
             if (product.Pictures != null)
             {
                 foreach (var pic in product.Pictures)
@@ -132,7 +133,9 @@ namespace StoreManagement.API.Controllers
                 }
             }
         
-            return Ok(_mapper.Map<ProductReturn>(product));
+
+            return Ok(_mapper.Map<ProductForReturn>(product));
+
         }
 
         [HttpPost]
@@ -161,7 +164,7 @@ namespace StoreManagement.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, [FromBody]ProductForUpdate product)
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody]ProductForReturn product)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

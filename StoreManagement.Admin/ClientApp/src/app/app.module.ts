@@ -27,7 +27,9 @@ import { OrderProductService } from './services/order-product.service';
 import { OrderDetailService } from './services/order-detail.service';
 import { StatisticalService } from './services/statistical.service';
 import { ExportService } from './services/export.service';
-
+import { Branch } from './models/branch/branch.model';
+import { BranchService } from './services/branch.service';
+import { BranchProductService } from './services/branch-product.service';
 
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN);
@@ -78,7 +80,9 @@ export function tokenGetter() {
     StatisticalService,
     ExportService,
     OrderService,
-    OrderProductService
+    OrderProductService,
+    BranchService,
+    BranchProductService
   ],
   bootstrap: [AppComponent],
 })

@@ -28,7 +28,8 @@
           </div>
           <div class="form-group">
             <label>Nhà cung cấp</label>
-            <select class="form-control" formControlName="supplierId" [ngClass]="{ 'is-invalid': f.supplierId.errors }">
+            <select class="form-control show-tick" formControlName="supplierId" 
+              [ngClass]="{ 'is-invalid': f.supplierId.errors }">
               <option *ngFor="let supplier of suppliers | async" value={{supplier.id}}>{{supplier.name}}</option>
             </select>
           </div>
