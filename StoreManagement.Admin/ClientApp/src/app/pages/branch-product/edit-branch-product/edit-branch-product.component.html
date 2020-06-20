@@ -1,1 +1,41 @@
-<p>edit-branch-product works!</p>
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+      <h3 class="box-title">Cập nhật</h3>
+    </div>
+  
+    <form [formGroup]="editBranchProductForm" (submit)="editBranhcProduct()" novalidate>
+      <div class="box-body">
+        <div class="row">
+          <div class="col-sm-6"> 
+            <div class="form-group">
+              <label>Chi nhánh</label>
+              <select class="form-control" formControlName="brachId" 
+              [ngClass]="{ 'is-invalid': f.brachId.errors }">
+                <option *ngFor="let branch of branches | async" value={{branch.id}}>{{branch.description}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+                <label>Tên sản phẩm</label>
+                <select class="form-control show-tick" formControlName="productId" 
+                  [ngClass]="{ 'is-invalid': f.productId.errors }">
+                  <option *ngFor="let product of products | async" value={{product.id}}>{{product.name}}</option>
+                </select>
+              </div>
+            <div class="form-group">
+                <label>Số lượng</label>
+                <input type="text" class="form-control" formControlName="quantity" placeholder="quantity"
+                  [ngClass]="{ 'is-invalid': f.quantity.errors }">
+                  <app-control-messages [control]="editBranchProductForm.get('quantity')"></app-control-messages>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="box-footer text-center">
+        <button [routerLink]="['/branchproducts']" class="btn btn-default">Hủy</button>
+        <button type="submit" [disabled]="editBranchProductForm.invalid" class="btn btn-success">Lưu</button>
+      </div>
+    </form>
+  
+</div>
+  
