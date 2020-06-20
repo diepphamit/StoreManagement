@@ -78,13 +78,13 @@ namespace StoreManagement.BusinessLogic.Implementaions
         public IEnumerable<OrderDetail> GetAllOrderDetail(int orderId)
         {
             if (orderId == 0)
-                return _context.OrderDetails.Include(x => x.Product).Include(y => y.Order).ThenInclude(z => z.Customer).ToList();
+                return _context.OrderDetails.Include(x => x.Product).ThenInclude(z => z.Pictures).Include(y => y.Order).ThenInclude(z => z.Customer).ToList();
             return _context.OrderDetails.Include(x => x.Product).ThenInclude(z => z.Pictures).Include(p => p.Order).ThenInclude(y => y.Customer).Where(p => p.OrderId == orderId).AsEnumerable();
         }
 
         public async Task<OrderDetail> GetOrderDetailById(int id)
         {
-            return await _context.OrderDetails.Include(x => x.Product).Include(p => p.Order).ThenInclude(y => y.Customer).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.OrderDetails.Include(x => x.Product).ThenInclude(z => z.Pictures).Include(p => p.Order).ThenInclude(y => y.Customer).FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

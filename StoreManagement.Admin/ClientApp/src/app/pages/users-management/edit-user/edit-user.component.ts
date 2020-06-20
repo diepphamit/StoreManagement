@@ -66,7 +66,7 @@ export class EditUserComponent implements OnInit {
             this.editUserForm.controls.groupUserId.setValue(this.getGroupUserIdByName(result.groupRole));
           },
           () => {
-            this.toastr.error(`Không tìm thấy sản phẩm này`);
+            this.toastr.error(`Không tìm thấy tài khoản này`);
           });
       }
     });

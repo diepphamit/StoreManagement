@@ -80,6 +80,8 @@ namespace StoreManagement.BusinessLogic.AutoMapper
                                                    .ForMember(x => x.Discount, y => y.MapFrom(z => z.product.Discount))
                                                    .ForMember(x => x.Barcode, y => y.MapFrom(z => z.product.Barcode))
                                                    .ForMember(x => x.ProductQuantity, y => y.MapFrom(z => z.QuantityStatistical));
+            CreateMap<User, CustomerByProduct>();
+
             CreateMap<BranchProduct, ProductReturn>()
                 .ForMember(x => x.Id, y => { y.MapFrom(z => z.Product.Id); })
                 .ForMember(x => x.Description, y => { y.MapFrom(z => z.Product.Description); })

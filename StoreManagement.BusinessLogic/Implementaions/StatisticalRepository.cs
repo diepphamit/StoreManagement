@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using StoreManagement.BusinessLogic.Dtos.Statistical;
 using StoreManagement.BusinessLogic.Helper;
 using StoreManagement.BusinessLogic.Interfaces;
 using StoreManagement.DataAccess.Data;
@@ -12,10 +14,40 @@ namespace StoreManagement.BusinessLogic.Implementaions
     public class StatisticalRepository : IStatisticalRepository
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public StatisticalRepository(DataContext context)
+        public StatisticalRepository(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
+        }
+
+        public IEnumerable<CustomerByProduct> GetAllCustomerByProduct()
+        {
+            var listCustomersinDb = _context.Users.Where(x => x.GroupUserId == 3).ToList();
+
+            var listCustomers = _mapper.Map<IEnumerable<CustomerByProduct>>(listCustomersinDb);
+
+            foreach(var customer in listCustomers)
+            {
+                customer.TotalPrice = _context.Orders.Where(x => x.CustomerId == customer.Id).Sum(p => p.TotalPrice);
+            }
+
+            return listCustomers;
+        }
+
+        public IEnumerable<CustomerByProduct> GetAllStaffByProduct()
+        {
+            var listStaffsinDb = _context.Users.Where(x => (x.GroupUserId == 2 || x.GroupUserId == 4)).ToList();
+
+            var listStaffs = _mapper.Map<IEnumerable<CustomerByProduct>>(listStaffsinDb);
+
+            foreach (var staff in listStaffs)
+            {
+                staff.TotalPrice = _context.Orders.Where(x => x.StaffId == staff.Id).Sum(p => p.TotalPrice);
+            }
+
+            return listStaffs;
         }
 
         public IEnumerable<ProductStatistical> ProductNotTaken()
