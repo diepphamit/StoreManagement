@@ -5,6 +5,7 @@
       <!-- <option *ngFor="let item of itemsProduct | async" value={{item.id}}>{{item.name}}</option> -->
       <option value="1">Thống kê nhân viên</option>
       <option value="2">Thống kê khách hàng</option>
+      <option value="3">Thống kê sản phẩm bán ra</option>
     </select>
   </div>
 </div>
@@ -65,4 +66,5 @@
 
 <app-statistical-customer *ngIf="flag == 2"></app-statistical-customer>
 <app-statistical-staff *ngIf="flag == 1"></app-statistical-staff>
+<app-statistical-product *ngIf="flag == 3"></app-statistical-product>
 

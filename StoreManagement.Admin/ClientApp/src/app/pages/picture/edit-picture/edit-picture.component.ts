@@ -8,6 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PictureService } from 'src/app/services/picture.service';
 import { ProductService } from 'src/app/services/product.sevice';
 import { map } from 'rxjs/operators';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-edit-picture',
@@ -26,7 +27,8 @@ export class EditPictureComponent implements OnInit {
     private route: ActivatedRoute,
     private productService: ProductService,
     private pictureService: PictureService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {
     this.editPictureForm = this.fb.group({
       productId: ['', Validators.required],
@@ -35,6 +37,10 @@ export class EditPictureComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authService.getRoles().filter(x => x.includes('UPDATE_PICTURE')).length === 0) {
+      this.router.navigate(['/pictures']);
+    }
+
     this.getAllProducts();
 
     this.route.params.subscribe(params => {

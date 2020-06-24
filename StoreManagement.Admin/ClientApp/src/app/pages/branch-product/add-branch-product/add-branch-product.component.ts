@@ -10,6 +10,7 @@ import { tap, map } from 'rxjs/operators';
 import { BranchProductForAdd } from 'src/app/models/branch-product/branch-productForAdd.model';
 import { BranchService } from 'src/app/services/branch.service';
 import { BranchProductService } from 'src/app/services/branch-product.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-add-branch-product',
@@ -30,7 +31,8 @@ export class AddBranchProductComponent implements OnInit {
     private productService: ProductService,
     private branchService: BranchService,
     private branchProductService: BranchProductService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {
     this.addBranchProductForm = this.fb.group({
       brachId: ['', [ValidationService.requireValue, ValidationService.numberValidator]],
@@ -40,6 +42,9 @@ export class AddBranchProductComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authService.getRoles().filter(x => x.includes('CREATE_BRANCH')).length === 0) {
+      this.router.navigate(['/branchproducts']);
+    }
     this.page = 1;
     this.pageSize = 1000;
     this.getAllBranches(this.page);

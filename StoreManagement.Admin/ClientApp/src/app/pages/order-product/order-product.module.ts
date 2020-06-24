@@ -10,6 +10,7 @@ import { OrderProductComponent } from './order-product.component';
 import { AddOrderProductComponent } from './add-order-product/add-order-product.component';
 import { EditOrderProductComponent } from './edit-order-product/edit-order-product.component';
 import { OrderDetailComponent } from './order-detail/order-detail.component';
+import { InvoiceComponent } from './invoice/invoice.component';
 
 @NgModule({
     imports: [
@@ -26,7 +27,8 @@ import { OrderDetailComponent } from './order-detail/order-detail.component';
         OrderProductComponent,
         AddOrderProductComponent,
         EditOrderProductComponent,
-        OrderDetailComponent
+        OrderDetailComponent,
+        InvoiceComponent
     ]
 })
 export class OrderProductModule { }

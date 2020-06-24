@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { tap, map, debounceTime } from 'rxjs/operators';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { AuthService } from 'src/app/services/auth.service';
+import { CURRENT_USER } from 'src/app/constants/db-keys';
 
 @Component({
   selector: 'app-product',
@@ -23,18 +25,25 @@ export class ProductComponent implements OnInit {
   pageSize: number;
   total: number;
 
+  permissons: string[];
+  canDelete = false;
+  canUpdate = false;
+  canCreate = false;
+
   constructor(
     public productService: ProductService,
     private router: Router,
     private modalService: BsModalService,
     private toastr: ToastrService,
-    private loadingBar: LoadingBarService
+    private loadingBar: LoadingBarService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
     this.keyword = '';
     this.page = 1;
     this.pageSize = 10;
+    this.loadPermisson();
     this.getAllProducts(this.page);
   }
 
@@ -108,6 +117,22 @@ export class ProductComponent implements OnInit {
             }),
             map(response => response.items)
         );
-}
+  }
+
+  loadPermisson() {
+    this.permissons = this.authService.getRoles().filter(x => x.includes('PRODUCT'));
+
+    if (this.permissons.filter(x => x.includes('DELETE')).length === 0) {
+      this.canDelete = true;
+    }
+
+    if (this.permissons.filter(x => x.includes('UPDATE')).length === 0) {
+      this.canUpdate = true;
+    }
+
+    if (this.permissons.filter(x => x.includes('CREATE')).length === 0) {
+      this.canCreate = true;
+    }
+  }
 
 }

@@ -68,7 +68,7 @@ namespace StoreManagement.API.Controllers
                 Ok(_mapper.Map<BranchProductUI>(branchProduct));
         }
 
-        [PermissionFilter(Permissions = "CREATE_BRANCH")]
+        [PermissionFilter(Permissions = PermissionConstant.CREATE_BRANCH)]
         [HttpPost]
         public async Task<IActionResult> CreateBranchProduct([FromBody]BranchProductUI branchProductAdd)
         {
@@ -85,7 +85,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
-        [PermissionFilter(Permissions = "UPDATE_BRANCH")]
+        [PermissionFilter(Permissions = PermissionConstant.UPDATE_BRANCH)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBranchProduct(int id, [FromBody]BranchProductUI branchProductUpdate)
         {
@@ -103,7 +103,7 @@ namespace StoreManagement.API.Controllers
 
         }
 
-        [PermissionFilter(Permissions = "DELETE_BRANCH")]
+        [PermissionFilter(Permissions = PermissionConstant.DELETE_BRANCH)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBranchProduct(int id)
         {

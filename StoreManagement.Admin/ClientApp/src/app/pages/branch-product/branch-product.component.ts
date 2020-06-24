@@ -11,6 +11,7 @@ import { BranchProductService } from 'src/app/services/branch-product.service';
 import { BranchService } from 'src/app/services/branch.service';
 import { ProductService } from 'src/app/services/product.sevice';
 import { async } from '@angular/core/testing';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
@@ -30,6 +31,10 @@ export class BranchProductComponent implements OnInit {
   itemsProduct: Observable<any[]>;
   itemsBranch: Observable<any[]>;
   item: Array<object[]>;
+  permissons: string[];
+  canDelete = false;
+  canUpdate = false;
+  canCreate = false;
 
   constructor(
     public productService: ProductService,
@@ -38,13 +43,15 @@ export class BranchProductComponent implements OnInit {
     private modalService: BsModalService,
     private toastr: ToastrService,
     private loadingBar: LoadingBarService,
-    private branchProductService: BranchProductService
+    private branchProductService: BranchProductService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
     this.keyword = '';
     this.page = 1;
     this.pageSize = 10;
+    this.loadPermisson();
     this.getAllBranches();
     this.getBranches();
   }
@@ -63,9 +70,8 @@ export class BranchProductComponent implements OnInit {
   }
 
 
-  getAllBranchProducts(id: any, page: number) {
+  getAllBranchProducts(page: number) {
     this.loadingBar.start();
-    this.brachId = id;
     this.itemsAsync = this.branchProductService.getAllBranchProducts(this.brachId, this.keyword, page, this.pageSize)
       .pipe(
         tap(response => {
@@ -111,7 +117,7 @@ export class BranchProductComponent implements OnInit {
     if (this.branchProduct) {
       this.branchProductService.deleteBranchProduct(this.branchProduct.id)
         .subscribe(
-          () =>  {
+          () => {
             this.getAllProductByBranchId(this.brachId, this.page);
             this.toastr.success(`Xóa sản phẩm thành công`);
           },
@@ -130,7 +136,7 @@ export class BranchProductComponent implements OnInit {
   }
 
   search() {
-    this.getAllBranchProducts(this.itemsBranch, this.page);
+    this.getAllBranchProducts(this.page);
   }
 
   // refresh() {
@@ -153,8 +159,24 @@ export class BranchProductComponent implements OnInit {
   }
 
   filterProducts(id: any) {
-      this.brachId = id;
-      this.getAllProductByBranchId(id, this.page);
+    this.brachId = id;
+    this.getAllProductByBranchId(id, this.page);
+  }
+
+  loadPermisson() {
+    this.permissons = this.authService.getRoles().filter(x => x.includes('BRANCH'));
+
+    if (this.permissons.filter(x => x.includes('DELETE')).length === 0) {
+      this.canDelete = true;
+    }
+
+    if (this.permissons.filter(x => x.includes('UPDATE')).length === 0) {
+      this.canUpdate = true;
+    }
+
+    if (this.permissons.filter(x => x.includes('CREATE')).length === 0) {
+      this.canCreate = true;
+    }
   }
 
 }

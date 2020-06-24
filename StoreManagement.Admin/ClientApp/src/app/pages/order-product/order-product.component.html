@@ -45,9 +45,13 @@
               <td>{{ item.totalPrice }}</td>
               <td>{{ item.orderDate | date }}</td>
               <td>{{ item.code }}</td>
-              <td style=" text-align: center;"><button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;"
+              <td *ngIf="item.status" style=" text-align: center;"><button [disabled]="!isAdmin" class="btn btn-sm btn-success" style="margin-right: 10px; margin-bottom: 5px;"
                 (click)="updateStatus(item.id, item.status)">
-                {{item.status ? 'Đã duyệt' : 'Chưa duyệt'}}
+                Đã duyệt
+              </button></td>
+              <td *ngIf="!item.status" style=" text-align: center;"><button  class="btn btn-sm btn-danger" style="margin-right: 10px; margin-bottom: 5px;"
+                (click)="updateStatus(item.id, item.status)">
+                Chưa duyệt
               </button></td>
               <td style=" text-align: center;">
                 <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;"

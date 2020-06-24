@@ -5,6 +5,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ExportService } from 'src/app/services/export.service';
 import { tap, map, debounceTime } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-statistical-customer',
@@ -22,10 +23,15 @@ export class StatisticalCustomerComponent implements OnInit {
     public statisticalService: StatisticalService,
     private loadingBar: LoadingBarService,
     private exportService: ExportService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
+    if (this.authService.getRoles().filter(x => x.includes('READ_STATISTICAL')).length === 0) {
+      this.router.navigate(['/home']);
+    }
+
     this.keyword = '';
     this.page = 1;
     this.pageSize = 10;
@@ -69,9 +75,4 @@ export class StatisticalCustomerComponent implements OnInit {
   export() {
     this.itemsAsync.subscribe(data => this.exportService.exportExcel(data, 'customers'));
   }
-
-  selectStatistical(value: any) {
-    this.router.navigate(['/statistical/' + value]);
-  }
-
 }

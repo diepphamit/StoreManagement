@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net.NetworkInformation;
 using StoreManagement.BusinessLogic.Core;
 using Microsoft.AspNetCore.Authorization;
+using StoreManagement.API.Helpers;
 
 namespace StoreManagement.API.Controllers
 {
@@ -66,6 +67,7 @@ namespace StoreManagement.API.Controllers
             return Ok(_mapper.Map<SupplierUI>(supplier));
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.CREATE_SUPPLIER)]
         [HttpPost]
         public async Task<IActionResult> CreateSupplier([FromBody]SupplierUI supplierui)
         {
@@ -75,7 +77,8 @@ namespace StoreManagement.API.Controllers
             if (result) return Ok();
             return BadRequest();
         }
-        
+
+        [PermissionFilter(Permissions = PermissionConstant.UPDATE_SUPPLIER)]
         [HttpPut("{id}")]
         public async Task<IActionResult> EditSupplier(int id, [FromBody]SupplierUI supplierUI)
         {
@@ -86,6 +89,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.DELETE_SUPPLIER)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSupplier(int id)
         {

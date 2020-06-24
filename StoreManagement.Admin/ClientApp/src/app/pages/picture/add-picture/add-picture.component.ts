@@ -11,6 +11,8 @@ import { ProductService } from 'src/app/services/product.sevice';
 import { tap, map } from 'rxjs/operators';
 import { NgxFileDropEntry, FileSystemDirectoryEntry, FileSystemFileEntry } from 'ngx-file-drop';
 import { PictureToUpload } from 'src/app/models/pictures/pictureToUpload.model';
+import { AuthService } from 'src/app/services/auth.service';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 @Component({
   selector: 'app-add-picture',
@@ -31,7 +33,9 @@ export class AddPictureComponent implements OnInit {
     private router: Router,
     private pictureService: PictureService,
     private productService: ProductService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService,
+    private loadingBar: LoadingBarService
   ) {
     this.addPictureForm = this.fb.group({
       // imageUrl: ['', Validators.required],
@@ -40,6 +44,10 @@ export class AddPictureComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authService.getRoles().filter(x => x.includes('CREATE_PICTURE')).length === 0) {
+      this.router.navigate(['/pictures']);
+    }
+
     this.getAllProducts();
   }
 
@@ -50,6 +58,7 @@ export class AddPictureComponent implements OnInit {
   }
 
   addPicture() {
+    this.loadingBar.start();
     this.picture = Object.assign({}, this.addPictureForm.value);
     this.picture.productId = Number(this.picture.productId);
     this.upload.productId = this.picture.productId;
@@ -61,7 +70,7 @@ export class AddPictureComponent implements OnInit {
         });
       },
       (error: HttpErrorResponse) => {
-        console.log(error);
+        this.loadingBar.stop();
         this.toastr.error('Tạo hình ảnh không thành công!');
       }
     );

@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ValidationService } from 'src/app/services/validation.service';
 import { BranchForAdd } from 'src/app/models/branch/branchForAdd.model';
 import { BranchService } from 'src/app/services/branch.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-add-branch',
@@ -19,7 +20,8 @@ export class AddBranchComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private branchService: BranchService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {
     this.addBranchForm = this.fb.group({
       description: ['', ValidationService.requireValue],
@@ -29,6 +31,9 @@ export class AddBranchComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authService.getRoles().filter(x => x.includes('CREATE_BRANCH')).length === 0) {
+      this.router.navigate(['/branchs']);
+    }
   }
 
   addBranch() {

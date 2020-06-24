@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Math.EC.Rfc7748;
+using StoreManagement.API.Helpers;
 using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Product;
 using StoreManagement.BusinessLogic.Interfaces;
@@ -138,6 +139,7 @@ namespace StoreManagement.API.Controllers
 
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.CREATE_PRODUCT)]
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromBody]ProductForCreate productCreate)
         {
@@ -153,6 +155,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.DELETE_PRODUCT)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
@@ -163,6 +166,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.UPDATE_PRODUCT)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody]ProductForReturn product)
         {

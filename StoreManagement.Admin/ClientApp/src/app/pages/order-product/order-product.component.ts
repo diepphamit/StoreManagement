@@ -119,6 +119,7 @@ export class OrderProductComponent implements OnInit {
   }
 
   updateStatus(id: any, status: boolean) {
+    this.loadingBar.start();
     this.orderService.getOrderById(id).subscribe(data => {
       data.status = !status;
       this.orderService.editOrder(id, data).subscribe(
@@ -127,6 +128,7 @@ export class OrderProductComponent implements OnInit {
           this.toastr.success('Cập nhật trạng thái thành công');
         },
         (error: HttpErrorResponse) => {
+          this.loadingBar.stop();
           this.toastr.error('Cập nhật trạng thái không thành công!');
         }
       );
@@ -135,5 +137,14 @@ export class OrderProductComponent implements OnInit {
 
   showDetail(id: any) {
     this.router.navigate(['/orderproducts/' + id]);
+  }
+
+  get isAdmin() {
+    const user = JSON.parse(localStorage.getItem(CURRENT_USER));
+    if (user != null) {
+      return user.groupRole === 'Admin';
+    }
+
+    return false;
   }
 }

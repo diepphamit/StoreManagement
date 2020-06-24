@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ValidationService } from 'src/app/services/validation.service';
 import { BranchForEdit } from 'src/app/models/branch/branchForEdit.model';
 import { BranchService } from 'src/app/services/branch.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-edit-branch',
@@ -23,7 +24,8 @@ export class EditBranchComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private branchService: BranchService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {
     this.editBranchForm = this.fb.group({
       description: ['', ValidationService.requireValue],
@@ -33,6 +35,10 @@ export class EditBranchComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authService.getRoles().filter(x => x.includes('UPDATE_BRANCH')).length === 0) {
+      this.router.navigate(['/branchs']);
+    }
+
     this.route.params.subscribe(params => {
       this.id = params.id;
       if (this.id) {

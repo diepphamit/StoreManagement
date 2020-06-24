@@ -4,6 +4,8 @@ import { BsDatepickerConfig, BsDatepickerViewMode } from 'ngx-bootstrap/datepick
 import { OrderService } from 'src/app/services/order.service';
 import { formatDate } from '@angular/common';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-chartdemo',
@@ -30,7 +32,12 @@ export class ChartdemoComponent implements OnInit {
   datePre: Date;
   dateAfter: Date;
 
-  constructor(private fb: FormBuilder, private orderService: OrderService, private loadingBar: LoadingBarService) {
+  constructor(
+    private fb: FormBuilder,
+    private orderService: OrderService,
+    private loadingBar: LoadingBarService,
+    private authService: AuthService,
+    private router: Router) {
     this.maxDate = new Date();
     this.dateForm = this.fb.group({
       datePre: ['', Validators.required],
@@ -44,6 +51,10 @@ export class ChartdemoComponent implements OnInit {
   bsConfig: Partial<BsDatepickerConfig>;
 
   ngOnInit() {
+    if (this.authService.getRoles().filter(x => x.includes('READ_STATISTICAL')).length === 0) {
+      this.router.navigate(['/home']);
+    }
+
     this.bsConfig = Object.assign({}, {
       minMode: this.minMode,
       dateInputFormat: 'MM/YYYY'

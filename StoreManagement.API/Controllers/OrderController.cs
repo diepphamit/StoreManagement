@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using StoreManagement.API.Helpers;
 using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.OrderDetails;
 using StoreManagement.BusinessLogic.Dtos.Orders;
@@ -109,7 +110,7 @@ namespace StoreManagement.API.Controllers
             return Ok(totalRevenueMonth);
         }
 
-
+        [PermissionFilter(Permissions = PermissionConstant.CREATE_ORDER)]
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody]OrderAdd orderAdd)
         {
@@ -127,11 +128,12 @@ namespace StoreManagement.API.Controllers
 
             var result = await _orderRepository.CreateOrderAsync(order, orderDetail);
             if (result)
-                return Ok();
+                return Ok(new { message= result});
 
             return BadRequest();
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderById(int id)
         {
@@ -141,6 +143,7 @@ namespace StoreManagement.API.Controllers
             return Ok(_mapper.Map<OrderUI>(order));
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.DELETE_ORDER)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
         {
@@ -151,6 +154,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.UPDATE_ORDER)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateOrder(int id, [FromBody]OrderUI orderUI)
         {

@@ -7,6 +7,7 @@ import { SupplierService } from 'src/app/services/supplier.service';
 import { Supplier } from 'src/app/models/supplier/supplier.model';
 import { SupplierForAdd } from 'src/app/models/supplier/supplierForAdd.model';
 import { ValidationService } from 'src/app/services/validation.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-add-su',
@@ -20,7 +21,8 @@ export class AddSupplierComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private supplierService: SupplierService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {
     this.addSupplierForm = this.fb.group({
       name: ['', Validators.required],
@@ -31,6 +33,9 @@ export class AddSupplierComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authService.getRoles().filter(x => x.includes('CREATE_SUPPLIER')).length === 0) {
+      this.router.navigate(['/suppliers']);
+    }
   }
 
   addSupplier() {

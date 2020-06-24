@@ -10,6 +10,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Supplier } from 'src/app/models/supplier/supplier.model';
 import { SupplierService } from 'src/app/services/supplier.service';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-supplier',
@@ -23,19 +24,25 @@ export class SupplierComponent implements OnInit {
   page: number;
   pageSize: number;
   total: number;
+  permissons: string[];
+  canDelete = false;
+  canUpdate = false;
+  canCreate = false;
 
   constructor(
     public supplierService: SupplierService,
     private router: Router,
     private modalService: BsModalService,
     private toastr: ToastrService,
-    private loadingBar: LoadingBarService
+    private loadingBar: LoadingBarService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
     this.keyword = '';
     this.page = 1;
     this.pageSize = 10;
+    this.loadPermisson();
     this.getAllSuppliers(this.page);
   }
 
@@ -109,5 +116,22 @@ export class SupplierComponent implements OnInit {
             }),
             map(response => response.items)
         );
- }
+  }
+
+  loadPermisson() {
+    this.permissons = this.authService.getRoles().filter(x => x.includes('SUPPLIER'));
+
+    if (this.permissons.filter(x => x.includes('DELETE')).length === 0) {
+      this.canDelete = true;
+    }
+
+    if (this.permissons.filter(x => x.includes('UPDATE')).length === 0) {
+      this.canUpdate = true;
+    }
+
+    if (this.permissons.filter(x => x.includes('CREATE')).length === 0) {
+      this.canCreate = true;
+    }
+  }
+
 }
