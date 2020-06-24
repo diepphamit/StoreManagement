@@ -10,6 +10,7 @@ namespace StoreManagement.BusinessLogic.Interfaces
     {
         IEnumerable<Product> GetAllProducts(string keyword);
         IEnumerable<BranchProduct> GetAllProductsInBranch(int BranchId);
+        IEnumerable<Product> GetAllProductNotInBranch(int branchId);
         Task<Product> GetProductByIdAsync(int id);
         Task<bool> CreateProductAsync(Product product);
         Task<bool> EditProductAsync(int id, Product product);

@@ -11,6 +11,7 @@ namespace StoreManagement.BusinessLogic.Dtos.Orders
         public int CustomerId { get; set; }
         public bool Status { get; set; }
         public int Code { get; set; }
+        public int BranchId { get; set; }
         public IEnumerable<OrderDetailAdd> orderDetail { get; set; }
     }
 }

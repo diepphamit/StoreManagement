@@ -15,6 +15,7 @@ using StoreManagement.DataAccess.Entites;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Twilio.TwiML.Voice;
 
 namespace StoreManagement.BusinessLogic.AutoMapper
 {
@@ -72,18 +73,17 @@ namespace StoreManagement.BusinessLogic.AutoMapper
                                                    .ForMember(x => x.Description, y => y.MapFrom(z => z.product.Description))
                                                    .ForMember(x => x.Price, y => y.MapFrom(z => z.product.Price))
                                                    .ForMember(x => x.Discount, y => y.MapFrom(z => z.product.Discount))
-                                                   .ForMember(x => x.Barcode, y => y.MapFrom(z => z.product.Barcode))
-                                                   .ForMember(x => x.ProductQuantity, y => y.MapFrom(z => z.QuantityStatistical));
+                                                   .ForMember(x => x.Barcode, y => y.MapFrom(z => z.product.Barcode));
             CreateMap<ProductStatistical, ProductNotTakenUI>().ForMember(x => x.Name, y => y.MapFrom(z => z.product.Name))
                                                    .ForMember(x => x.Description, y => y.MapFrom(z => z.product.Description))
                                                    .ForMember(x => x.Price, y => y.MapFrom(z => z.product.Price))
                                                    .ForMember(x => x.Discount, y => y.MapFrom(z => z.product.Discount))
-                                                   .ForMember(x => x.Barcode, y => y.MapFrom(z => z.product.Barcode))
-                                                   .ForMember(x => x.ProductQuantity, y => y.MapFrom(z => z.QuantityStatistical));
+                                                   .ForMember(x => x.Barcode, y => y.MapFrom(z => z.product.Barcode));
             CreateMap<User, CustomerByProduct>();
 
             CreateMap<BranchProduct, ProductReturn>()
                 .ForMember(x => x.Id, y => { y.MapFrom(z => z.Product.Id); })
+                .ForMember(x => x.Name, y => { y.MapFrom(z => z.Product.Name); })
                 .ForMember(x => x.Description, y => { y.MapFrom(z => z.Product.Description); })
                 .ForMember(x => x.Price, y => { y.MapFrom(z => z.Product.Price); })
                 .ForMember(x => x.Discount, y => { y.MapFrom(z => z.Product.Discount); })
@@ -91,6 +91,23 @@ namespace StoreManagement.BusinessLogic.AutoMapper
                 .ForMember(x => x.Pictures, y => { y.MapFrom(z => z.Product.Pictures); })
                 .ForMember(x => x.SupplierName, y => { y.MapFrom(z => z.Product.Supplier.Name); })
                 .ForMember(x => x.CategoryName, y => { y.MapFrom(z => z.Product.Category.Name); });
+            CreateMap<OrderUpdate, Order>();
+            CreateMap<OrderDetailUpdate, OrderDetail>();
+
+            CreateMap<OrderAdd, Order>();
+            CreateMap<Product, NumberProduct>().ForMember(x => x.SupplierName, y => y.MapFrom(z => z.Supplier.Name))
+                                               .ForMember(x => x.CategoryName, y => y.MapFrom(z => z.Category.Name));
+
+            CreateMap<BranchProduct, NumberProduct>()
+                .ForMember(x => x.Id, y => { y.MapFrom(z => z.Product.Id); })
+                .ForMember(x => x.Name, y => { y.MapFrom(z => z.Product.Name); })
+                .ForMember(x => x.Price, y => { y.MapFrom(z => z.Product.Price); })
+                .ForMember(x => x.Discount, y => { y.MapFrom(z => z.Product.Discount); })
+                .ForMember(x => x.Barcode, y => { y.MapFrom(z => z.Product.Barcode); })
+                .ForMember(x => x.SupplierName, y => { y.MapFrom(z => z.Product.Supplier.Name); })
+                .ForMember(x => x.CategoryName, y => { y.MapFrom(z => z.Product.Category.Name); });
+
+            CreateMap<Product, ProductNotInBranch>();
         }
 
     }

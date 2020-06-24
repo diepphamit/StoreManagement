@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Math.EC.Rfc7748;
 using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Statistical;
 using StoreManagement.BusinessLogic.Helper;
@@ -26,9 +27,9 @@ namespace StoreManagement.API.Controllers
         }
         [Route("ProductSole")]
         [HttpGet]
-        public ActionResult GetProductSole(int page = 1, int pagesize = 10)
+        public ActionResult GetProductSole(string keyword, int page = 1, int pagesize = 10)
         {
-            var productSoles = _statistical.ProductSoles();
+            var productSoles = _statistical.ProductSoles(keyword).Where(x => x.QuantityStatistical > 0);
 
             int totalCount = productSoles.Count();
             try
@@ -52,9 +53,9 @@ namespace StoreManagement.API.Controllers
 
         [Route("ProductNotTaken")]
         [HttpGet]
-        public ActionResult ProductNotTaken(int page = 1, int pagesize = 10)
+        public ActionResult ProductNotTaken(int branchId, string keyword, int page = 1, int pagesize = 10)
         {
-            var ProductNotTakens = _statistical.ProductNotTaken();
+            var ProductNotTakens = _statistical.ProductNotTaken(branchId, keyword).Where(x => x.QuantityStatistical> 0);
 
             int totalCount = ProductNotTakens.Count();
 
@@ -122,6 +123,33 @@ namespace StoreManagement.API.Controllers
                 {
                     Total = totalCount,
                     Items = query
+                };
+
+                return Ok(paginationset);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
+        }
+
+        [Route("ProductSapHet")]
+        [HttpGet]
+        public IActionResult ProductSapHet(int branchId, int page = 1, int pagesize = 10)
+        {
+            var product = _statistical.ProductSapHet(branchId).Where(x => x.Quantity < 50);
+
+            int totalCount = product.Count();
+
+            try
+            {
+                var query = product.OrderBy(x => x.Quantity).Skip((page - 1) * pagesize).Take(pagesize);
+
+                var paginationset = new PaginationSet<NumberProduct>
+                {
+                    Items = query,
+                    Total = totalCount
                 };
 
                 return Ok(paginationset);
