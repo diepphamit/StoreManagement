@@ -52,18 +52,48 @@ namespace StoreManagement.BusinessLogic.Implementaions
             }
         }
 
-        public async Task<bool> EditOrderDetail(int id, OrderDetail orderDetailUpdate)
+        public async Task<bool> EditOrderDetail(int orderId, IEnumerable<OrderDetail> orderDetailUpdate, IEnumerable<OrderDetail> orderDetailDeletes)
         {
-            var orderDetail = await _context.OrderDetails.FirstOrDefaultAsync(x => x.Id == id);
-            if (orderDetail == null)
-                return false;
 
             try
             {
-                orderDetail.DisCount = orderDetailUpdate.DisCount;
-                orderDetail.OrderId = orderDetailUpdate.OrderId;
-                orderDetail.ProductId = orderDetailUpdate.OrderId;
-                orderDetail.Quantity = orderDetailUpdate.Quantity;
+                int branchId = _context.Orders.FirstOrDefault(x => x.Id == orderId).BranchId;
+                if (branchId == null)
+                    return false;
+                foreach (var item in orderDetailUpdate)
+                {
+                    var orderDetail = await _context.OrderDetails.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.OrderId == orderId);
+                    var updateQuantity = await _context.BranchProducts.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.BrachId == branchId);
+                    if (updateQuantity == null)
+                        return false;
+                    if (orderDetail == null)
+                    {
+                        item.OrderId = orderId;
+                        _context.OrderDetails.Add(item);
+                        updateQuantity.Quantity -= item.Quantity;
+                    }
+
+                    else
+                    {
+                        updateQuantity.Quantity -= (item.Quantity - orderDetail.Quantity) ;
+                        orderDetail.Quantity = item.Quantity;
+                        orderDetail.DisCount = item.DisCount;
+                    }
+                    await _context.SaveChangesAsync();
+                }
+
+                foreach (var item in orderDetailDeletes)
+                {
+                    var orderDetail = await _context.OrderDetails.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.OrderId == orderId);
+                    if (orderDetail != null)
+                    {
+                        var updateQuantity = await _context.BranchProducts.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.BrachId == branchId);
+                        updateQuantity.Quantity += orderDetail.Quantity;
+                        _context.OrderDetails.Remove(orderDetail);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                UpdateTotalPrice(orderId);
                 await _context.SaveChangesAsync();
 
                 return true;
@@ -85,6 +115,22 @@ namespace StoreManagement.BusinessLogic.Implementaions
         public async Task<OrderDetail> GetOrderDetailById(int id)
         {
             return await _context.OrderDetails.Include(x => x.Product).ThenInclude(z => z.Pictures).Include(p => p.Order).ThenInclude(y => y.Customer).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        private void UpdateTotalPrice(int orderId)
+        {
+
+            int totalPrice = 0;
+            var listorderDetail = _context.OrderDetails.Where(x => x.OrderId == orderId).AsEnumerable();
+            foreach (var item in listorderDetail)
+            {
+                var product = _context.Products.FirstOrDefault(p => p.Id == item.ProductId);
+                totalPrice += product.Price * item.Quantity;
+            }
+            var order = _context.Orders.FirstOrDefault(x => x.Id == orderId);
+            order.TotalPrice = totalPrice;
+            _context.SaveChanges();
+
         }
     }
 }

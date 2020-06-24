@@ -82,8 +82,8 @@ namespace StoreManagement.BusinessLogic.Implementaions
         {
             if (string.IsNullOrEmpty(keyword)) keyword = "";
 
-            return _context.Products.
-                Include(x => x.Pictures).Include(y => y.Category).Include(z => z.Supplier)
+            return _context.Products
+                .Include(x => x.Pictures).Include(y => y.Category).Include(z => z.Supplier)
                 .Where(x => x.Name.ToLower().Contains(keyword.ToLower())).AsEnumerable();
         }
 
@@ -91,14 +91,22 @@ namespace StoreManagement.BusinessLogic.Implementaions
         public IEnumerable<BranchProduct> GetAllProductsInBranch(int branchId)
         {
             if(branchId == 0)
-                return _context.BranchProducts.Include(x => x.Product).ThenInclude(x => x.Category)
+                return _context.BranchProducts
+                                   .Include(x => x.Product).ThenInclude(x => x.Category)
                                    .Include(x => x.Product).ThenInclude(x => x.Supplier)
                                    .Include(x => x.Product).ThenInclude(x => x.Pictures).AsEnumerable();
             return _context.BranchProducts.Include(x => x.Product).ThenInclude(x => x.Category)
                                    .Include(x => x.Product).ThenInclude(x => x.Supplier)
-                                   .Include(x => x.Product).ThenInclude(x => x.Pictures).Where(y => y.BrachId == branchId).AsEnumerable();
+                                   .Include(x => x.Product).Where(y => y.BrachId == branchId)
+                                   .Include(x => x.Product).ThenInclude(y => y.Pictures).AsEnumerable();
         }
 
+        public IEnumerable<Product> GetAllProductNotInBranch(int branchId)
+        {
+            var productInBranch = _context.BranchProducts.Where(x => x.BrachId == branchId).Select(x => x.ProductId).ToList();
+            var productNotInBranch = _context.Products.Where(x => !productInBranch.Contains(x.Id));
+            return productNotInBranch.AsEnumerable();
+        }
         public async Task<Product> GetProductByIdAsync(int id)
         {
             return await _context.Products.Include(x => x.Pictures).Include(y => y.Supplier).Include(z => z.Category).FirstOrDefaultAsync(x => x.Id == id);

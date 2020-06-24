@@ -38,7 +38,7 @@ namespace StoreManagement.BusinessLogic.Implementaions
                 {
                     item.Order = order;
                     _context.OrderDetails.Add(item);
-                    var branchProduct = await _context.BranchProducts.FirstOrDefaultAsync(x => x.ProductId == item.ProductId);
+                    var branchProduct = await _context.BranchProducts.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.BrachId == order.BranchId);
                     branchProduct.Quantity -= item.Quantity;
                 }
 
@@ -86,12 +86,10 @@ namespace StoreManagement.BusinessLogic.Implementaions
 
             try
             {
-                order.Code = orderupdate.Code;
-                order.CustomerId = orderupdate.CustomerId;
-                order.OrderDate = orderupdate.OrderDate;
+                if (order.Status == true)
+                    return false;
                 order.StaffId = orderupdate.StaffId;
                 order.Status = orderupdate.Status;
-                //order.TotalPrice = TotalPrice(order.OrderDetails);
                 await _context.SaveChangesAsync();
 
                 return true;
@@ -135,14 +133,17 @@ namespace StoreManagement.BusinessLogic.Implementaions
             return await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public IEnumerable<RevenueUI> GetRevenueMonth(DateTime date)
+        public IEnumerable<RevenueUI> GetRevenueMonth(int branchId, DateTime date)
         {
             List<RevenueUI> list = new List<RevenueUI>();
             int totalRevenue;
             RevenueUI RevenueUI;
-            var revenue = _context.Orders.Where(x => x.OrderDate.Year == date.Year && x.OrderDate.Month == date.Month && x.Status == true);
-           
-            for(int i =1; i <= DateTime.DaysInMonth(date.Year, date.Month); i++)
+            dynamic revenue;
+            if(branchId == 0)
+                revenue = _context.Orders.Where(x => x.OrderDate.Year == date.Year && x.OrderDate.Month == date.Month && x.Status == true).AsEnumerable();
+            else
+                revenue = _context.Orders.Where(x => x.OrderDate.Year == date.Year && x.OrderDate.Month == date.Month && x.Status == true && x.BranchId == branchId).AsEnumerable();
+            for (int i =1; i <= DateTime.DaysInMonth(date.Year, date.Month); i++)
             {
                 totalRevenue = 0;
                 RevenueUI = new RevenueUI();
@@ -156,8 +157,6 @@ namespace StoreManagement.BusinessLogic.Implementaions
                 }
                 RevenueUI.TotalRevenue = totalRevenue;
                 RevenueUI.datetime = new DateTime(date.Year, date.Month, i);
-                //RevenueUI.TotalRevenue = (int)_context.Orders.Where(x => x.OrderDate.Year == date.Year && x.OrderDate.Month == date.Month && x.OrderDate.Day == i).Sum(p => p.TotalPrice);
-                //RevenueUI.datetime = new DateTime(date.Year, date.Month, i);
 
                 list.Add(RevenueUI);
             }
@@ -167,12 +166,20 @@ namespace StoreManagement.BusinessLogic.Implementaions
         private int TotalPrice(IEnumerable<OrderDetail> orderDetails)
         {
             int totalPrice = 0;
-            foreach (var item in orderDetails)
+            try
             {
-                var product = _context.Products.Include(x => x.OrderDetails).FirstOrDefault(p => p.Id == item.ProductId);
-                totalPrice += product.Price * item.Quantity;
+                foreach (var item in orderDetails)
+                {
+                    var product = _context.Products.FirstOrDefault(p => p.Id == item.ProductId);
+                    totalPrice += product.Price * item.Quantity;
+                }
+                return totalPrice;
             }
-            return totalPrice;
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
 
