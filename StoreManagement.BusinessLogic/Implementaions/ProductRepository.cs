@@ -15,11 +15,13 @@ namespace StoreManagement.BusinessLogic.Implementaions
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly IUpdatTotalPriceRepository _updatTotalPriceRepository;
 
-        public ProductRepository(DataContext context, IMapper mapper)
+        public ProductRepository(DataContext context, IMapper mapper, IUpdatTotalPriceRepository updatTotalPriceRepository)
         {
             _context = context;
             _mapper = mapper;
+            _updatTotalPriceRepository = updatTotalPriceRepository;
         }
         public async Task<bool> CreateProductAsync(Product product)
         {
@@ -70,6 +72,12 @@ namespace StoreManagement.BusinessLogic.Implementaions
 
                 await _context.SaveChangesAsync();
 
+                var orderDetail = _context.OrderDetails.Include(x => x.Order).Where(x => x.ProductId == id && x.Order.Status == false).ToList();
+                foreach (var item in orderDetail)
+                {
+                    _updatTotalPriceRepository.UpdateTotalPrice(item.OrderId);
+                }
+
                 return true;
             }
             catch (Exception ex)
@@ -85,7 +93,7 @@ namespace StoreManagement.BusinessLogic.Implementaions
             return _context.Products
                 .Include(x => x.Pictures).Include(y => y.Category).Include(z => z.Supplier)
                 .Where(x => x.Name.ToLower().Contains(keyword.ToLower())).AsEnumerable();
-        }
+        }   
 
 
         public IEnumerable<BranchProduct> GetAllProductsInBranch(int branchId)

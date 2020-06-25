@@ -23,7 +23,12 @@ namespace StoreManagement.BusinessLogic.Implementaions
         {
             try
             {
-                _context.BranchProducts.Add(branchProduct);
+                var result = await _context.BranchProducts.FirstOrDefaultAsync(x => x.ProductId == branchProduct.ProductId && x.BrachId == branchProduct.BrachId);
+                if(result != null)
+                {
+                    result.Quantity += branchProduct.Quantity;
+                }
+                else _context.BranchProducts.Add(branchProduct);
                 await _context.SaveChangesAsync();
                 return true;
             }
