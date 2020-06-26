@@ -4,6 +4,7 @@ import { StatisticalComponent } from './statistical.component';
 import { StatisticalStaffComponent } from './statistical-staff/statistical-staff.component';
 import { StatisticalCustomerComponent } from './statistical-customer/statistical-customer.component';
 import { StatisticalProductComponent } from './statistical-product/statistical-product.component';
+import { RemainProductComponent } from './remain-product/remain-product.component';
 
 
 export const routes: Routes = [
@@ -18,6 +19,9 @@ export const routes: Routes = [
     },
     {
       path: 'productsoles', component: StatisticalProductComponent,
+    },
+    {
+      path: 'productremains', component: RemainProductComponent,
     }
 ];
 

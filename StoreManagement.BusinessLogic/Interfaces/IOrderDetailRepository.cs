@@ -11,7 +11,7 @@ namespace StoreManagement.BusinessLogic.Interfaces
         IEnumerable<OrderDetail> GetAllOrderDetail(int orderId);
         Task<OrderDetail> GetOrderDetailById(int id);
         Task<bool> createOrderDetail(OrderDetail orderDetailAdd);
-        Task<bool> EditOrderDetail(int id, OrderDetail orderDetailUpdate);
+        Task<bool> EditOrderDetail(int id, IEnumerable<OrderDetail> Update, IEnumerable<OrderDetail> Deletes);
         Task<bool> DeleteOrderDetail(int id);
     }
 }

@@ -21,4 +21,7 @@ export class StatisticalService {
   getAllProductSoles(keyword: string, page: number, pageSize: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/ProductSole?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
   }
+  getAllProductRemains(branchId: any, keyword: string, page: number, pageSize: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/ProductSapHet?branchId=${branchId}&keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
+  }
 }

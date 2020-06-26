@@ -10,7 +10,7 @@ import { map } from 'rxjs/operators';
   templateUrl: './invoice.component.html',
   styleUrls: ['./invoice.component.css']
 })
-export class InvoiceComponent implements  OnInit {
+export class InvoiceComponent implements OnInit {
 
   id: any;
   order: any;
@@ -20,18 +20,17 @@ export class InvoiceComponent implements  OnInit {
     private route: ActivatedRoute,
     private orderService: OrderService,
     private orderDetailService: OrderDetailService) { }
-    ngOnInit() {
+  ngOnInit() {
     //console.log( this.route.params._value.id);
     this.route.params.subscribe(params => {
       this.id = params.id;
       if (this.id) {
         this.itemsAsync = this.orderDetailService.getAllOrderDetails(this.id, '', 1, 1000)
-      .pipe(
-        map(response => response.items)
-      );
+          .pipe(
+            map(response => response.items)
+          );
         this.getOrderById(this.id);
         this.getOrderDetailByOrderId(this.id);
-        //setTimeout( () => console.log(this.items), 2000 );
         console.log(this.items);
       }
     });
@@ -44,9 +43,8 @@ export class InvoiceComponent implements  OnInit {
 
   getOrderDetailByOrderId(orderId: any) {
     this.orderDetailService.getAllOrderDetails(orderId, '', 1, 1000).subscribe(data => {
-      this.items = data;
-      console.log(this.id);
-      console.log(this.items);
+      this.items = data.items;
+      //console.log(this.totalPrice());
       //window.print();
     });
   }
@@ -54,6 +52,13 @@ export class InvoiceComponent implements  OnInit {
   print() {
     this.flag = true;
     window.print();
+  }
+
+  get totalPrice() {
+    if (this.items) {
+      return this.items['items'].reduce((acc, val) => acc += (val.price * val.quantity), 0);
+    }
+    return 0;
   }
 
 }

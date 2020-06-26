@@ -25,6 +25,7 @@ export class AddBranchProductComponent implements OnInit {
   total: number;
   branches: Observable<any[]>;
   products: Observable<any[]>;
+  branchId: any;
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -48,7 +49,7 @@ export class AddBranchProductComponent implements OnInit {
     this.page = 1;
     this.pageSize = 1000;
     this.getAllBranches(this.page);
-    this.getAllProducts(this.page);
+    this.getAllProducts(15);
   }
 
   getAllBranches(page: number) {
@@ -58,11 +59,8 @@ export class AddBranchProductComponent implements OnInit {
     );
   }
 
-  getAllProducts(page: number) {
-    this.products = this.productService.getAllProducts('', page, this.pageSize)
-    .pipe(
-      map(response => response.items)
-    );
+  getAllProducts(branchId: any) {
+    this.products = this.productService.GetAllProductNotInBranch(branchId);
   }
 
   addBranchProduct() {
@@ -82,6 +80,10 @@ export class AddBranchProductComponent implements OnInit {
         this.toastr.error('Tạo sản phẩm không thành công!');
       }
     );
+  }
+
+  filterProducts(id: any) {
+    this.getAllProducts(id);
   }
 
   get f() { return this.addBranchProductForm.controls; }

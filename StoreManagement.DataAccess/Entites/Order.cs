@@ -14,6 +14,7 @@ namespace StoreManagement.DataAccess.Entites
         public bool Status { get; set; }
         public int Code { get; set; }
         public int TotalPrice { get; set; }
+        public int BranchId { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

@@ -45,7 +45,7 @@ export class EditUserComponent implements OnInit {
       address: [''],
       phoneNumber: ['', ValidationService.phonenumberValidator],
       dateOfBirth: [''],
-      image: [''],
+      gender: [''],
       groupUserId: []
     });
   }
@@ -56,12 +56,13 @@ export class EditUserComponent implements OnInit {
       if (this.id) {
         this.userService.getUserById(this.id).subscribe(
           result => {
+            console.log(result);
             this.user = result;
             this.editUserForm.controls.email.setValue(result.email);
             this.editUserForm.controls.name.setValue(result.name);
             this.editUserForm.controls.address.setValue(result.address);
             this.editUserForm.controls.phoneNumber.setValue(result.phoneNumber);
-            this.editUserForm.controls.gender.setValue(result.gender);
+            this.editUserForm.controls.gender.setValue(Boolean(result.gender));
             this.editUserForm.controls.dateOfBirth.setValue(new Date(result.dateOfBirth));
             this.editUserForm.controls.groupUserId.setValue(this.getGroupUserIdByName(result.groupRole));
           },

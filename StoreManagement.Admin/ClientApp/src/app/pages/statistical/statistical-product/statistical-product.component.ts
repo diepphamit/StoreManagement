@@ -6,6 +6,7 @@ import { ExportService } from 'src/app/services/export.service';
 import { Router } from '@angular/router';
 import { tap, map, debounceTime } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
+import { BranchService } from 'src/app/services/branch.service';
 
 @Component({
   selector: 'app-statistical-product',
@@ -75,5 +76,6 @@ export class StatisticalProductComponent implements OnInit {
   export() {
     this.itemsAsync.subscribe(data => this.exportService.exportExcel(data, 'products'));
   }
+
 
 }

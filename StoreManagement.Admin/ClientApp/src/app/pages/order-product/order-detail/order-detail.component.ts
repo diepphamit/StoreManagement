@@ -52,7 +52,7 @@ export class OrderDetailComponent implements OnInit {
     this.page = 1;
     this.pageSize = 10;
     this.getAllOrderDetail(this.page);
-    this.getAllProducts(this.page);
+    //this.getAllProducts(this.page);
   }
 
   getAllOrderDetail(page: number) {
@@ -70,6 +70,9 @@ export class OrderDetailComponent implements OnInit {
         //     }),
         //     map(response => response.items)
         //   );
+        this.orderService.getOrderById(this.id).subscribe(data => {
+          this.getAllProducts(data.branchId, this.page);
+        });
         this.orderDetailService.getAllOrderDetails(this.id, '', page, this.pageSize).subscribe(data => this.itemsAsync = data.items);
       }
     });
@@ -95,8 +98,8 @@ export class OrderDetailComponent implements OnInit {
     });
   }
 
-  getAllProducts(page: number) {
-    this.itemsProduct = this.productService.getAllProducts('', page, this.pageSize)
+  getAllProducts(branchId: any, page: number) {
+    this.itemsProduct = this.productService.getAllProductsByBranchId(branchId, '', page, this.pageSize)
       .pipe(
         map(response => response.items)
       );
@@ -135,7 +138,23 @@ export class OrderDetailComponent implements OnInit {
       itemDeletes: this.itemDeletes
     };
 
-    console.log(order);
+    //console.log(order);
+    this.loadingBar.start();
+    this.orderDetailService.editOrderDetail(this.id, order).subscribe(
+      () => {
+        this.router.navigate(['/orderproducts']).then(() => {
+          this.toastr.success('Tạo đơn hàng thành công');
+        });
+      },
+      (error: HttpErrorResponse) => {
+        this.toastr.error('Tạo đơn hàng không thành công!');
+        this.loadingBar.stop();
+      }
+    );
   }
+
+  // getAllProducts(branchId: any) {
+  //   this.products = this.productService.GetAllProductNotInBranch(branchId);
+  // }
 
 }

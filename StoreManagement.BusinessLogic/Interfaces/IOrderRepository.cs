@@ -15,6 +15,6 @@ namespace StoreManagement.BusinessLogic.Interfaces
         Task<bool> CreateOrderAsync(Order order, IEnumerable<OrderDetail> orderDetail);
         Task<bool> EditOrderAsync(int id, Order orderupdate);
         Task<bool> DeleteOrderAsync(int id);
-        IEnumerable<RevenueUI> GetRevenueMonth(DateTime date);
+        IEnumerable<RevenueUI> GetRevenueMonth(int BranchId, DateTime date);
     }
 }

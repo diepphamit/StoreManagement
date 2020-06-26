@@ -10,10 +10,11 @@ namespace StoreManagement.BusinessLogic.Interfaces
 {
     public interface IStatisticalRepository
     {
-        IEnumerable<ProductStatistical> ProductSoles();
-        IEnumerable<ProductStatistical> ProductNotTaken();
+        IEnumerable<ProductStatistical> ProductSoles(string keyword);
+        IEnumerable<ProductStatistical> ProductNotTaken(int branchId, string keyword);
         IEnumerable<CustomerByProduct> GetAllCustomerByProduct();
         IEnumerable<CustomerByProduct> GetAllStaffByProduct();
+        IEnumerable<NumberProduct> ProductSapHet(int branchId);
 
     }
 }

@@ -14,6 +14,7 @@ namespace StoreManagement.BusinessLogic.Dtos.Orders
         public DateTime OrderDate { get; set; }
         public bool Status { get; set; }
         public int Code { get; set; }
+        public int BranchId { get; set; }
         public int TotalPrice { get; set; }
     }
 }

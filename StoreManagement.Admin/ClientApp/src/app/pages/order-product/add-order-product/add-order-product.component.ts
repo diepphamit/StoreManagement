@@ -30,6 +30,7 @@ export class AddOrderProductComponent implements OnInit {
   page: number;
   pageSize: number;
   total: number;
+  branchId = 20;
   status: any = [
     { value: true, name: 'Da duyet' },
     { value: false, name: 'Chua duyet' }
@@ -61,11 +62,11 @@ export class AddOrderProductComponent implements OnInit {
     this.pageSize = 1000;
     this.getAllUsers(this.page);
     this.getAllBranches(this.page);
-    this.getAllProducts(this.page);
+    this.getAllProducts(this.branchId, this.page);
   }
 
-  getAllProducts(page: number) {
-    this.itemsProduct = this.productService.getAllProducts('', page, 1000)
+  getAllProducts(branchId: any, page: number) {
+    this.itemsProduct = this.productService.getAllProductsByBranchId(branchId, '', page, 1000)
       .pipe(
         map(response => response.items)
       );
@@ -120,8 +121,6 @@ export class AddOrderProductComponent implements OnInit {
       }
     );
 
-    console.log(this.orderAdd);
-
   }
 
   get totalprice() {
@@ -159,6 +158,12 @@ export class AddOrderProductComponent implements OnInit {
 
   deleteProduct(id: number) {
     this.itemsAsync = this.itemsAsync.filter(item => item.productId !== id);
+  }
+
+  filterProducts(id: any) {
+    this.branchId = id;
+    console.log(this.branchId);
+    this.getAllProducts(this.branchId, this.page);
   }
 
 

@@ -97,10 +97,10 @@ namespace StoreManagement.API.Controllers
         [AllowAnonymous]
         [Route("Revenue")]
         [HttpGet]
-        public IActionResult GetRevenueMonth(DateTime date)
+        public IActionResult GetRevenueMonth(int branchId, DateTime date)
         {
 
-            var revenue = _orderRepository.GetRevenueMonth(date);
+            var revenue = _orderRepository.GetRevenueMonth(branchId, date);
            
             var totalRevenueMonth = new TotalRevenueMonth()
             {
@@ -115,14 +115,14 @@ namespace StoreManagement.API.Controllers
         public async Task<IActionResult> CreateOrder([FromBody]OrderAdd orderAdd)
         {
             //int staffId, int customerId, bool status, int code,[FromBody]IEnumerable<OrderDetailAdd> orderDetailAdd
-            var newOrderAdd = new OrderUI()
-            {
-                StaffId = orderAdd.StaffId,
-                CustomerId = orderAdd.CustomerId,
-                Status = orderAdd.Status,
-                Code = orderAdd.Code
-            };
-            var order = _mapper.Map<Order>(newOrderAdd);
+            //var newOrderAdd = new OrderUI()
+            //{
+            //    StaffId = orderAdd.StaffId,
+            //    CustomerId = orderAdd.CustomerId,
+            //    Status = orderAdd.Status,
+            //    Code = orderAdd.Code
+            //};
+            var order = _mapper.Map<Order>(orderAdd);
 
             var orderDetail = _mapper.Map<IEnumerable<OrderDetail>>(orderAdd.orderDetail);
 
@@ -156,12 +156,12 @@ namespace StoreManagement.API.Controllers
 
         [PermissionFilter(Permissions = PermissionConstant.UPDATE_ORDER)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateOrder(int id, [FromBody]OrderUI orderUI)
+        public async Task<IActionResult> UpdateOrder(int id, [FromBody]OrderUpdate orderUpdate)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var order = _mapper.Map<Order>(orderUI);
+            var order = _mapper.Map<Order>(orderUpdate);
 
             var result = await _orderRepository.EditOrderAsync(id, order);
             if (result)

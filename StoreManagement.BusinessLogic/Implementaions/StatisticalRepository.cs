@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Twilio.TwiML.Voice;
 
 namespace StoreManagement.BusinessLogic.Implementaions
 {
@@ -28,7 +29,7 @@ namespace StoreManagement.BusinessLogic.Implementaions
 
             var listCustomers = _mapper.Map<IEnumerable<CustomerByProduct>>(listCustomersinDb);
 
-            foreach(var customer in listCustomers)
+            foreach (var customer in listCustomers)
             {
                 customer.TotalPrice = _context.Orders.Where(x => x.CustomerId == customer.Id).Sum(p => p.TotalPrice);
             }
@@ -50,52 +51,97 @@ namespace StoreManagement.BusinessLogic.Implementaions
             return listStaffs;
         }
 
-        public IEnumerable<ProductStatistical> ProductNotTaken()
+        public IEnumerable<ProductStatistical> ProductNotTaken(int branchId, string keyword)
         {
+            if (string.IsNullOrEmpty(keyword))
+                keyword = "";
             List<ProductStatistical> productNotTakens = new List<ProductStatistical>();
             ProductStatistical productNotTaken;
-            var product = _context.Products.ToList();
-            foreach (var item in product)
+            if (branchId == 0)
             {
-                productNotTaken = new ProductStatistical();
-                productNotTaken.product = item;
+                var product = _context.Products.Where(x => x.Name.ToLower().Contains(keyword.ToLower())).ToList();
 
-                var quantity = _context.BranchProducts.FirstOrDefault(x => x.ProductId == item.Id);
-                if (quantity == null)
-                    productNotTaken.ProductQuantity = 0;
-                else
-                    productNotTaken.ProductQuantity = quantity.Quantity;
+                foreach (var item in product)
+                {
+                    productNotTaken = new ProductStatistical();
+                    productNotTaken.product = item;
 
-
-
-                productNotTaken.QuantityStatistical = _context.OrderDetails.Include(y => y.Order).Where(x => x.ProductId == item.Id && x.Order.Status == false).Sum(x => x.Quantity);
-                productNotTakens.Add(productNotTaken);
+                    var quantity = _context.BranchProducts.Where(x => x.ProductId == item.Id).Sum(x => x.Quantity);
+                    productNotTaken.ProductQuantity = quantity;
+                    productNotTaken.QuantityStatistical = _context.OrderDetails.Include(y => y.Order).Where(x => x.ProductId == item.Id && x.Order.Status == false).Sum(x => x.Quantity);
+                    productNotTakens.Add(productNotTaken);
+                }
             }
+            else
+            {
+                var product = _context.BranchProducts.Include(x => x.Product).Where(x => x.BrachId == branchId && x.Product.Name.ToLower().Contains(keyword.ToLower()));
+
+                foreach (var item in product)
+                {
+                    productNotTaken = new ProductStatistical();
+                    productNotTaken.product = item.Product;
+
+                    var quantity = _context.BranchProducts.FirstOrDefault(x => x.ProductId == item.ProductId && x.BrachId == branchId);
+                    productNotTaken.ProductQuantity = quantity.Quantity;
+                    productNotTaken.QuantityStatistical = _context.OrderDetails.Include(y => y.Order).Where(x => x.ProductId == item.ProductId && x.Order.Status == false && x.Order.BranchId == branchId).Sum(x => x.Quantity);
+                    productNotTakens.Add(productNotTaken);
+                }
+            }
+
+
             return productNotTakens.AsEnumerable();
         }
 
-        public IEnumerable<ProductStatistical> ProductSoles()
+        public IEnumerable<ProductStatistical> ProductSoles(string keyword)
         {
+            if (string.IsNullOrEmpty(keyword))
+                keyword = "";
+
             List<ProductStatistical> productSoles = new List<ProductStatistical>();
             ProductStatistical productSole;
-            var product = _context.Products.ToList();
+            var product = _context.Products.Where(x => x.Name.ToLower().Contains(keyword.ToLower())).ToList();
             foreach (var item in product)
             {
                 productSole = new ProductStatistical();
                 productSole.product = item;
-               
-                var quantity = _context.BranchProducts.FirstOrDefault(x => x.ProductId == item.Id);
-                if(quantity == null)
-                    productSole.ProductQuantity = 0;
-                else
-                    productSole.ProductQuantity = quantity.Quantity;
-                
-                
-                    
-                productSole.QuantityStatistical = _context.OrderDetails.Include(y => y.Order).Where(x => x.ProductId == item.Id && x.Order.Status == true).Sum(x => x.Quantity);
+
+                productSole.ProductQuantity = _context.BranchProducts.Where(x => x.ProductId == item.Id).Sum(y => y.Quantity);
+
+                productSole.QuantityStatistical = _context.OrderDetails.Include(x => x.Order).Where(x => x.ProductId == item.Id && x.Order.Status == true).Sum(x => x.Quantity);
                 productSoles.Add(productSole);
             }
             return productSoles.AsEnumerable();
+        }
+        public IEnumerable<NumberProduct> ProductSapHet(int branchId)
+        {
+            List<NumberProduct> products = new List<NumberProduct>();
+            NumberProduct numberProduct;
+            if (branchId == 0)
+            {
+                var product = _context.Products.Include(x => x.Category).Include(x => x.Supplier).ToList();
+                foreach (var item in product)
+                {
+                    numberProduct = new NumberProduct();
+                    numberProduct = _mapper.Map<NumberProduct>(item);
+                    numberProduct.Quantity = _context.BranchProducts.Where(x => x.ProductId == item.Id).Sum(x => x.Quantity);
+                    products.Add(numberProduct);
+                }
+            }
+            else
+            {
+                var product = _context.BranchProducts
+                    .Include(x => x.Product).ThenInclude(x => x.Supplier)
+                    .Include(x => x.Product).ThenInclude(x => x.Category)
+                    .Where(x => x.BrachId == branchId).AsEnumerable();
+                foreach (var item in product)
+                {
+                    numberProduct = new NumberProduct();
+                    numberProduct = _mapper.Map<NumberProduct>(item);
+                    numberProduct.Quantity = _context.BranchProducts.FirstOrDefault(x => x.BrachId == branchId && x.ProductId == item.Product.Id).Quantity;
+                    products.Add(numberProduct);
+                }
+            }
+            return products.AsEnumerable().Distinct();
         }
     }
 }

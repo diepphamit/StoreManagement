@@ -115,6 +115,15 @@ namespace StoreManagement.API.Controllers
             }
 
         }
+        [Route("GetAllProductNotInBranch")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllProductNotInBranch(int branchId)
+        {
+            var product = _productRepository.GetAllProductNotInBranch(branchId);
+            var productReturn = _mapper.Map<IEnumerable<ProductNotInBranch>>(product);
+
+            return Ok(productReturn);
+        }
 
         [AllowAnonymous]
         [HttpGet("{id}")]

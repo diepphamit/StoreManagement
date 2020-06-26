@@ -106,15 +106,17 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
+
         [PermissionFilter(Permissions = PermissionConstant.UPDATE_ORDER)]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateOrderDetail(int id, [FromBody]OrderDetailAdd orderDetailAdd)
+        [HttpPut("{orderId}")]
+        public async Task<IActionResult> UpdateOrderDetail(int orderId, [FromBody]ListOrderDetailUpdate listOrderDetailUpdate)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var orderDetail = _mapper.Map<OrderDetail>(orderDetailAdd);
-            var result = await _orderDetailRepository.EditOrderDetail(id, orderDetail);
+            var orderDetailUpdate = _mapper.Map<IEnumerable<OrderDetail>>(listOrderDetailUpdate.items);
+            var orderDetailDeletes = _mapper.Map<IEnumerable<OrderDetail>>(listOrderDetailUpdate.itemDeletes);
+            var result = await _orderDetailRepository.EditOrderDetail(orderId, orderDetailUpdate, orderDetailDeletes);
 
             if (result)
                 return Ok();
