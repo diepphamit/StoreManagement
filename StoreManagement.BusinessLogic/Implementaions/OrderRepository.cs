@@ -86,8 +86,6 @@ namespace StoreManagement.BusinessLogic.Implementaions
 
             try
             {
-                if (order.Status == true)
-                    return false;
                 order.StaffId = orderupdate.StaffId;
                 order.Status = orderupdate.Status;
                 await _context.SaveChangesAsync();

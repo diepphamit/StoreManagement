@@ -52,6 +52,7 @@ namespace StoreManagement.API.Controllers
                     Items = response,
                     Total = totalCount
                 };
+                
 
                 return Ok(paginationset);
             }
