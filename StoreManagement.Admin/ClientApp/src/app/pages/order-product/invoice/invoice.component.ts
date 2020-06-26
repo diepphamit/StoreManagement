@@ -4,6 +4,7 @@ import { OrderService } from 'src/app/services/order.service';
 import { OrderDetailService } from 'src/app/services/order-detail.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { BranchService } from 'src/app/services/branch.service';
 
 @Component({
   selector: 'app-invoice',
@@ -16,10 +17,12 @@ export class InvoiceComponent implements OnInit {
   order: any;
   items: any[];
   itemsAsync: Observable<any[]>;
+  branch: any;
   constructor(private router: Router,
     private route: ActivatedRoute,
     private orderService: OrderService,
-    private orderDetailService: OrderDetailService) { }
+    private orderDetailService: OrderDetailService,
+    private branchService: BranchService) { }
   ngOnInit() {
     //console.log( this.route.params._value.id);
     this.route.params.subscribe(params => {
@@ -31,14 +34,16 @@ export class InvoiceComponent implements OnInit {
           );
         this.getOrderById(this.id);
         this.getOrderDetailByOrderId(this.id);
-        console.log(this.items);
       }
     });
 
   }
 
   getOrderById(id: any) {
-    this.orderService.getOrderById(id).subscribe(data => this.order = data);
+    this.orderService.getOrderById(id).subscribe(data => {
+      this.order = data;
+      this.branchService.getBranchById(data.branchId).subscribe(dataBranch => this.branch = dataBranch);
+    });
   }
 
   getOrderDetailByOrderId(orderId: any) {

@@ -91,7 +91,6 @@ export class EditBranchProductComponent implements OnInit {
     this.branchProduct.quantity = Number(this.branchProduct.quantity);
     this.branchProduct.brachId = Number(this.branchProduct.brachId);
     this.branchProduct.productId = Number(this.branchProduct.productId);
-    console.log(this.branchProduct);
 
     this.branchProductService.editBranchProduct(this.id, this.branchProduct).subscribe(
       () => {

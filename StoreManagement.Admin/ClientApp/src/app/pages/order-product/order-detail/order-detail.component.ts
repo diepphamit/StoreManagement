@@ -29,6 +29,7 @@ export class OrderDetailComponent implements OnInit {
   addProductForm: FormGroup;
   itemsProduct: Observable<any[]>;
   itemDeletes: any[] = [];
+  totalPrices = 0;
 
   constructor(
     public orderDetailService: OrderDetailService,
@@ -61,19 +62,12 @@ export class OrderDetailComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params.id;
       if (this.id) {
-        // this.itemsAsync = this.orderDetailService.getAllOrderDetails(this.id, '', page, this.pageSize)
-        //   .pipe(
-        //     tap(response => {
-        //       this.total = response.total;
-        //       this.page = page;
-        //       this.loadingBar.stop();
-        //     }),
-        //     map(response => response.items)
-        //   );
         this.orderService.getOrderById(this.id).subscribe(data => {
           this.getAllProducts(data.branchId, this.page);
         });
-        this.orderDetailService.getAllOrderDetails(this.id, '', page, this.pageSize).subscribe(data => this.itemsAsync = data.items);
+        this.orderDetailService.getAllOrderDetails(this.id, '', page, this.pageSize).subscribe(data => {
+          this.itemsAsync = data.items;
+        });
       }
     });
   }
@@ -105,14 +99,6 @@ export class OrderDetailComponent implements OnInit {
       );
   }
 
-  get totalprice() {
-    let prices = 0;
-    this.itemsAsync.forEach(element => {
-      prices = prices + element.totalPrice;
-    });
-    return prices;
-  }
-
   isPushItem(productId, quantity) {
     let isPush = true;
     this.itemsAsync.forEach(element => {
@@ -138,7 +124,6 @@ export class OrderDetailComponent implements OnInit {
       itemDeletes: this.itemDeletes
     };
 
-    //console.log(order);
     this.loadingBar.start();
     this.orderDetailService.editOrderDetail(this.id, order).subscribe(
       () => {
@@ -156,5 +141,10 @@ export class OrderDetailComponent implements OnInit {
   // getAllProducts(branchId: any) {
   //   this.products = this.productService.GetAllProductNotInBranch(branchId);
   // }
-
+  get totalPrice() {
+    if (this.itemsAsync) {
+      return this.itemsAsync.reduce((acc, val) => acc += (val.price * val.quantity), 0);
+    }
+    return 0;
+  }
 }

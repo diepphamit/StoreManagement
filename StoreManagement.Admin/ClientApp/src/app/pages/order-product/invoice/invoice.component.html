@@ -8,10 +8,11 @@
   <div class="row no-gutters">
 
     <div class="col">
-      <p>0999999999</p>
+      <p>Chi nhánh: {{branch.description}}</p>
       <div class="address">
-        <p>quanly.storemanagement@gmail.com</p>
-        <p>1234 Nguyễn Lương Bằng</p>
+        <p>Số điện thoại: {{branch.phoneNumber}}</p>
+        <p>Email: quanly.storemanagement@gmail.com</p>
+        <p>Địa chỉ: {{branch.address}}</p>
       </div>
     </div>
   </div>
@@ -21,15 +22,13 @@
       <table class="table table-bordered">
         <tbody>
           <tr>
-            <th style="width: 5%">Id</th>
-            <th>Tên sản phẩm</th>
+            <th >Tên sản phẩm</th>
             <th>Đơn giá</th>
             <th>Số lượng</th>
             <th>Thành tiền</th>
           </tr>
           <tr
             *ngFor="let item of itemsAsync | async">
-            <td>{{ item.id }}</td>
             <td>{{ item.productName }}</td>
             <td>{{ item.price }}</td>
             <td>{{ item.quantity }}</td>
@@ -37,8 +36,9 @@
           </tr>
         </tbody>
       </table>
-      <h2>{{order ? order.totalPrice : 0}}</h2>
-
     </div>
   </div>
+  <h4>Tổng tiền thanh toán: {{order ? order.totalPrice : 0}}VNĐ</h4>
+  <br>
+  <p>Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi!</p>
 
