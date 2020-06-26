@@ -99,9 +99,9 @@ namespace StoreManagement.API.Controllers
 
                 }
 
-                var respone = _mapper.Map<IEnumerable<BranchProduct>, IEnumerable<ProductReturn>>(query);
+                var respone = _mapper.Map<IEnumerable<BranchProduct>, IEnumerable<ProductInBranchReturn>>(query);
 
-                var paginationset = new PaginationSet<ProductReturn>
+                var paginationset = new PaginationSet<ProductInBranchReturn>
                 {
                     Items = respone,
                     Total = totalCount
@@ -117,7 +117,7 @@ namespace StoreManagement.API.Controllers
         }
         [Route("GetAllProductNotInBranch")]
         [HttpGet]
-        public async Task<IActionResult> GetAllProductNotInBranch(int branchId)
+        public IActionResult GetAllProductNotInBranch(int branchId)
         {
             var product = _productRepository.GetAllProductNotInBranch(branchId);
             var productReturn = _mapper.Map<IEnumerable<ProductNotInBranch>>(product);

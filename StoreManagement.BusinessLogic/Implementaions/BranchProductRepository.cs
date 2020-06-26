@@ -67,8 +67,6 @@ namespace StoreManagement.BusinessLogic.Implementaions
 
             try
             {
-                branchProduct.BrachId = branchProductUpdate.BrachId;
-                branchProduct.ProductId = branchProductUpdate.ProductId;
                 branchProduct.Quantity = branchProductUpdate.Quantity;
                 await _context.SaveChangesAsync();
                 return true;
