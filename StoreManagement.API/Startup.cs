@@ -83,7 +83,7 @@ namespace StoreManagement.API
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<IBranchProductRepository, BranchProductRepository>();
             services.AddScoped<IStatisticalRepository, StatisticalRepository>();
-
+            services.AddScoped<IUpdatTotalPriceRepository, UpdateTotalPriceRepository>();
             services.AddScoped<PermissionFilter>();
 
             services.AddAuthentication(x =>

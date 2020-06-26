@@ -13,10 +13,12 @@ namespace StoreManagement.BusinessLogic.Implementaions
     public class OrderDetailRepository : IOrderDetailRepository
     {
         private readonly DataContext _context;
+        private readonly IUpdatTotalPriceRepository _updatTotalPriceRepository;
 
-        public OrderDetailRepository(DataContext context)
+        public OrderDetailRepository(DataContext context, IUpdatTotalPriceRepository updatTotalPriceRepository)
         {
             _context = context;
+            _updatTotalPriceRepository = updatTotalPriceRepository;
         }
         public async Task<bool> createOrderDetail(OrderDetail orderDetailAdd)
         {
@@ -93,7 +95,7 @@ namespace StoreManagement.BusinessLogic.Implementaions
                         await _context.SaveChangesAsync();
                     }
                 }
-                UpdateTotalPrice(orderId);
+                _updatTotalPriceRepository.UpdateTotalPrice(orderId);
                 await _context.SaveChangesAsync();
 
                 return true;
@@ -117,20 +119,20 @@ namespace StoreManagement.BusinessLogic.Implementaions
             return await _context.OrderDetails.Include(x => x.Product).ThenInclude(z => z.Pictures).Include(p => p.Order).ThenInclude(y => y.Customer).FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        private void UpdateTotalPrice(int orderId)
-        {
+        //public void UpdateTotalPrice(int orderId)
+        //{
 
-            int totalPrice = 0;
-            var listorderDetail = _context.OrderDetails.Where(x => x.OrderId == orderId).AsEnumerable();
-            foreach (var item in listorderDetail)
-            {
-                var product = _context.Products.FirstOrDefault(p => p.Id == item.ProductId);
-                totalPrice += product.Price * item.Quantity;
-            }
-            var order = _context.Orders.FirstOrDefault(x => x.Id == orderId);
-            order.TotalPrice = totalPrice;
-            _context.SaveChanges();
+        //    int totalPrice = 0;
+        //    var listorderDetail = _context.OrderDetails.Where(x => x.OrderId == orderId).AsEnumerable();
+        //    foreach (var item in listorderDetail)
+        //    {
+        //        var product = _context.Products.FirstOrDefault(p => p.Id == item.ProductId);
+        //        totalPrice += product.Price * item.Quantity;
+        //    }
+        //    var order = _context.Orders.FirstOrDefault(x => x.Id == orderId);
+        //    order.TotalPrice = totalPrice;
+        //    _context.SaveChanges();
 
-        }
+        //}
     }
 }

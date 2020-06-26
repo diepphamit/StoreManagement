@@ -52,6 +52,7 @@ namespace StoreManagement.BusinessLogic.AutoMapper
             CreateMap<Order, OrderUI>()
                 .ForMember(x => x.CustomerName, y => { y.MapFrom(z => z.Customer.Username); })
                 .ForMember(x => x.StaffName, y => { y.MapFrom(z => z.Staff.Username); });
+                //.ForMember(x => x.OrderDate, y => { y.MapFrom(z => z.OrderDate.ToString("yyyy-MM-ddTHH:mm:ss")); });
             CreateMap<OrderUI, Order>();
             CreateMap<OrderDetail, OrderDetailUI>().ForMember(x => x.ProductName, y => { y.MapFrom(z => z.Product.Name); })
                                                    .ForMember(x => x.CustomerName, y => { y.MapFrom(z => z.Order.Customer.Name); })
