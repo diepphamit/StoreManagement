@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginModel).subscribe(
       response => {
         this.loadingBar.stop();
-        this.router.navigate(['/home']).then(() => {
+        this.router.navigate(['/orderproducts']).then(() => {
           this.toastr.success('Đăng nhập thành công!');
         });
       },

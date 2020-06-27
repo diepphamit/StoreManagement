@@ -138,6 +138,9 @@ export class OrderProductComponent implements OnInit {
   showDetail(id: any) {
     this.router.navigate(['/orderproducts/' + id]);
   }
+  showInvoice(id: any) {
+    this.router.navigate(['/orderproducts/invoice/' + id]);
+  }
 
   get isAdmin() {
     const user = JSON.parse(localStorage.getItem(CURRENT_USER));

@@ -30,7 +30,7 @@ export class OrderService {
 
   createOrder(order: any) {
     console.log(this.baseUrl);
-    return this.http.post('http://localhost:5000/api/order', order);
+    return this.http.post(`${this.baseUrl}`, order);
   }
 
   editOrder(id: any, order: any) {

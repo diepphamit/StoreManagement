@@ -70,11 +70,11 @@ namespace StoreManagement.API.Controllers
                 return BadRequest(ModelState);
 
             if (await _userRepo.UserExists(userForCreate.Username))
-                return BadRequest("The User has been existed");
+                return BadRequest(new { message = false });
 
             var result = await _userRepo.CreateUserAsync(userForCreate);
             if (result)
-                return Ok();
+                return Ok(new { message = result });
 
             return BadRequest();
         }
@@ -88,9 +88,9 @@ namespace StoreManagement.API.Controllers
 
             var result = await _userRepo.EditUserAsync(id, userForUpdate);
             if (result)
-                return Ok();
+                return Ok(new { message = result });
 
-            return BadRequest();
+            return BadRequest(new { message = false });
         }
 
         [PermissionFilter(Permissions = PermissionConstant.DELETE_USER)]

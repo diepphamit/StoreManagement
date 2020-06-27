@@ -24,7 +24,6 @@ export class InvoiceComponent implements OnInit {
     private orderDetailService: OrderDetailService,
     private branchService: BranchService) { }
   ngOnInit() {
-    //console.log( this.route.params._value.id);
     this.route.params.subscribe(params => {
       this.id = params.id;
       if (this.id) {
@@ -49,14 +48,7 @@ export class InvoiceComponent implements OnInit {
   getOrderDetailByOrderId(orderId: any) {
     this.orderDetailService.getAllOrderDetails(orderId, '', 1, 1000).subscribe(data => {
       this.items = data.items;
-      //console.log(this.totalPrice());
-      //window.print();
     });
-  }
-  flag = false;
-  print() {
-    this.flag = true;
-    window.print();
   }
 
   get totalPrice() {

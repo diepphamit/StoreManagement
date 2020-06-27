@@ -30,7 +30,7 @@ export class AddOrderProductComponent implements OnInit {
   page: number;
   pageSize: number;
   total: number;
-  branchId = 20;
+  branchId: any;
   status: any = [
     { value: true, name: 'Da duyet' },
     { value: false, name: 'Chua duyet' }
@@ -62,7 +62,6 @@ export class AddOrderProductComponent implements OnInit {
     this.pageSize = 1000;
     this.getAllUsers(this.page);
     this.getAllBranches(this.page);
-    this.getAllProducts(this.branchId, this.page);
   }
 
   getAllProducts(branchId: any, page: number) {
@@ -112,7 +111,6 @@ export class AddOrderProductComponent implements OnInit {
       () => {
         this.router.navigate(['/orderproducts']).then(() => {
           this.toastr.success('Tạo đơn hàng thành công');
-          this.loadingBar.stop();
         });
       },
       (error: HttpErrorResponse) => {
@@ -162,7 +160,6 @@ export class AddOrderProductComponent implements OnInit {
 
   filterProducts(id: any) {
     this.branchId = id;
-    console.log(this.branchId);
     this.getAllProducts(this.branchId, this.page);
   }
 

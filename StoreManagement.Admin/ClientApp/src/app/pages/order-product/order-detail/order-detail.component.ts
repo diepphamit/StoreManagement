@@ -53,12 +53,9 @@ export class OrderDetailComponent implements OnInit {
     this.page = 1;
     this.pageSize = 10;
     this.getAllOrderDetail(this.page);
-    //this.getAllProducts(this.page);
   }
 
   getAllOrderDetail(page: number) {
-    //this.loadingBar.start();
-
     this.route.params.subscribe(params => {
       this.id = params.id;
       if (this.id) {

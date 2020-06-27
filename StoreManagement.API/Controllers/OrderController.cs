@@ -150,7 +150,7 @@ namespace StoreManagement.API.Controllers
         {
             var result = await _orderRepository.DeleteOrderAsync(id);
             if (result) 
-                return Ok();
+                return Ok(new { message = result });
 
             return BadRequest();
         }
@@ -166,7 +166,7 @@ namespace StoreManagement.API.Controllers
 
             var result = await _orderRepository.EditOrderAsync(id, order);
             if (result)
-                return Ok();
+                return Ok(new { message = result });
 
             return BadRequest();
         }

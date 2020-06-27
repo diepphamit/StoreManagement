@@ -30,9 +30,9 @@
             <tr>
               <th style="width: 5%">Id</th>
               <th>Tên sản phẩm</th>
-              <th>Mô tả</th>
+              <!-- <th>Mô tả</th> -->
               <th>Giá</th>
-              <th>Giảm giá</th>
+              <!-- <th>Giảm giá</th> -->
               <th>Mã barcode</th>
               <th>Nhà cung cấp</th>
               <th>Danh mục</th>
@@ -41,9 +41,9 @@
             <tr *ngFor="let item of itemsAsync | async | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: total }">
               <td>{{ item.id }}</td>
               <td>{{ item.name }}</td>
-              <td>{{ (item.description.length>30)? (item.description | slice:0:30)+'...':(item.description)}}</td>
+              <!-- <td>{{ (item.description.length>30)? (item.description | slice:0:30)+'...':(item.description)}}</td> -->
               <td>{{ item.price }}</td>
-              <td>{{ item.discount }}</td>
+              <!-- <td>{{ item.discount }}</td> -->
               <td>{{ item.barcode }}</td>
               <td>{{ item.supplierName }}</td>
               <td>{{ item.categoryName }}</td>
