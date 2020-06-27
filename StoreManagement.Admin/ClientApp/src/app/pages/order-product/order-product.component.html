@@ -36,6 +36,7 @@
               <th>Mã code</th>
               <th>Trạng thái</th>
               <th style="text-align: center;">Hành động</th>
+              <th style="text-align: center;">Hóa đơn</th>
             </tr>
             <tr
               *ngFor="let item of itemsAsync | async | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: total }">
@@ -45,17 +46,17 @@
               <td>{{ item.totalPrice }}</td>
               <td>{{ item.orderDate | date }}</td>
               <td>{{ item.code }}</td>
-              <td style=" text-align: center;"><button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;"
+              <td *ngIf="item.status" style=" text-align: center;"><button [disabled]="!isAdmin" class="btn btn-sm btn-success" style="margin-right: 10px; margin-bottom: 5px;"
                 (click)="updateStatus(item.id, item.status)">
-                {{item.status ? 'Đã duyệt' : 'Chưa duyệt'}}
+                Đã duyệt
+              </button></td>
+              <td *ngIf="!item.status" style=" text-align: center;"><button  class="btn btn-sm btn-danger" style="margin-right: 10px; margin-bottom: 5px;"
+                (click)="updateStatus(item.id, item.status)">
+                Chưa duyệt
               </button></td>
               <td style=" text-align: center;">
                 <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;"
                   (click)="showDetail(item.id)">
-                  <i class="fa fa-pencil"></i>
-                </button>
-                <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;"
-                  (click)="edit(item.id)">
                   <i class="fa fa-pencil"></i>
                 </button>
                 <button class="btn btn-sm btn-danger" style="margin-right: 10px; margin-bottom: 5px;"
@@ -63,6 +64,7 @@
                   <i class="fa fa-trash"></i>
                 </button>
               </td>
+              <td style=" text-align: center;"><button class="btn btn-primary" (click)="showInvoice(item.id)">Xuất</button></td>
             </tr>
           </tbody>
         </table>

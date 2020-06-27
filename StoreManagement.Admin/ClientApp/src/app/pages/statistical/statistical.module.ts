@@ -9,6 +9,8 @@ import { StatisticalRoutingModule } from './statistical-routing.module';
 import { StatisticalComponent } from './statistical.component';
 import { StatisticalStaffComponent } from './statistical-staff/statistical-staff.component';
 import { StatisticalCustomerComponent } from './statistical-customer/statistical-customer.component';
+import { StatisticalProductComponent } from './statistical-product/statistical-product.component';
+import { RemainProductComponent } from './remain-product/remain-product.component';
 
 @NgModule({
     imports: [
@@ -24,7 +26,9 @@ import { StatisticalCustomerComponent } from './statistical-customer/statistical
     declarations: [
         StatisticalComponent,
         StatisticalStaffComponent,
-        StatisticalCustomerComponent
+        StatisticalCustomerComponent,
+        StatisticalProductComponent,
+        RemainProductComponent
     ]
 })
 export class StatisticalModule { }

@@ -102,11 +102,11 @@ namespace StoreManagement.BusinessLogic.Implementaions
                 return _context.BranchProducts
                                    .Include(x => x.Product).ThenInclude(x => x.Category)
                                    .Include(x => x.Product).ThenInclude(x => x.Supplier)
-                                   .Include(x => x.Product).ThenInclude(x => x.Pictures).AsEnumerable();
+                                   .Include(x => x.Product).ThenInclude(x => x.Pictures).AsEnumerable().Distinct();
             return _context.BranchProducts.Include(x => x.Product).ThenInclude(x => x.Category)
                                    .Include(x => x.Product).ThenInclude(x => x.Supplier)
                                    .Include(x => x.Product).Where(y => y.BrachId == branchId)
-                                   .Include(x => x.Product).ThenInclude(y => y.Pictures).AsEnumerable();
+                                   .Include(x => x.Product).ThenInclude(y => y.Pictures).AsEnumerable().Distinct();
         }
 
         public IEnumerable<Product> GetAllProductNotInBranch(int branchId)

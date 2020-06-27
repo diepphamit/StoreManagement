@@ -14,6 +14,13 @@ export class ProductService {
     return this.http.get(`${this.baseUrl}?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
   }
 
+  getAllProductsByBranchId(branchId: any, keyword: string, page: number, pageSize: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/GetAllProductInBranch?branchId=${branchId}&keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
+  }
+  GetAllProductNotInBranch(branchId: any): Observable<any> {
+    return this.http.get(`${this.baseUrl}/GetAllProductNotInBranch?branchId=${branchId}`);
+  }
+
   getProductById(id: any): Observable<any> {
     return this.http.get(`${this.baseUrl}/${id}`);
   }
@@ -37,4 +44,6 @@ export class ProductService {
   deleteProduct(id: any) {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
+
+
 }

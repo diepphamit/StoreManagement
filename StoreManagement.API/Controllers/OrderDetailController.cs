@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using StoreManagement.API.Helpers;
 using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.OrderDetails;
 using StoreManagement.BusinessLogic.Interfaces;
@@ -89,6 +90,7 @@ namespace StoreManagement.API.Controllers
             return Ok(_mapper.Map<OrderDetailUI>(orderDetail));
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.CREATE_ORDER)]
         [HttpPost]
         public async Task<IActionResult> CreateOrderDetail([FromBody]OrderDetailAdd orderDetailAdd)
         {
@@ -104,6 +106,8 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
+
+        [PermissionFilter(Permissions = PermissionConstant.UPDATE_ORDER)]
         [HttpPut("{orderId}")]
         public async Task<IActionResult> UpdateOrderDetail(int orderId, [FromBody]ListOrderDetailUpdate listOrderDetailUpdate)
         {
@@ -120,6 +124,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.DELETE_ORDER)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrderDetail(int id)
         {

@@ -21,70 +21,54 @@
           <i class="fa fa-id-card"></i> <span>Quản lý tài khoản</span>
         </a>
       </li>
-      <li *ngIf="isAdmin || isStaffManager">
-        <a routerLink="/products">
-          <i class="fa fa-th"></i> <span>Quản lý sản phẩm</span>
-        </a>
-      </li>
-      <li *ngIf="isAdmin || isStaffManager">
-        <a routerLink="/pictures">
-          <i class="fa fa-id-card"></i> <span>Quản lý hình ảnh</span>
-        </a>
-      </li>
-      <li *ngIf="isAdmin || isStaffManager">
-        <a routerLink="/categories">
-          <i class="fa fa-id-card"></i> <span>Quản lý loại hàng</span>
-        </a>
-      </li>
-      <li *ngIf="isAdmin || isStaffManager">
-        <a routerLink="/suppliers">
-          <i class="fa fa-id-card"></i> <span>Quản lý Nhà cung cấp</span>
-        </a>
-      </li>
       <li>
         <a routerLink="/orderproducts">
           <i class="fa fa-id-card"></i> <span>Quản lý đơn hàng</span>
         </a>
       </li>
-      <li *ngIf="isAdmin || isStaffManager">
-        <a routerLink="/branches">
-          <i class="fa fa-id-card"></i> <span>Quản lý chi nhánh</span>
+      <li class="treeview">
+        <a style="cursor: pointer;">
+          <i class="fa fa-pie-chart"></i>
+          <span>Quản lý sản phẩm</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
         </a>
+        <ul class="treeview-menu">
+          <li><a routerLink="/categories"><i class="fa fa-circle-o"></i>Quản lý loại hàng</a></li>
+          <li><a routerLink="/suppliers"><i class="fa fa-circle-o"></i>Quản lý nhà cung cấp</a></li>
+          <li><a routerLink="/products"><i class="fa fa-circle-o"></i>Quản lý sản phẩm</a></li>
+          <li><a routerLink="/pictures"><i class="fa fa-circle-o"></i>Quản lý hình ảnh</a></li>
+        </ul>
       </li>
-      <li *ngIf="isAdmin || isStaffManager">
-        <a routerLink="/charts">
-          <i class="fa fa-id-card"></i> <span>Thống kê giá</span>
-        </a>
-      </li>
-      <li *ngIf="isAdmin || isStaffManager">
-        <a routerLink="/statistical">
-          <i class="fa fa-id-card"></i> <span>Thống kê khách hàng</span>
-        </a>
-      </li>
-      <li *ngIf="isAdmin || isStaffManager">
-        <a routerLink="/branchproducts">
-            <i class="fa fa-id-card"></i> <span>Quản lý chi nhánh sản phẩm</span>
-        </a>
-    </li>
-      <!-- <li>
 
-              <a routerLink="/comments">
-                  <i class="fa fa-id-card"></i> <span>Quản lý câu bình luận</span>
-              </a>
-          </li> -->
-      <!--<li class="treeview">
-              <a routerLink="/lessons">
-                  <i class="fa fa-pie-chart"></i>
-                  <span>Bài học</span>
-                  <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                  </span>
-              </a>
-              <ul class="treeview-menu">
-                  <li><a routerLink="/vocabularies"><i class="fa fa-circle-o"></i> Từ mới</a></li>
-                  <li><a routerLink="/pronunciations"><i class="fa fa-circle-o"></i> Phát âm</a></li>
-              </ul>
-          </li>-->
+      <li class="treeview">
+        <a style="cursor: pointer;">
+          <i class="fa fa-pie-chart"></i>
+          <span>Quản lý chi nhánh</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a routerLink="/branches"><i class="fa fa-circle-o"></i>Quản lý chi nhánh</a></li>
+          <li><a routerLink="/branchproducts"><i class="fa fa-circle-o"></i>Sản phẩm</a></li>
+        </ul>
+      </li>
+
+      <li *ngIf="isAdmin || isStaffManager" class="treeview">
+        <a style="cursor: pointer;">
+          <i class="fa fa-pie-chart"></i>
+          <span>Thống kê</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a routerLink="/charts"><i class="fa fa-circle-o"></i>Thống kê giá</a></li>
+          <li><a routerLink="/statistical"><i class="fa fa-circle-o"></i>Thống kê khác</a></li>
+        </ul>
+      </li>
     </ul>
   </section>
   <!-- /.sidebar -->

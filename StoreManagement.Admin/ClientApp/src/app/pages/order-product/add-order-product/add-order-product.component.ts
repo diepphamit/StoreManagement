@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { BranchService } from 'src/app/services/branch.service';
 
 @Component({
   selector: 'app-add-order-product',
@@ -24,10 +25,12 @@ export class AddOrderProductComponent implements OnInit {
   itemsProduct: Observable<any[]>;
   itemsUser: Observable<any[]>;
   itemCustomer: Observable<any[]>;
+  itemBranch: Observable<any[]>;
   itemStaff: any[];
   page: number;
   pageSize: number;
   total: number;
+  branchId: any;
   status: any = [
     { value: true, name: 'Da duyet' },
     { value: false, name: 'Chua duyet' }
@@ -42,6 +45,7 @@ export class AddOrderProductComponent implements OnInit {
     private toastr: ToastrService,
     private productService: ProductService,
     private loadingBar: LoadingBarService,
+    private branchService: BranchService,
     private orderService: OrderService) {
     this.addProductForm = this.fb.group({
       productId: ['', [ValidationService.requireValue]],
@@ -49,27 +53,35 @@ export class AddOrderProductComponent implements OnInit {
     });
     this.addOrderForm = this.fb.group({
       customerId: ['', [ValidationService.requireValue, ValidationService.numberValidator]],
-      status: ['', [ValidationService.requireValue]]
+      status: ['', [ValidationService.requireValue]],
+      branchId: ['', [ValidationService.requireValue]]
     });
   }
   ngOnInit() {
     this.page = 1;
     this.pageSize = 1000;
     this.getAllUsers(this.page);
-    this.getAllProducts(this.page);
+    this.getAllBranches(this.page);
   }
 
-  getAllProducts(page: number) {
-    this.itemsProduct = this.productService.getAllProducts('', page, this.pageSize)
+  getAllProducts(branchId: any, page: number) {
+    this.itemsProduct = this.productService.getAllProductsByBranchId(branchId, '', page, 1000)
       .pipe(
         map(response => response.items)
       );
   }
 
   getAllUsers(page: number) {
-    this.itemCustomer = this.userService.getAllUsers('', page, this.pageSize)
+    this.itemCustomer = this.userService.getAllUsers('', page, 1000)
       .pipe(
         map(response => response.items.filter(item => item.groupRole === 'Customer'))
+      );
+  }
+
+  getAllBranches(page: number) {
+    this.itemBranch = this.branchService.getAllBranches('', page, 1000)
+      .pipe(
+        map(response => response.items)
       );
   }
 
@@ -92,13 +104,13 @@ export class AddOrderProductComponent implements OnInit {
     // this.orderAdd = Object.assign(Object.assign({}, this.addOrderForm.value), this.itemsAsync);
     this.loadingBar.start();
     this.orderAdd = new OrderAdd(this.getId(), Number(this.addOrderForm.value.customerId),
+      Number(this.addOrderForm.value.branchId),
       Boolean(this.addOrderForm.value.status), 0, this.itemsAsync as ProductOrder[]);
 
     this.orderService.createOrder(this.orderAdd).subscribe(
       () => {
         this.router.navigate(['/orderproducts']).then(() => {
           this.toastr.success('Tạo đơn hàng thành công');
-          this.loadingBar.stop();
         });
       },
       (error: HttpErrorResponse) => {
@@ -145,5 +157,12 @@ export class AddOrderProductComponent implements OnInit {
   deleteProduct(id: number) {
     this.itemsAsync = this.itemsAsync.filter(item => item.productId !== id);
   }
+
+  filterProducts(id: any) {
+    this.branchId = id;
+    this.getAllProducts(this.branchId, this.page);
+  }
+
+
 
 }

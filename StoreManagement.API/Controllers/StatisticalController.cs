@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StoreManagement.API.Helpers;
 using Org.BouncyCastle.Math.EC.Rfc7748;
 using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Statistical;
@@ -25,6 +26,8 @@ namespace StoreManagement.API.Controllers
             _statistical = statistical;
             _mapper = mapper;
         }
+
+        [PermissionFilter(Permissions = PermissionConstant.READ_STATISTICAL)]
         [Route("ProductSole")]
         [HttpGet]
         public ActionResult GetProductSole(string keyword, int page = 1, int pagesize = 10)
@@ -51,6 +54,7 @@ namespace StoreManagement.API.Controllers
 
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.READ_STATISTICAL)]
         [Route("ProductNotTaken")]
         [HttpGet]
         public ActionResult ProductNotTaken(int branchId, string keyword, int page = 1, int pagesize = 10)
@@ -80,6 +84,7 @@ namespace StoreManagement.API.Controllers
             }
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.READ_STATISTICAL)]
         [Route("GetCustomers")]
         [HttpGet]
         public ActionResult GetCustomers(int page = 1, int pagesize = 10)
@@ -107,6 +112,7 @@ namespace StoreManagement.API.Controllers
             }
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.READ_STATISTICAL)]
         [Route("GetStaffs")]
         [HttpGet]
         public ActionResult GetStaffs(int page = 1, int pagesize = 10)

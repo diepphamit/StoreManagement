@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StoreManagement.API.Helpers;
 using StoreManagement.BusinessLogic.Core;
 using StoreManagement.BusinessLogic.Dtos.Pictures;
 using StoreManagement.BusinessLogic.Interfaces;
@@ -128,6 +129,7 @@ namespace StoreManagement.API.Controllers
             return Ok(pictureToReturn);
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.CREATE_PICTURE)]
         [HttpPost]
         public async Task<IActionResult> CreatePicture([FromForm]UploadFileDto pictureAdd)
         {
@@ -182,6 +184,7 @@ namespace StoreManagement.API.Controllers
             }
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.DELETE_PICTURE)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePicture(int id)
         {
@@ -195,6 +198,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
+        [PermissionFilter(Permissions = PermissionConstant.UPDATE_PICTURE)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePicture(int id, [FromBody]PictureUpdate pictureUpdate)
         {

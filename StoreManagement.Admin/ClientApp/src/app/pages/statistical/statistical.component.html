@@ -5,64 +5,15 @@
       <!-- <option *ngFor="let item of itemsProduct | async" value={{item.id}}>{{item.name}}</option> -->
       <option value="1">Thống kê nhân viên</option>
       <option value="2">Thống kê khách hàng</option>
+      <option value="3">Thống kê sản phẩm bán ra</option>
+      <option value="4">Thống kê sản phẩm sắp hết</option>
     </select>
   </div>
 </div>
 
-<!-- <div class="box box-primary">
-  <div class="box-header with-border">
-      <h3 class="box-title">Quản lý tài khoản</h3>
-  </div>
-  <div class="box-body">
-      <div class="row">
-          <div class="col-sm-8">
-              <div class="input-group">
-                  <input class="form-control" type="text" [(ngModel)]="keyword" placeholder="Nhập từ khóa" />
-                  <span class="input-group-btn">
-                      <button class="btn btn-default" type="button" (click)="search()">
-                          <i class="fa fa-search"></i>
-                      </button>
-                      <button class="btn btn-default" type="button" (click)="export()">
-                          Export
-                      </button>
-                  </span>
-              </div>
-          </div>
-      </div>
-      <br />
-      <div class="row">
-          <div class="col-xs-12 col-md-12">
-              <table class="table table-bordered">
-                  <tbody>
-                      <tr>
-                          <th style="width: 5%">Id</th>
-                          <th>Tên đăng nhập</th>
-                          <th>Họ và tên</th>
-                          <th>Email</th>
-                          <th>Số điện thoại</th>
-                          <th>Tổng tiền</th>
-                      </tr>
-                      <tr
-                          *ngFor="let item of itemsAsync | async | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: total }">
-                          <td>{{ item.id }}</td>
-                          <td>{{ item.username }}</td>
-                          <td>{{ item.name }}</td>
-                          <td>{{ item.email }}</td>
-                          <td>{{ item.phoneNumber }}</td>
-                          <td>{{ item.totalPrice }}</td>
-                      </tr>
-                  </tbody>
-              </table>
-              <div class="text-center">
-                <pagination-controls class="custom-pagination" (pageChange)="getAllCustomers($event)" autoHide="true"
-                        responsive="true" previousLabel="Trước" nextLabel="Sau" directionLinks="true">
-                    </pagination-controls>
-              </div>
-          </div>
-      </div>
-  </div>
-</div> -->
 
 <app-statistical-customer *ngIf="flag == 2"></app-statistical-customer>
 <app-statistical-staff *ngIf="flag == 1"></app-statistical-staff>
+<app-statistical-product *ngIf="flag == 3"></app-statistical-product>
+<app-remain-product *ngIf="flag == 4"></app-remain-product>
 

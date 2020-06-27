@@ -26,7 +26,7 @@ namespace StoreManagement.API.Controllers
             _mapper = mapper;
         }
 
-        [PermissionFilter(Permissions = "READ_USER")]
+        [PermissionFilter(Permissions = PermissionConstant.READ_USER)]
         [HttpGet]
         public IActionResult GetAllUsers(string keyword, int page = 1, int pagesize = 10)
         {
@@ -50,7 +50,7 @@ namespace StoreManagement.API.Controllers
 
         }
 
-        [PermissionFilter(Permissions = "READ_USER")]
+        [PermissionFilter(Permissions = PermissionConstant.READ_USER)]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
@@ -62,7 +62,7 @@ namespace StoreManagement.API.Controllers
             return Ok(_mapper.Map<UserDto>(user));
         }
 
-        [PermissionFilter(Permissions = "CREATE_USER")]
+        [PermissionFilter(Permissions = PermissionConstant.CREATE_USER)]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] UserForCreate userForCreate)
         {
@@ -70,16 +70,16 @@ namespace StoreManagement.API.Controllers
                 return BadRequest(ModelState);
 
             if (await _userRepo.UserExists(userForCreate.Username))
-                return BadRequest("The User has been existed");
+                return BadRequest(new { message = false });
 
             var result = await _userRepo.CreateUserAsync(userForCreate);
             if (result)
-                return Ok();
+                return Ok(new { message = result });
 
             return BadRequest();
         }
 
-        [PermissionFilter(Permissions = "UPDATE_USER")]
+        [PermissionFilter(Permissions = PermissionConstant.UPDATE_USER)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDto userForUpdate)
         {
@@ -88,12 +88,12 @@ namespace StoreManagement.API.Controllers
 
             var result = await _userRepo.EditUserAsync(id, userForUpdate);
             if (result)
-                return Ok();
+                return Ok(new { message = result });
 
-            return BadRequest();
+            return BadRequest(new { message = false });
         }
 
-        [PermissionFilter(Permissions = "DELETE_USER")]
+        [PermissionFilter(Permissions = PermissionConstant.DELETE_USER)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

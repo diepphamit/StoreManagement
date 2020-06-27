@@ -1,0 +1,53 @@
+<ngx-loading-bar [height]="'5px'" [color]="'#FFFF66'"></ngx-loading-bar>
+<br>
+<br>
+<div class="box box-primary">
+  <div class="box-header with-border">
+      <h3 class="box-title">Thống kê sản phẩm bán ra nhiều nhất</h3>
+  </div>
+  <div class="box-body">
+      <div class="row">
+          <div class="col-sm-8">
+              <div class="input-group">
+                  <span class="input-group-btn">
+                      <button class="btn btn-primary" type="button" (click)="export()">
+                          Export
+                      </button>
+                  </span>
+              </div>
+          </div>
+      </div>
+      <br />
+      <div class="row">
+          <div class="col-xs-12 col-md-12">
+              <table class="table table-bordered">
+                  <tbody>
+                      <tr>
+                          <th style="width: 5%">Id</th>
+                          <th>Tên sản phẩm</th>
+                          <th>Mô tả</th>
+                          <th>Giá</th>
+                          <th>Barcode</th>
+                          <th>Số lượng bán</th>
+                      </tr>
+                      <tr
+                          *ngFor="let item of itemsAsync | async | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: total }">
+                          <td>{{ item.id }}</td>
+                          <td>{{ item.name }}</td>
+                          <td>{{ item.description }}</td>
+                          <td>{{ item.price }}</td>
+                          <td>{{ item.barcode }}</td>
+                          <td>{{ item.quantityStatistical }}</td>
+                      </tr>
+                  </tbody>
+              </table>
+              <div class="text-center">
+                <pagination-controls class="custom-pagination" (pageChange)="getAllProductSoles($event)" autoHide="true"
+                        responsive="true" previousLabel="Trước" nextLabel="Sau" directionLinks="true">
+                    </pagination-controls>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+

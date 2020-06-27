@@ -13,7 +13,15 @@ export class StatisticalService {
   getAllCustomers(keyword: string, page: number, pageSize: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/GetCustomers?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
   }
+
   getAllStaffs(keyword: string, page: number, pageSize: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/GetStaffs?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
+  }
+
+  getAllProductSoles(keyword: string, page: number, pageSize: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/ProductSole?keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
+  }
+  getAllProductRemains(branchId: any, keyword: string, page: number, pageSize: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/ProductSapHet?branchId=${branchId}&keyword=${keyword}&page=${page}&pageSize=${pageSize}`);
   }
 }

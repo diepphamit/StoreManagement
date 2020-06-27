@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SupplierForEdit } from 'src/app/models/supplier/supplierForEdit.model';
 import { ValidationService } from 'src/app/services/validation.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-edit-supplier',
@@ -25,7 +26,8 @@ export class EditSupplierComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private supplierService: SupplierService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {
     this.editSupplierForm = this.fb.group({
       name: ['', [Validators.required, ValidationService.requireValue]],
@@ -36,6 +38,10 @@ export class EditSupplierComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authService.getRoles().filter(x => x.includes('UPDATE_SUPPLIER')).length === 0) {
+      this.router.navigate(['/suppliers']);
+    }
+
     this.route.params.subscribe(params => {
       this.id = params.id;
       if (this.id) {

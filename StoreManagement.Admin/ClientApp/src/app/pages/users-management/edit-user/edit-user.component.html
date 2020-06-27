@@ -24,27 +24,27 @@
             <input type="text" bsDatepicker class="form-control" formControlName="dateOfBirth" placeholder="Ngày Sinh"
               [ngClass]="{ 'is-invalid': f.dateOfBirth.errors }">
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label>Hình ảnh</label>
             <input type="text" class="form-control" formControlName="image" placeholder="Hình Ảnh" [ngClass]="{ 'is-invalid': f.image.errors }">
-          </div>
+          </div> -->
         </div>
          <div class="col-sm-6">
           <div class="form-group">
             <label>Địa chỉ</label>
             <input type="text" class="form-control" formControlName="address" placeholder="Địa chỉ"
-              [ngClass]="{ 'is-invalid': f.address.errors }">
+              >
           </div>
           <div class="form-group">
             <label>Giới tính</label>
-            <select class="form-control" formControlName="gender" [ngClass]="{ 'is-invalid': f.gender.errors }">
+            <select class="form-control" formControlName="gender" >
               <option *ngFor="let gender1 of genders " value={{gender1.key}}>{{gender1.value[0]}}</option>
           </select>
           </div>
           <div class="form-group">
             <label>Số điện thoại</label>
             <input type="text" class="form-control" formControlName="phoneNumber" placeholder="Số điện thoại"
-              [ngClass]="{ 'is-invalid': f.phoneNumber.errors }">
+              >
               <app-control-messages [control]="editUserForm.get('phoneNumber')"></app-control-messages>
           </div>
           <div class="form-group" *ngIf="getId == 1">

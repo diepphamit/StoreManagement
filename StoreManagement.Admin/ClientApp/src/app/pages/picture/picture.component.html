@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="col-sm-4">
-        <button class="btn btn-success" (click)="add()">Thêm mới</button>
+        <button class="btn btn-success" [disabled]="canCreate" (click)="add()">Thêm mới</button>
       </div>
     </div>
     <br />
@@ -33,7 +33,7 @@
             <tr>
               <th style="width: 5%">Id</th>
               <th>Tên sản phẩm</th>
-              <th>URL</th>
+              <th>Hình ảnh</th>
               <th style="text-align: center;">Hành động</th>
             </tr>
             <tr *ngFor="let item of itemsAsync | async | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: total }">
@@ -44,7 +44,7 @@
                 <!-- <button class="btn btn-sm btn-primary" style="margin-right: 10px; margin-bottom: 5px;" (click)="edit(item.id)">
                   <i class="fa fa-pencil"></i>
                 </button> -->
-                <button class="btn btn-sm btn-danger" style="margin-right: 10px; margin-bottom: 5px;"
+                <button class="btn btn-sm btn-danger" [disabled]="canDelete" style="margin-right: 10px; margin-bottom: 5px;"
                   (click)="deleteConfirm(template,item)">
                   <i class="fa fa-trash"></i>
                 </button>

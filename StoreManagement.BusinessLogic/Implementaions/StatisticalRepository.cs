@@ -141,7 +141,7 @@ namespace StoreManagement.BusinessLogic.Implementaions
                     products.Add(numberProduct);
                 }
             }
-            return products.AsEnumerable();
+            return products.AsEnumerable().Distinct();
         }
     }
 }

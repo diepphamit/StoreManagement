@@ -4,6 +4,7 @@ import { OrderProductComponent } from './order-product.component';
 import { AddOrderProductComponent } from './add-order-product/add-order-product.component';
 import { EditOrderProductComponent } from './edit-order-product/edit-order-product.component';
 import { OrderDetailComponent } from './order-detail/order-detail.component';
+import { InvoiceComponent } from './invoice/invoice.component';
 export const routes: Routes = [
     {
         path: '', component: OrderProductComponent,
@@ -16,6 +17,9 @@ export const routes: Routes = [
     },
     {
       path: ':id', component: OrderDetailComponent
+    },
+    {
+      path: 'invoice/:id', component: InvoiceComponent
     }
 ];
 

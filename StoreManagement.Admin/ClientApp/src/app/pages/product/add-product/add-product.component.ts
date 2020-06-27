@@ -10,6 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ValidationService } from 'src/app/services/validation.service';
 import { SupplierService } from 'src/app/services/supplier.service';
 import { tap, map } from 'rxjs/operators';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-add-product',
@@ -30,7 +31,8 @@ export class AddProductComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private supplierService: SupplierService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {
     this.addProductForm = this.fb.group({
       name: ['', [ValidationService.requireValue]],
@@ -44,6 +46,10 @@ export class AddProductComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authService.getRoles().filter(x => x.includes('CREATE_PRODUCT')).length === 0) {
+      this.router.navigate(['/products']);
+    }
+
     this.page = 1;
     this.pageSize = 1000;
     this.getAllCategories(this.page);

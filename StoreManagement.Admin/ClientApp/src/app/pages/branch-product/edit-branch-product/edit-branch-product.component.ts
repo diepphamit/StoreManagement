@@ -10,6 +10,7 @@ import { tap, map } from 'rxjs/operators';
 import { BranchProductForEdit } from 'src/app/models/branch-product/branch-productForEdit.model';
 import { BranchService } from 'src/app/services/branch.service';
 import { BranchProductService } from 'src/app/services/branch-product.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-edit-branch-product',
@@ -33,7 +34,8 @@ export class EditBranchProductComponent implements OnInit {
     private branchService: BranchService,
     private productService: ProductService,
     private branchProductService: BranchProductService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {
     this.editBranchProductForm = this.fb.group({
       brachId: ['', [ValidationService.requireValue]],
@@ -43,6 +45,10 @@ export class EditBranchProductComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authService.getRoles().filter(x => x.includes('UPDATE_BRANCH')).length === 0) {
+      this.router.navigate(['/branchproducts']);
+    }
+
     this.page = 1;
     this.pageSize = 1000;
     this.getAllProducts(this.page);
@@ -85,7 +91,6 @@ export class EditBranchProductComponent implements OnInit {
     this.branchProduct.quantity = Number(this.branchProduct.quantity);
     this.branchProduct.brachId = Number(this.branchProduct.brachId);
     this.branchProduct.productId = Number(this.branchProduct.productId);
-    console.log(this.branchProduct);
 
     this.branchProductService.editBranchProduct(this.id, this.branchProduct).subscribe(
       () => {

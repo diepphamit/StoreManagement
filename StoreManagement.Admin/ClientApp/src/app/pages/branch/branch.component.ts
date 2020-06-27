@@ -8,6 +8,7 @@ import { tap, map, debounceTime } from 'rxjs/operators';
 import { Branch } from 'src/app/models/branch/branch.model';
 import { BranchService } from 'src/app/services/branch.service';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-branch',
@@ -23,18 +24,26 @@ export class BranchComponent implements OnInit {
   pageSize: number;
   total: number;
 
+  permissons: string[];
+
+  canDelete = false;
+  canUpdate = false;
+  canCreate = false;
+
   constructor(
     public branchService: BranchService,
     private router: Router,
     private modalService: BsModalService,
     private toastr: ToastrService,
-    private loadingBar: LoadingBarService
+    private loadingBar: LoadingBarService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
     this.keyword = '';
     this.page = 1;
     this.pageSize = 10;
+    this.loadPermisson();
     this.getAllBranches(this.page);
   }
 
@@ -97,13 +106,29 @@ export class BranchComponent implements OnInit {
 
   searchCharacter() {
     this.itemsAsync = this.branchService.getAllBranches(this.keyword, this.page, this.pageSize)
-        .pipe(
-            debounceTime(1000),
-            tap(response => {
-                this.total = response.total;
-            }),
-            map(response => response.items)
-        );
-}
+      .pipe(
+        debounceTime(1000),
+        tap(response => {
+          this.total = response.total;
+        }),
+        map(response => response.items)
+      );
+  }
+
+  loadPermisson() {
+    this.permissons = this.authService.getRoles().filter(x => x.includes('BRANCH'));
+
+    if (this.permissons.filter(x => x.includes('DELETE')).length === 0) {
+      this.canDelete = true;
+    }
+
+    if (this.permissons.filter(x => x.includes('UPDATE')).length === 0) {
+      this.canUpdate = true;
+    }
+
+    if (this.permissons.filter(x => x.includes('CREATE')).length === 0) {
+      this.canCreate = true;
+    }
+  }
 
 }

@@ -29,6 +29,7 @@ export class OrderDetailComponent implements OnInit {
   addProductForm: FormGroup;
   itemsProduct: Observable<any[]>;
   itemDeletes: any[] = [];
+  totalPrices = 0;
 
   constructor(
     public orderDetailService: OrderDetailService,
@@ -52,25 +53,18 @@ export class OrderDetailComponent implements OnInit {
     this.page = 1;
     this.pageSize = 10;
     this.getAllOrderDetail(this.page);
-    this.getAllProducts(this.page);
   }
 
   getAllOrderDetail(page: number) {
-    //this.loadingBar.start();
-
     this.route.params.subscribe(params => {
       this.id = params.id;
       if (this.id) {
-        // this.itemsAsync = this.orderDetailService.getAllOrderDetails(this.id, '', page, this.pageSize)
-        //   .pipe(
-        //     tap(response => {
-        //       this.total = response.total;
-        //       this.page = page;
-        //       this.loadingBar.stop();
-        //     }),
-        //     map(response => response.items)
-        //   );
-        this.orderDetailService.getAllOrderDetails(this.id, '', page, this.pageSize).subscribe(data => this.itemsAsync = data.items);
+        this.orderService.getOrderById(this.id).subscribe(data => {
+          this.getAllProducts(data.branchId, this.page);
+        });
+        this.orderDetailService.getAllOrderDetails(this.id, '', page, this.pageSize).subscribe(data => {
+          this.itemsAsync = data.items;
+        });
       }
     });
   }
@@ -95,19 +89,11 @@ export class OrderDetailComponent implements OnInit {
     });
   }
 
-  getAllProducts(page: number) {
-    this.itemsProduct = this.productService.getAllProducts('', page, this.pageSize)
+  getAllProducts(branchId: any, page: number) {
+    this.itemsProduct = this.productService.getAllProductsByBranchId(branchId, '', page, this.pageSize)
       .pipe(
         map(response => response.items)
       );
-  }
-
-  get totalprice() {
-    let prices = 0;
-    this.itemsAsync.forEach(element => {
-      prices = prices + element.totalPrice;
-    });
-    return prices;
   }
 
   isPushItem(productId, quantity) {
@@ -135,7 +121,27 @@ export class OrderDetailComponent implements OnInit {
       itemDeletes: this.itemDeletes
     };
 
-    console.log(order);
+    this.loadingBar.start();
+    this.orderDetailService.editOrderDetail(this.id, order).subscribe(
+      () => {
+        this.router.navigate(['/orderproducts']).then(() => {
+          this.toastr.success('Tạo đơn hàng thành công');
+        });
+      },
+      (error: HttpErrorResponse) => {
+        this.toastr.error('Tạo đơn hàng không thành công!');
+        this.loadingBar.stop();
+      }
+    );
   }
 
+  // getAllProducts(branchId: any) {
+  //   this.products = this.productService.GetAllProductNotInBranch(branchId);
+  // }
+  get totalPrice() {
+    if (this.itemsAsync) {
+      return this.itemsAsync.reduce((acc, val) => acc += (val.price * val.quantity), 0);
+    }
+    return 0;
+  }
 }

@@ -9,6 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { tap, map } from 'rxjs/operators';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ProductService } from 'src/app/services/product.sevice';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-picture',
@@ -24,6 +25,10 @@ export class PictureComponent implements OnInit {
   pageSize: number;
   total: number;
   itemsProduct: Observable<any[]>;
+  permissons: string[];
+  canDelete = false;
+  canUpdate = false;
+  canCreate = false;
 
   constructor(
     public pictureService: PictureService,
@@ -31,13 +36,15 @@ export class PictureComponent implements OnInit {
     private modalService: BsModalService,
     private toastr: ToastrService,
     private loadingBar: LoadingBarService,
-    private productService: ProductService
+    private productService: ProductService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
     this.keyword = '';
     this.page = 1;
     this.pageSize = 10;
+    this.loadPermisson();
     this.getAllPictures(this.page);
     this.getAllProducts();
   }
@@ -124,6 +131,22 @@ export class PictureComponent implements OnInit {
       this.getAllPictures(this.page);
     } else {
       this.getAllPicturesByProductId(id, this.page);
+    }
+  }
+
+  loadPermisson() {
+    this.permissons = this.authService.getRoles().filter(x => x.includes('PICTURE'));
+
+    if (this.permissons.filter(x => x.includes('DELETE')).length === 0) {
+      this.canDelete = true;
+    }
+
+    if (this.permissons.filter(x => x.includes('UPDATE')).length === 0) {
+      this.canUpdate = true;
+    }
+
+    if (this.permissons.filter(x => x.includes('CREATE')).length === 0) {
+      this.canCreate = true;
     }
   }
 

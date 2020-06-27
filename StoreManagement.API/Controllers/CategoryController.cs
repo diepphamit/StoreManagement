@@ -99,7 +99,7 @@ namespace StoreManagement.API.Controllers
             return Ok(_mapper.Map<CategoryUI>(category));
         }
 
-        [AllowAnonymous]
+        [PermissionFilter(Permissions = PermissionConstant.CREATE_CATEGORY)]
         [HttpPost]
         public async Task<IActionResult> CreateCategory([FromBody]CategoryUI category)
         {
@@ -115,7 +115,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
-        [PermissionFilter(Permissions = "DELETE_CATEGORY")]
+        [PermissionFilter(Permissions = PermissionConstant.DELETE_CATEGORY)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
@@ -126,7 +126,7 @@ namespace StoreManagement.API.Controllers
             return BadRequest();
         }
 
-        [PermissionFilter(Permissions = "UPDATE_CATEGORY")]
+        [PermissionFilter(Permissions = PermissionConstant.UPDATE_CATEGORY)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(int id, [FromBody]CategoryUI category)
         {

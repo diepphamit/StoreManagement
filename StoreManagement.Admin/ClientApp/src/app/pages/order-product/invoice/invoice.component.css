@@ -1,0 +1,94 @@
+/* .header, .header-space, .footer, .footer-space { height: 100px; }
+.header { position: fixed; top: 0; }
+.footer { position: fixed; bottom: 0; }
+
+@media screen {
+  :host {
+    display: none;
+  }
+} */
+html, body, h1, h2, h3, h4, p, img { margin: 0;} /* margin reset*/
+h1{font-size: 18pt; font-weight: 500; margin-bottom: 0.5cm;}
+h2{font-size: 16pt; font-weight: 500;}
+p{font-size: 12pt;}
+
+.items-group {
+  border-style: solid;
+  border-color: black;
+  border-width: 1pt 1pt 1pt 1pt;
+  border-radius: 5pt;
+  padding: 3pt 3pt 3pt 3pt;
+  margin: 9pt 0 9pt 0;
+}
+
+.logotipo {
+  width: 6cm;
+  height: 4cm;
+  margin: -0.5cm;
+}
+
+.label { font-weight: 500;}
+
+.disclaimer, .address p {
+  font-size: 10pt;
+}
+
+.signature-field {
+  padding-bottom: 24pt;
+  border-bottom: solid black 1pt;
+}
+
+
+
+
+/*
+.container {
+  display: grid;
+  grid: "numero numero"
+        "logo loja"
+        "clt-lbl clt"
+        "da-lbl da";
+  grid-row-gap: 1cm;
+}
+
+.label-group {
+  border-left: solid black 1pt;
+  border-top: solid black 1pt;
+  border-top-left-radius: 10pt;
+  padding: 9pt 0 0 9pt
+}
+
+.description-group {
+  border-top: solid black 1pt;
+  padding: 9pt 0 0 9pt
+}
+
+.numero {
+  grid-area: numero;
+}
+
+.loja {
+  grid-area: loja;
+}
+
+.logotipo {
+  grid-area: logo;
+}
+
+.cliente-label {
+  grid-area: clt-lbl;
+}
+
+.cliente {
+  grid-area: clt;
+}
+
+.detalhes-assistencia-label {
+  grid-area: da-lbl;
+}
+
+.detalhes-assistencia {
+  grid-area: da;
+}
+
+*/

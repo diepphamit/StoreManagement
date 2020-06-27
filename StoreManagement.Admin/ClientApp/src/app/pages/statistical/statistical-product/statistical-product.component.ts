@@ -3,15 +3,16 @@ import { Observable } from 'rxjs';
 import { StatisticalService } from 'src/app/services/statistical.service';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ExportService } from 'src/app/services/export.service';
-import { tap, map, debounceTime } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { tap, map, debounceTime } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
+import { BranchService } from 'src/app/services/branch.service';
 
 @Component({
-  selector: 'app-statistical-staff',
-  templateUrl: './statistical-staff.component.html'
+  selector: 'app-statistical-product',
+  templateUrl: './statistical-product.component.html'
 })
-export class StatisticalStaffComponent implements OnInit {
+export class StatisticalProductComponent implements OnInit {
 
   keyword: string;
   itemsAsync: Observable<any[]>;
@@ -35,12 +36,12 @@ export class StatisticalStaffComponent implements OnInit {
     this.keyword = '';
     this.page = 1;
     this.pageSize = 10;
-    this.getAllStaffs(this.page);
+    this.getAllProductSoles(this.page);
   }
 
-  getAllStaffs(page: number) {
+  getAllProductSoles(page: number) {
     this.loadingBar.start();
-    this.itemsAsync = this.statisticalService.getAllStaffs(this.keyword, page, this.pageSize)
+    this.itemsAsync = this.statisticalService.getAllProductSoles(this.keyword, page, this.pageSize)
       .pipe(
         tap(response => {
           this.total = response.total;
@@ -53,16 +54,16 @@ export class StatisticalStaffComponent implements OnInit {
 
 
   search() {
-    this.getAllStaffs(this.page);
+    this.getAllProductSoles(this.page);
   }
 
   refresh() {
     this.keyword = '';
-    this.getAllStaffs(this.page);
+    this.getAllProductSoles(this.page);
   }
 
   searchCharacter() {
-    this.itemsAsync = this.statisticalService.getAllStaffs(this.keyword, this.page, this.pageSize)
+    this.itemsAsync = this.statisticalService.getAllProductSoles(this.keyword, this.page, this.pageSize)
       .pipe(
         debounceTime(1000),
         tap(response => {
@@ -73,7 +74,8 @@ export class StatisticalStaffComponent implements OnInit {
   }
 
   export() {
-    this.itemsAsync.subscribe(data => this.exportService.exportExcel(data, 'staffs'));
+    this.itemsAsync.subscribe(data => this.exportService.exportExcel(data, 'products'));
   }
+
 
 }

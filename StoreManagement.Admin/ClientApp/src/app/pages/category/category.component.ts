@@ -26,10 +26,9 @@ export class CategoryComponent implements OnInit {
   total: number;
 
   permissons: string[];
-
-  canDelete = '';
-  canUpdate = '';
-  canCreate = '';
+  canDelete = false;
+  canUpdate = false;
+  canCreate = false;
 
   constructor(
     public categoryService: CategoryService,
@@ -44,8 +43,8 @@ export class CategoryComponent implements OnInit {
     this.keyword = '';
     this.page = 1;
     this.pageSize = 10;
-    this.getAllCategories(this.page);
     this.loadPermisson();
+    this.getAllCategories(this.page);
   }
 
   getAllCategories(page: number) {
@@ -115,15 +114,15 @@ export class CategoryComponent implements OnInit {
     this.permissons = this.authService.getRoles().filter(x => x.includes('CATEGORY'));
 
     if (this.permissons.filter(x => x.includes('DELETE')).length === 0) {
-      this.canDelete = 'disabled';
+      this.canDelete = true;
     }
 
     if (this.permissons.filter(x => x.includes('UPDATE')).length === 0) {
-      this.canUpdate = 'disabled';
+      this.canUpdate = true;
     }
 
     if (this.permissons.filter(x => x.includes('CREATE')).length === 0) {
-      this.canCreate = 'disabled';
+      this.canCreate = true;
     }
   }
 

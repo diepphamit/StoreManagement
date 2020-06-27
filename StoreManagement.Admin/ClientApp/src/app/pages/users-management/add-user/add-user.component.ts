@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user/user.model';
 import { ValidationService } from 'src/app/services/validation.service';
+import { CURRENT_USER } from 'src/app/constants/db-keys';
 
 @Component({
   selector: 'app-add-user',
@@ -48,6 +49,9 @@ export class AddUserComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.getId !== 1) {
+      this.router.navigate(['/home']);
+    }
   }
 
   addUser() {
@@ -65,4 +69,13 @@ export class AddUserComponent implements OnInit {
   }
 
   get f() { return this.addUserForm.controls; }
+
+  get getId() {
+    const user = JSON.parse(localStorage.getItem(CURRENT_USER));
+    if (user != null) {
+      return user.id;
+    }
+
+    return 0;
+  }
 }

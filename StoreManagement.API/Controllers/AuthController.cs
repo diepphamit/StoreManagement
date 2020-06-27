@@ -45,7 +45,7 @@ namespace StoreManagement.API.Controllers
 
             userAuthDto.Username = userAuthDto.Username.ToLower();
             if (await _authRepository.UserExists(userAuthDto.Username))
-                return BadRequest("Username alredy exixts");
+                return BadRequest(new { message = false});
 
             var userToCrete = new User
             {
@@ -55,7 +55,7 @@ namespace StoreManagement.API.Controllers
 
             var createdUser = await _authRepository.Register(userToCrete, userAuthDto.Password);
 
-            return StatusCode(201);
+            return Ok(new { message = true});
         }
 
         [Route("login")]

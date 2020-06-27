@@ -18,8 +18,15 @@
           <div class="form-group" >
             <label>Trạng thái</label>
             <select class="form-control" formControlName="status">
-              <option value="">Choose the status</option>
+              <option value="">Chọn trạng thái</option>
               <option *ngFor="let item of status " value={{item.value}}>{{item.name}}</option>
+            </select>
+          </div>
+          <div class="form-group" >
+            <label>Chi nhánh</label>
+            <select class="form-control" (change)="filterProducts($event.target.value)" formControlName="branchId">
+              <option value="">Chọn chi nhánh</option>
+              <option *ngFor="let item of itemBranch | async" value={{item.id}}>{{item.description}}</option>
             </select>
           </div>
         </div>
